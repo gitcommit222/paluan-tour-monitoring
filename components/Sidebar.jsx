@@ -11,15 +11,22 @@ const Sidebar = () => {
 	return (
 		<aside className="sidebar">
 			<div className="flex size-full flex-col gap-2">
-				<div className="border-b p-2 flex items-center justify-center">
+				<div className="border-b p-5 flex items-center justify-center">
 					<Link href="/">
-						<Image src={logo} alt="logo" width={106} />
+						<Image
+							src={logo}
+							alt="logo"
+							width={200}
+							height={150}
+							objectFit="contain"
+						/>
 					</Link>
 				</div>
 				<nav className="sidebar-nav ">
 					<ul className="sidebar-nav_elements">
 						{navLinks.map((item) => {
-							const isActive = item.url === pathname;
+							const isActive =
+								pathname === item.url || pathname?.startsWith(`${item.url}/`);
 
 							return (
 								<li
