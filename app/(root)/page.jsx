@@ -13,7 +13,7 @@ const Dashboard = () => {
 			{
 				label: "Resort 1",
 				data: [150, 200, 180, 220, 170, 210, 190],
-				backgroundColor: "rgba(255, 99, 132, 0.2)",
+				backgroundColor: "rgb(254 226 226)",
 				borderColor: "rgba(255, 99, 132, 1)",
 				borderWidth: 1,
 			},
@@ -71,12 +71,7 @@ const Dashboard = () => {
 				subtext="Track tourist spots progress here."
 			/>
 			<div className="flex gap-4 flex-wrap w-full">
-				<DataBox
-					icon={tourist}
-					title="Tourists Spots"
-					data="5"
-					color="indigo"
-				/>
+				<DataBox icon={tourist} title="Tourists Spots" data="5" color="blue" />
 				<DataBox
 					icon={tourist}
 					title="Total Tourist"

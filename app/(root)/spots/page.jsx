@@ -2,8 +2,7 @@ import AddNewSpotForm from "@/components/AddNewSpotForm";
 import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
 import SpotsCard from "@/components/SpotsCard";
-import { beach1, beach2 } from "@/public";
-import { Button } from "flowbite-react";
+import { beach1, beach2, spot } from "@/public";
 import React from "react";
 
 const Spots = () => {
@@ -35,7 +34,7 @@ const Spots = () => {
 						headerTitle="Maslud Cove"
 						imageUrl={beach2}
 						description="Paluan, Occidental Mindoro"
-						owner="Alexis Cadalin"
+						owner="Alexis Cadahin"
 					/>
 				</div>
 			</div>

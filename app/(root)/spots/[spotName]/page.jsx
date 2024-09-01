@@ -29,10 +29,10 @@ const SingeSpotPage = ({ params }) => {
 					data="1,290"
 					color="green"
 				/>
-				<DataBox icon={tourist} title="Male Tourist" data="500" color="red" />
+				<DataBox icon={tourist} title="Male Guests" data="500" color="red" />
 				<DataBox
 					icon={tourist}
-					title="Female Tourist"
+					title="Female Guests"
 					data="500"
 					color="yellow"
 				/>
