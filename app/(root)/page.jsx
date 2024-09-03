@@ -6,7 +6,17 @@ import Headerbox from "@/components/shared/HeaderBox";
 import { tourist } from "@/public";
 import React from "react";
 
+import {
+	regions,
+	getProvincesByRegion,
+	getCityMunByProvince,
+	getBarangayByMun,
+} from "phil-reg-prov-mun-brgy";
+
 const Dashboard = () => {
+	// console.log(getProvincesByRegion(17));
+	// console.log(getCityMunByProvince(1751));
+	console.log(getBarangayByMun(175107));
 	const data = {
 		labels: ["January", "February", "March", "April", "May", "June", "July"],
 		datasets: [

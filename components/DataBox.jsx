@@ -5,7 +5,7 @@ import Image from "next/image";
 const DataBox = ({ data = "1,000", icon, title = "Total", color = "blue" }) => {
 	return (
 		<Card
-			className={`shadow-none bg-${color}-100 min-w-[250px] border-none outline-none flex-1`}
+			className={`shadow-none bg-${color}-100 min-w-[250px] max-w-[450px] border-none outline-none flex-1`}
 		>
 			<div className="flex items-center justify-between">
 				<div className="flex items-start justify-center flex-col">
