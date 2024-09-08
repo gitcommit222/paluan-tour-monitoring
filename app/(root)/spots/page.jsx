@@ -3,6 +3,7 @@ import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
 import SpotsCard from "@/components/SpotsCard";
 import { beach1, beach2, spot } from "@/public";
+import { Button, Tooltip } from "flowbite-react";
 import React from "react";
 
 const Spots = () => {
@@ -11,13 +12,11 @@ const Spots = () => {
 			<div className="flex justify-between items-center">
 				<Headerbox title="Tourist Spots" subtext="Manage spots here." />
 				<div>
-					<CustomModal
-						headerTitle="ADD SPOT FORM"
-						buttonName="ADD SPOT"
-						yesLabel="Save"
-						noLabel="Cancel"
-						mainContent={<AddNewSpotForm />}
-					/>
+					<Tooltip content="Add new spot">
+						<Button href="/spots/new-spot" color="secondary">
+							NEW SPOT
+						</Button>
+					</Tooltip>
 				</div>
 			</div>
 			<div className="flex flex-wrap gap-5">

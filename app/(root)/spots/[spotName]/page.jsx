@@ -2,8 +2,9 @@
 import DataBox from "@/components/DataBox";
 import CustomCarousel from "@/components/shared/CustomCarousel";
 import Headerbox from "@/components/shared/HeaderBox";
-import { tourist } from "@/public";
+import { beach1, tourist } from "@/public";
 import { Table } from "flowbite-react";
+import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
@@ -16,7 +17,10 @@ const SingeSpotPage = ({ params }) => {
 				title={newSpotName}
 				subtext={`Here is the detailed analysis of ${newSpotName} data.`}
 			/>
-			<div className="flex gap-4 flex-wrap w-full">
+			<div className="border w-full min-h-[250px] rounded-t-2xl relative">
+				<Image src={beach1} alt="beachimage" fill className="object-cover" />
+			</div>
+			{/* <div className="flex gap-4 flex-wrap w-full">
 				<DataBox
 					icon={tourist}
 					title="Current Guests"
@@ -36,8 +40,8 @@ const SingeSpotPage = ({ params }) => {
 					data="500"
 					color="yellow"
 				/>
-			</div>
-			<div className="mt-5 w-full min-h-[500px]">
+			</div> */}
+			{/* <div className="mt-5 w-full min-h-[500px]">
 				<Table>
 					<Table.Head>
 						<Table.HeadCell>Name</Table.HeadCell>
@@ -75,7 +79,7 @@ const SingeSpotPage = ({ params }) => {
 						</Table.Row>
 					</Table.Body>
 				</Table>
-			</div>
+			</div> */}
 		</section>
 	);
 };

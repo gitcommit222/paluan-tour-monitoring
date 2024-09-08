@@ -11,4 +11,16 @@ import reports from "./icons/report.png";
 import beach1 from "./images/beach1.jpg";
 import beach2 from "./images/beach2.jpg";
 
-export { logo, tourist, beach1, beach2, spot, dashboard, settings, reports };
+import notfound from "./images/pagenotfound.svg";
+
+export {
+	logo,
+	tourist,
+	beach1,
+	beach2,
+	spot,
+	dashboard,
+	settings,
+	reports,
+	notfound,
+};

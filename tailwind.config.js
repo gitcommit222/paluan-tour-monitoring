@@ -12,7 +12,7 @@ module.exports = {
 			colors: {
 				primary: "#70B1E1",
 				secondary: "#FFD835",
-				accentg: "#BFBFBF",
+				accent: "#BFBFBF",
 			},
 			backgroundImage: {
 				"custom-gradient":
