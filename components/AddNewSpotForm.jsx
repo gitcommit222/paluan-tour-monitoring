@@ -12,12 +12,7 @@ import Image from "next/image";
 
 import * as Yup from "yup";
 
-import {
-	regions,
-	getProvincesByRegion,
-	getCityMunByProvince,
-	getBarangayByMun,
-} from "phil-reg-prov-mun-brgy";
+import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 import { useFormik } from "formik";
 
 const FILE_SIZE = 1024 * 1024 * 2; // 2 MB

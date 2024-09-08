@@ -1,3 +1,4 @@
+"use client";
 import OwnersTable from "@/components/OwnersTable";
 import Headerbox from "@/components/shared/HeaderBox";
 import { logo } from "@/public";
@@ -5,10 +6,23 @@ import { Button, Label, Select, TextInput } from "flowbite-react";
 import Image from "next/image";
 import React from "react";
 
+import {
+	regions,
+	getProvincesByRegion,
+	getCityMunByProvince,
+	getBarangayByMun,
+} from "phil-reg-prov-mun-brgy";
+
 const Home = () => {
+	const provinces = getProvincesByRegion(17);
+
+	const municipalities = getCityMunByProvince(1751);
+
+	const barangays = getBarangayByMun(175106);
+	console.log(barangays);
 	return (
 		<section className="relative">
-			<div className="w-full shadow-sm fixed z-100 bg-white h-[80px] flex items-center justify-between px-[100px]">
+			<div className="w-full shadow-sm z-100 bg-white h-[80px] flex items-center justify-between px-[100px]">
 				<div>
 					<Image
 						src={logo}
@@ -29,7 +43,7 @@ const Home = () => {
 					</ul>
 				</nav>
 			</div>
-			<div className="px-[100px] py-[105px]">
+			<div className="px-[100px] py-[25px]">
 				<div>
 					<Headerbox
 						user="Owner!"
@@ -51,14 +65,14 @@ const Home = () => {
 								</div>
 								<TextInput id="name" type="text" name="name" sizing="sm" />
 							</div>
-							<div className="flex gap-2">
+							<div className="flex gap-2 w-full">
 								<div>
 									<div className="mb-2 block">
 										<Label htmlFor="age" value="Age" />
 									</div>
 									<TextInput id="age" type="number" name="age" sizing="sm" />
 								</div>
-								<div>
+								<div className="w-full">
 									<div className="mb-2 block">
 										<Label htmlFor="gender" value="Gender" />
 									</div>
@@ -72,13 +86,28 @@ const Home = () => {
 							</div>
 							<div>
 								<div className="mb-2 block">
+									<Label htmlFor="region" value="Region" />
+								</div>
+								<Select id="region" name="region" sizing="sm">
+									<option defaultChecked></option>
+									{regions.map((reg) => (
+										<option value={reg.reg_code} key={reg.reg_code}>
+											{reg.name}
+										</option>
+									))}
+								</Select>
+							</div>
+							<div>
+								<div className="mb-2 block">
 									<Label htmlFor="province" value="Province" />
 								</div>
 								<Select id="province" name="province" sizing="sm">
 									<option defaultChecked></option>
-									<option>Male</option>
-									<option>Female</option>
-									<option>Prefer not to say</option>
+									{provinces.map((prov) => (
+										<option value={prov.prov_code} key={prov.prov_code}>
+											{prov.name}
+										</option>
+									))}
 								</Select>
 							</div>
 							<div>
@@ -87,9 +116,11 @@ const Home = () => {
 								</div>
 								<Select id="municipality" name="municipality" sizing="sm">
 									<option defaultChecked></option>
-									<option>Male</option>
-									<option>Female</option>
-									<option>Prefer not to say</option>
+									{municipalities.map((mun) => (
+										<option value={mun.mun_code} key={mun.mun_code}>
+											{mun.name}
+										</option>
+									))}
 								</Select>
 							</div>
 							<div>
@@ -98,9 +129,11 @@ const Home = () => {
 								</div>
 								<Select id="barangay" name="barangay" sizing="sm">
 									<option defaultChecked></option>
-									<option>Male</option>
-									<option>Female</option>
-									<option>Prefer not to say</option>
+									{barangays.map((brgy) => (
+										<option value={brgy.name} key={brgy.name}>
+											{brgy.name}
+										</option>
+									))}
 								</Select>
 							</div>
 							<div>
