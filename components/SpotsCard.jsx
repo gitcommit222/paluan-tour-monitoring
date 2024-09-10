@@ -17,11 +17,17 @@ const SpotsCard = ({
 	owner = "Unknown",
 }) => {
 	return (
-		<Card className="max-w-[300px] min-w-[280px] rounded-lg">
-			<div className="border w-full h-[250px] relative">
-				<Image src={imageUrl} objectFit="cover" fill alt="spot image" />
+		<div className="max-w-[300px] min-w-[330px] rounded-xl shadow-md">
+			<div className="border w-full h-[250px] rounded-xl  relative">
+				<Image
+					src={imageUrl}
+					objectFit="cover"
+					fill
+					alt="spot image"
+					className="rounded-t-xl "
+				/>
 			</div>
-			<div className="space-y-1">
+			<div className="space-y-1 p-4">
 				<div className="flex items-center justify-between">
 					<h5 className="text-[18px] font-bold tracking-wide text-gray-900 ">
 						{headerTitle}
@@ -56,15 +62,7 @@ const SpotsCard = ({
 						/>
 					</div>
 				</div>
-				<div>
-					<Rating>
-						<Rating.Star />
-						<Rating.Star />
-						<Rating.Star />
-						<Rating.Star />
-						<Rating.Star filled={false} />
-					</Rating>
-				</div>
+
 				<div>
 					<p className="text-[12px] text-gray-500">
 						Owned by{" "}
@@ -75,7 +73,7 @@ const SpotsCard = ({
 					{truncateText(description, 80)}
 				</p>
 			</div>
-		</Card>
+		</div>
 	);
 };
 

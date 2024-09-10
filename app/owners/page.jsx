@@ -19,7 +19,6 @@ const Home = () => {
 	const municipalities = getCityMunByProvince(1751);
 
 	const barangays = getBarangayByMun(175106);
-	console.log(barangays);
 	return (
 		<section className="relative">
 			<div className="w-full shadow-sm z-100 bg-white h-[80px] flex items-center justify-between px-[100px]">
@@ -56,7 +55,7 @@ const Home = () => {
 					<div className="flex-1">
 						<OwnersTable />
 					</div>
-					<div className="border rounded-lg min-w-[350px] p-5 space-y-2">
+					<div className="border rounded-lg min-w-[350px] p-5 space-y-5">
 						<h3 className="font-semibold text-[18px] mb-2">Add Guests</h3>
 						<form>
 							<div>
