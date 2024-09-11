@@ -10,7 +10,7 @@ import React from "react";
 const Home = ({ data }) => {
 	return (
 		<section className="relative">
-			<div className="w-full shadow-sm z-100 bg-white h-[80px] flex items-center justify-between px-[100px]">
+			<div className="w-full shadow-lg z-100 bg-gray-800 h-[80px] flex items-center justify-between px-[100px]">
 				<div>
 					<Image
 						src={logo}
@@ -45,7 +45,12 @@ const Home = ({ data }) => {
 						<OwnersTable />
 					</div>
 					<div className="border rounded-lg min-w-[350px] p-5 space-y-5">
-						<h3 className="font-semibold text-[18px] mb-2">Add Guests</h3>
+						<div className="flex justify-between items-center flex-wrap">
+							<h3 className="font-semibold text-[18px] mb-2">Add Guests</h3>
+							<div>
+								<p className="text-red-500 text-[14px]">* required fields.</p>
+							</div>
+						</div>
 						<AddGuestForm />
 					</div>
 				</div>

@@ -38,7 +38,7 @@
 	}
 
 	.sidebar {
-		@apply fixed h-screen w-60 bg-white p-3 shadow-md shadow-purple-200/50;
+		@apply fixed h-screen w-60 bg-gray-800 p-3 shadow-md shadow-purple-200/50;
 	}
 
 	.sidebar-nav {

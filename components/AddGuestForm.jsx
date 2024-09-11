@@ -19,6 +19,7 @@ const AddGuestForm = ({ data }) => {
 			province: data ? data.province : "",
 			municipality: data ? data.municipality : "",
 			barangay: data ? data.barangay : "",
+			contactNumber: data ? data.contactNumber : "",
 		},
 		validationSchema: addOwnerGuest,
 		onSubmit: ({ fullName }) => {
@@ -42,10 +43,10 @@ const AddGuestForm = ({ data }) => {
 
 	return (
 		<div>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit} className="space-y-2">
 				<div>
 					<div className="mb-2 block">
-						<Label htmlFor="name" value="Full Name" />
+						<Label htmlFor="name" value="Full Name *" />
 					</div>
 					<TextInput
 						id="name"
@@ -54,18 +55,16 @@ const AddGuestForm = ({ data }) => {
 						name="fullName"
 						value={values.fullName}
 						onChange={handleChange}
-						color={`${errors.fullName && touched.fullName && "failure"}`}
+						color={`${
+							errors.fullName && touched.fullName ? "failure" : "gray"
+						}`}
+						helperText={errors.fullName}
 					/>
-					{errors.fullName && touched.fullName && (
-						<span className="text-red-500 text-[12px] pt-2 block">
-							{errors.fullName}
-						</span>
-					)}
 				</div>
 				<div className="flex gap-2 w-full">
 					<div>
 						<div className="mb-2 block">
-							<Label htmlFor="age" value="Age" />
+							<Label htmlFor="age" value="Age *" />
 						</div>
 						<TextInput
 							id="age"
@@ -74,13 +73,9 @@ const AddGuestForm = ({ data }) => {
 							name="age"
 							value={values.age}
 							onChange={handleChange}
-							color={`${errors.age && touched.age && "failure"}`}
+							color={`${errors.age && touched.age ? "failure" : "gray"}`}
+							helperText={errors.age}
 						/>
-						{errors.age && touched.age && (
-							<span className="text-red-500 text-[12px] pt-2 block">
-								{errors.age}
-							</span>
-						)}
 					</div>
 					<div className="w-full">
 						<div className="mb-2 block">
@@ -96,15 +91,16 @@ const AddGuestForm = ({ data }) => {
 				</div>
 				<div>
 					<div className="mb-2 block">
-						<Label htmlFor="region" value="Region" />
+						<Label htmlFor="region" value="Region *" />
 					</div>
 					<Select
 						id="region"
-						name="region"
 						sizing="sm"
-						color={`${errors.region && touched.region && "failure"}`}
+						name="region"
+						color={`${errors.region && touched.region ? "failure" : "gray"}`}
 						onChange={handleChange}
 						value={values.region}
+						helperText={errors.region}
 					>
 						<option defaultChecked></option>
 						{regions.map((reg) => (
@@ -113,17 +109,22 @@ const AddGuestForm = ({ data }) => {
 							</option>
 						))}
 					</Select>
-					{errors.region && touched.region && (
-						<span className="text-red-500 text-[12px] pt-2 block">
-							{errors.region}
-						</span>
-					)}
 				</div>
 				<div>
 					<div className="mb-2 block">
-						<Label htmlFor="province" value="Province" />
+						<Label htmlFor="province" value="Province *" />
 					</div>
-					<Select id="province" name="province" sizing="sm">
+					<Select
+						id="province"
+						name="province"
+						sizing="sm"
+						color={`${
+							errors.province && touched.province ? "failure" : "gray"
+						}`}
+						onChange={handleChange}
+						value={values.province}
+						helperText={errors.province}
+					>
 						<option defaultChecked></option>
 						{provinces.map((prov) => (
 							<option value={prov.prov_code} key={prov.prov_code}>
@@ -134,9 +135,19 @@ const AddGuestForm = ({ data }) => {
 				</div>
 				<div>
 					<div className="mb-2 block">
-						<Label htmlFor="municipality" value="Municipality" />
+						<Label htmlFor="municipality" value="Municipality *" />
 					</div>
-					<Select id="municipality" name="municipality" sizing="sm">
+					<Select
+						id="municipality"
+						name="municipality"
+						sizing="sm"
+						color={`${
+							errors.municipality && touched.municipality ? "failure" : "gray"
+						}`}
+						onChange={handleChange}
+						value={values.municipality}
+						helperText={errors.municipality}
+					>
 						<option defaultChecked></option>
 						{municipalities.map((mun) => (
 							<option value={mun.mun_code} key={mun.mun_code}>
@@ -147,9 +158,19 @@ const AddGuestForm = ({ data }) => {
 				</div>
 				<div>
 					<div className="mb-2 block">
-						<Label htmlFor="barangay" value="Barangay" />
+						<Label htmlFor="barangay" value="Barangay *" />
 					</div>
-					<Select id="barangay" name="barangay" sizing="sm">
+					<Select
+						id="barangay"
+						name="barangay"
+						sizing="sm"
+						color={`${
+							errors.barangay && touched.barangay ? "failure" : "gray"
+						}`}
+						onChange={handleChange}
+						value={values.barangay}
+						helperText={errors.barangay}
+					>
 						<option defaultChecked></option>
 						{barangays.map((brgy) => (
 							<option value={brgy.name} key={brgy.name}>
@@ -158,11 +179,22 @@ const AddGuestForm = ({ data }) => {
 						))}
 					</Select>
 				</div>
-				<div>
-					<div className="mb-2 block">
-						<Label htmlFor="contact" value="Contact No." />
+				<div className="mb-2">
+					<div className=" block">
+						<Label htmlFor="contact" value="Contact No. *" />
 					</div>
-					<TextInput id="contact" type="text" name="contact" sizing="sm" />
+					<TextInput
+						id="contact"
+						type="text"
+						name="contact"
+						sizing="sm"
+						color={`${
+							errors.contactNumber && touched.contactNumber ? "failure" : "gray"
+						}`}
+						onChange={handleChange}
+						value={values.contactNumber}
+						helperText={errors.contactNumber}
+					/>
 				</div>
 				<div className="flex gap-2 mt-4">
 					<Button color="gray" onClick={resetForm} className="flex-1">

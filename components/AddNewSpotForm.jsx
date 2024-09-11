@@ -14,9 +14,6 @@ import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 import { useFormik } from "formik";
 import { addSpotSchema } from "@/lib/formSchema";
 
-const FILE_SIZE = 1024 * 1024 * 2; // 2 MB
-const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
-
 const AddNewSpotForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
 
@@ -240,10 +237,10 @@ const AddNewSpotForm = ({ data }) => {
 							<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-5">
 								Spot Cover Image
 							</h3>
-							<div className="flex w-full items-center justify-center">
+							<div className="flex w-full items-center justify-center h-full">
 								<Label
 									htmlFor="dropzone-file"
-									className="flex h-64 w-full cursor-pointer flex-col relative items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
+									className="flex h-80 w-full cursor-pointer flex-col relative items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
 								>
 									<div className="flex flex-col items-center justify-center pb-6 pt-5 ">
 										{selectedImage ? (

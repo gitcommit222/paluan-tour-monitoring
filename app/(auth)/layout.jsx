@@ -1,7 +1,7 @@
 import React from "react";
 
 const AuthLayout = ({ children }) => {
-	return <section>{children}</section>;
+	return <section className="bg-gray-800">{children}</section>;
 };
 
 export default AuthLayout;

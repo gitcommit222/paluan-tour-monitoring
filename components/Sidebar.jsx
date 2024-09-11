@@ -16,8 +16,8 @@ const Sidebar = () => {
 						<Image
 							src={logo}
 							alt="logo"
-							width={200}
-							height={150}
+							width={400}
+							height={250}
 							objectFit="contain"
 						/>
 					</Link>
@@ -34,7 +34,7 @@ const Sidebar = () => {
 									className={`sidebar-nav_element group ${
 										isActive
 											? " bg-primary rounded-md text-white"
-											: "text-gray-700"
+											: "text-gray-100"
 									}`}
 								>
 									<Link href={item.url} className="sidebar-link">
@@ -44,7 +44,7 @@ const Sidebar = () => {
 											width={18}
 											height={18}
 											className={`${
-												isActive ? "brightness-0 invert" : "brightness-0"
+												isActive ? "brightness-0 invert" : "brightness-0 invert"
 											}`}
 										/>
 										{item.label}

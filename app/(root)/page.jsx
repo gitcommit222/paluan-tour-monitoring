@@ -4,6 +4,7 @@ import DataBox from "@/components/DataBox";
 import DoughnutChart from "@/components/DoughnutChartComponent";
 import Headerbox from "@/components/shared/HeaderBox";
 import { tourist } from "@/public";
+import { Button } from "flowbite-react";
 import React from "react";
 
 const Dashboard = () => {
@@ -64,12 +65,17 @@ const Dashboard = () => {
 	};
 	return (
 		<section>
-			<Headerbox
-				type="greeting"
-				title="Hello,"
-				user="Admin!"
-				subtext="Track tourist spots progress here."
-			/>
+			<div className="flex justify-between items-center">
+				<Headerbox
+					type="greeting"
+					title="Hello,"
+					user="Admin!"
+					subtext="Track tourist spots progress here."
+				/>
+				<div>
+					<Button color="primary">Export</Button>
+				</div>
+			</div>
 			<div className="flex gap-4 flex-wrap w-full">
 				<DataBox icon={tourist} title="Tourists Spots" data="5" color="blue" />
 				<DataBox
