@@ -10,40 +10,12 @@ import {
 } from "flowbite-react";
 import Image from "next/image";
 
-import * as Yup from "yup";
-
 import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 import { useFormik } from "formik";
+import { addSpotSchema } from "@/lib/formSchema";
 
 const FILE_SIZE = 1024 * 1024 * 2; // 2 MB
 const SUPPORTED_FORMATS = ["image/jpg", "image/jpeg", "image/png"];
-
-const addSpotSchema = Yup.object({
-	spotName: Yup.string().required("Spot name is a required field."),
-	category: Yup.string().required("Category is a required field."),
-	permitNumber: Yup.string().required("Permit number is a required field."),
-	address: Yup.string().required(),
-	specificPlace: Yup.string(),
-	description: Yup.string(),
-	ownerName: Yup.string().required("Owner name is a required field."),
-	ownerEmail: Yup.string().email().required(),
-	contactNumber: Yup.string()
-		.matches(/^\d+$/, "Must contain only digits")
-		.min(11, "Must be exactly 11 digits")
-		.max(11, "Must be exactly 11 digits")
-		.required("Phone number is required"),
-	spotCover: Yup.mixed()
-		.test(
-			"fileSize",
-			"File too large, maximum size is 10MB",
-			(value) => value && value.size <= FILE_SIZE
-		)
-		.test(
-			"fileFormat",
-			"Unsupported Format, only JPG, PNG, and GIF allowed",
-			(value) => value && SUPPORTED_FORMATS.includes(value.type)
-		),
-});
 
 const AddNewSpotForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
@@ -93,9 +65,9 @@ const AddNewSpotForm = ({ data }) => {
 							</div>
 							<TextInput
 								id="spotName"
-								name="spotName"
 								type="text"
 								placeholder="e.g. Maslud Cove"
+								name="spotName"
 								value={values.spotName}
 								onChange={handleChange}
 								color={`${errors.spotName && touched.spotName && "failure"}`}
