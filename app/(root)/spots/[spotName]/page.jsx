@@ -17,69 +17,25 @@ const SingeSpotPage = ({ params }) => {
 				title={newSpotName}
 				subtext={`Here is the detailed analysis of ${newSpotName} data.`}
 			/>
-			<div className="border w-full min-h-[250px] rounded-t-2xl relative">
-				<Image src={beach1} alt="beachimage" fill className="object-cover" />
+			<div className="border w-full min-h-[250px] rounded-t-2xl relative shadow-sm">
+				<Image
+					src={beach1}
+					alt="beachimage"
+					fill
+					className="object-cover rounded-t-2xl filter brightness-75 contrast-90"
+				/>
+				<h1 className="absolute text-white font-bold text-[65px] bottom-0 px-5">
+					{newSpotName}
+				</h1>
 			</div>
-			{/* <div className="flex gap-4 flex-wrap w-full">
-				<DataBox
-					icon={tourist}
-					title="Current Guests"
-					data="104"
-					color="blue"
-				/>
-				<DataBox
-					icon={tourist}
-					title="Total Guests"
-					data="1,290"
-					color="green"
-				/>
-				<DataBox icon={tourist} title="Male Guests" data="500" color="red" />
-				<DataBox
-					icon={tourist}
-					title="Female Guests"
-					data="500"
-					color="yellow"
-				/>
-			</div> */}
-			{/* <div className="mt-5 w-full min-h-[500px]">
-				<Table>
-					<Table.Head>
-						<Table.HeadCell>Name</Table.HeadCell>
-						<Table.HeadCell>Age</Table.HeadCell>
-						<Table.HeadCell>Gender</Table.HeadCell>
-						<Table.HeadCell>Address</Table.HeadCell>
-						<Table.HeadCell>Contact</Table.HeadCell>
-						<Table.HeadCell>
-							<span>Actions</span>
-						</Table.HeadCell>
-					</Table.Head>
-					<Table.Body className="divide-y">
-						<Table.Row className="bg-white">
-							<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-								Rheymark Estonanto
-							</Table.Cell>
-							<Table.Cell>22</Table.Cell>
-							<Table.Cell>Male</Table.Cell>
-							<Table.Cell>Sta. Cruz</Table.Cell>
-							<Table.Cell>09123123123</Table.Cell>
-							<Table.Cell className="flex gap-2">
-								<Link
-									href="#"
-									className="font-medium text-cyan-600 hover:underline"
-								>
-									Edit
-								</Link>
-								<Link
-									href="#"
-									className="font-medium text-red-600 hover:underline"
-								>
-									Delete
-								</Link>
-							</Table.Cell>
-						</Table.Row>
-					</Table.Body>
-				</Table>
-			</div> */}
+			<div className="h-screen">
+				<div className="w-full gap-3 flex items-center justify-between py-4 flex-wrap">
+					<DataBox title="Guests" />
+					<DataBox color="green" title="Male Guests" />
+					<DataBox color="orange" title="Female Guests" />
+					<DataBox color="red" title="Children Guests" />
+				</div>
+			</div>
 		</section>
 	);
 };

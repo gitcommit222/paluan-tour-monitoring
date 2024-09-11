@@ -82,8 +82,8 @@ const AddNewSpotForm = ({ data }) => {
 	return (
 		<div>
 			<form onSubmit={handleSubmit}>
-				<div className="flex flex-wrap gap-10">
-					<div className="add-spot-forms space-y-4">
+				<div className="flex flex-wrap min-w-[400px] gap-10 ">
+					<div className="add-spot-forms space-y-4 min-w-[200px]">
 						<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-4">
 							Place Info
 						</h3>
@@ -98,13 +98,11 @@ const AddNewSpotForm = ({ data }) => {
 								placeholder="e.g. Maslud Cove"
 								value={values.spotName}
 								onChange={handleChange}
-								color={`${errors.spotName && touched.spotName && "failure"}`}
+								color={`${
+									errors.spotName && touched.spotName ? "failure" : "gray"
+								}`}
+								helperText={errors.spotName}
 							/>
-							{errors.spotName && touched.spotName && (
-								<span className="text-red-500 text-[12px] pt-2 block">
-									{errors.spotName}
-								</span>
-							)}
 						</div>
 						<div>
 							<div className="mb-2 block" aria-labelledby="default-popover">
@@ -112,10 +110,13 @@ const AddNewSpotForm = ({ data }) => {
 							</div>
 							<Select
 								id="categories"
-								color={`${errors.category && touched.category && "failure"}`}
+								color={`${
+									errors.category && touched.category ? "failure" : "gray"
+								}`}
 								name="category"
 								onChange={handleChange}
 								value={values.category}
+								helperText={errors.category}
 							>
 								<option defaultChecked></option>
 								<option>Historial significance</option>
@@ -126,11 +127,6 @@ const AddNewSpotForm = ({ data }) => {
 								<option>Leisure</option>
 								<option>Amusement and fun</option>
 							</Select>
-							{errors.category && touched.category && (
-								<span className="text-red-500 text-[12px] pt-2 block">
-									{errors.category}
-								</span>
-							)}
 						</div>
 						<div>
 							<div className="mb-2 block">
@@ -143,14 +139,12 @@ const AddNewSpotForm = ({ data }) => {
 								onChange={handleChange}
 								value={values.permitNumber}
 								color={`${
-									errors.permitNumber && touched.permitNumber && "failure"
+									errors.permitNumber && touched.permitNumber
+										? "failure"
+										: "gray"
 								}`}
+								helperText={errors.permitNumber}
 							/>
-							{errors.permitNumber && touched.permitNumber && (
-								<span className="text-red-500 text-[12px] pt-2 block">
-									{errors.permitNumber}
-								</span>
-							)}
 						</div>
 						<div>
 							<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-2">
@@ -164,9 +158,12 @@ const AddNewSpotForm = ({ data }) => {
 									<Select
 										id="barangay"
 										name="address"
-										color={`${errors.address && touched.address && "failure"}`}
+										color={`${
+											errors.address && touched.address ? "failure" : "gray"
+										}`}
 										onChange={handleChange}
 										value={values.address}
+										helperText={errors.address}
 									>
 										<option defaultChecked></option>
 										{barangays.map((brgy) => (
@@ -175,11 +172,6 @@ const AddNewSpotForm = ({ data }) => {
 											</option>
 										))}
 									</Select>
-									{errors.address && touched.address && (
-										<span className="text-red-500 text-[12px] pt-2 block">
-											{errors.address}
-										</span>
-									)}
 								</div>
 								<div>
 									<div className="mb-2 block">
@@ -191,6 +183,7 @@ const AddNewSpotForm = ({ data }) => {
 										name="specificPlace"
 										onChange={handleChange}
 										value={values.specificPlace}
+										helperText={errors.specificPlace}
 									/>
 								</div>
 							</div>
@@ -214,7 +207,7 @@ const AddNewSpotForm = ({ data }) => {
 							</div>
 						</div>
 					</div>
-					<div className=" add-spot-forms space-y-4">
+					<div className=" add-spot-forms space-y-4 min-w-[200px]">
 						<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat">
 							Owner Info
 						</h3>
@@ -229,13 +222,11 @@ const AddNewSpotForm = ({ data }) => {
 								name="ownerName"
 								onChange={handleChange}
 								value={values.ownerName}
-								color={`${errors.ownerName && touched.ownerName && "failure"}`}
+								color={`${
+									errors.ownerName && touched.ownerName ? "failure" : "gray"
+								}`}
+								helperText={errors.ownerName}
 							/>
-							{errors.ownerName && touched.ownerName && (
-								<span className="text-red-500 text-[12px] pt-2 block">
-									{errors.ownerName}
-								</span>
-							)}
 						</div>
 						<div>
 							<div className="mb-2 block">
@@ -249,14 +240,10 @@ const AddNewSpotForm = ({ data }) => {
 								onChange={handleChange}
 								value={values.ownerEmail}
 								color={`${
-									errors.ownerEmail && touched.ownerEmail && "failure"
+									errors.ownerEmail && touched.ownerEmail ? "failure" : "gray"
 								}`}
+								helperText={errors.ownerEmail}
 							/>
-							{errors.ownerEmail && touched.ownerEmail && (
-								<span className="text-red-500 text-[12px] pt-2 block">
-									{errors.ownerEmail}
-								</span>
-							)}
 						</div>
 						<div>
 							<div className="mb-2 block">
@@ -270,14 +257,12 @@ const AddNewSpotForm = ({ data }) => {
 								onChange={handleChange}
 								value={values.contactNumber}
 								color={`${
-									errors.contactNumber && touched.contactNumber && "failure"
+									errors.contactNumber && touched.contactNumber
+										? "failure"
+										: "gray"
 								}`}
+								helperText={errors.contactNumber}
 							/>
-							{errors.contactNumber && touched.contactNumber && (
-								<span className="text-red-500 text-[12px] pt-2 block">
-									{errors.contactNumber}
-								</span>
-							)}
 						</div>
 						<div className=" space-y-4">
 							<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-5">
@@ -342,7 +327,13 @@ const AddNewSpotForm = ({ data }) => {
 					</div>
 				</div>
 				<div className="flex justify-end gap-2 items-end mt-3">
-					<Button color="gray" onClick={resetForm}>
+					<Button
+						color="gray"
+						onClick={() => {
+							resetForm();
+							setSelectedImage("");
+						}}
+					>
 						Reset
 					</Button>
 					<Button type="submit" color="primary">

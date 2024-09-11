@@ -72,4 +72,8 @@
 	.add-spot-forms {
 		@apply flex-1 w-full;
 	}
+
+	.owners-data-box {
+		@apply flex-1 min-w-[250px] max-w-[400px] min-h-[150px] bg-gray-100 outline-none border-none rounded-xl;
+	}
 }
