@@ -14,7 +14,7 @@ import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 import { useFormik } from "formik";
 import { addSpotSchema } from "@/lib/formSchema";
 
-const AddNewSpotForm = ({ data }) => {
+const SpotDetailsForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
 
 	const formik = useFormik({
@@ -314,4 +314,4 @@ const AddNewSpotForm = ({ data }) => {
 	);
 };
 
-export default AddNewSpotForm;
+export default SpotDetailsForm;

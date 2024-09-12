@@ -30,7 +30,7 @@ const Reports = () => {
 						</Select>
 					</div>
 					<div>
-						<Button color="primary">Export</Button>
+						<Button color="primary">EXPORT</Button>
 					</div>
 				</div>
 			</div>

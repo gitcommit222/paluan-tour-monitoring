@@ -1,5 +1,3 @@
-import AddNewSpotForm from "@/components/AddNewSpotForm";
-import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
 import SpotsCard from "@/components/SpotsCard";
 import { beach1, beach2, spot } from "@/public";
@@ -13,7 +11,7 @@ const Spots = () => {
 				<Headerbox title="Tourist Spots" subtext="Manage spots here." />
 				<div>
 					<Tooltip content="Add new spot">
-						<Button href="/spots/new-spot" color="secondary">
+						<Button href="/spots/new-spot/add" color="primary">
 							NEW SPOT
 						</Button>
 					</Tooltip>

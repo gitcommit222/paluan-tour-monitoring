@@ -73,7 +73,7 @@ const Dashboard = () => {
 					subtext="Track tourist spots progress here."
 				/>
 				<div>
-					<Button color="primary">Export</Button>
+					<Button color="primary">EXPORT</Button>
 				</div>
 			</div>
 			<div className="flex gap-4 flex-wrap w-full">
