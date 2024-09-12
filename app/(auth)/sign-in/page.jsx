@@ -7,8 +7,8 @@ import React from "react";
 
 const SignInPage = () => {
 	return (
-		<div className="flex items-center justify-center h-screen backdrop-blur-md  ">
-			<div className="w-[400px] shadow-md rounded-lg p-5">
+		<div className="flex items-center justify-center h-screen backdrop-blur-md">
+			<div className="w-[400px] shadow-md rounded-lg p-5 bg-gray-800 ">
 				<div className="flex items-center justify-center mb-5">
 					<Image src={logo} height={150} width={200} />
 				</div>

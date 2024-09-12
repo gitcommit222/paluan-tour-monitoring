@@ -1,31 +1,41 @@
 "use client";
 
 import { Button, Modal } from "flowbite-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const CustomModal = ({
-	headerTitle,
 	buttonName,
 	mainContent,
-	yesLabel,
-	noLabel,
+	size = "lg",
+	btnColor,
+	type = "form",
 }) => {
 	const [openModal, setOpenModal] = useState(false);
 
 	return (
 		<>
-			<Button gradientDuoTone="cyanToBlue" onClick={() => setOpenModal(true)}>
+			<Button color={btnColor} onClick={() => setOpenModal(true)}>
 				{buttonName}
 			</Button>
-			<Modal show={openModal} onClose={() => setOpenModal(false)}>
-				<Modal.Header>{headerTitle}</Modal.Header>
-				<Modal.Body>{mainContent}</Modal.Body>
-				<Modal.Footer>
-					<Button onClick={() => setOpenModal(false)}>{yesLabel}</Button>
-					<Button color="gray" onClick={() => setOpenModal(false)}>
-						{noLabel}
-					</Button>
-				</Modal.Footer>
+			<Modal show={openModal} size={size} onClose={() => setOpenModal(false)}>
+				<Modal.Body>
+					{mainContent}
+					{type == "logout" && (
+						<div className="flex justify-center gap-4">
+							<Button
+								color="failure"
+								onClick={async () => {
+									setOpenModal(false);
+								}}
+							>
+								{"Yes, I'm sure"}
+							</Button>
+							<Button color="gray" onClick={() => setOpenModal(false)}>
+								No, cancel
+							</Button>
+						</div>
+					)}
+				</Modal.Body>
 			</Modal>
 		</>
 	);

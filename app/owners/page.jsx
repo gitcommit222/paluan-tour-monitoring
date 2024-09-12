@@ -1,13 +1,13 @@
 "use client";
 import AddGuestForm from "@/components/AddGuestForm";
 import OwnersTable from "@/components/OwnersTable";
+import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
 import { logo } from "@/public";
-import { Button } from "flowbite-react";
 import Image from "next/image";
-import React from "react";
+import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-const Home = ({ data }) => {
+const Home = () => {
 	return (
 		<section className="relative">
 			<div className="w-full shadow-lg z-100 bg-gray-800 h-[80px] flex items-center justify-between px-[100px]">
@@ -22,12 +22,20 @@ const Home = ({ data }) => {
 				</div>
 				<nav>
 					<ul>
-						<Button
-							color="secondary"
-							className="text-white uppercase tracking-wide font-medium"
-						>
-							Logout
-						</Button>
+						<CustomModal
+							size="md"
+							buttonName="LOGOUT"
+							btnColor="secondary"
+							mainContent={
+								<div className="text-center">
+									<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+									<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+										Are you sure you want to logout?
+									</h3>
+								</div>
+							}
+							type="logout"
+						/>
 					</ul>
 				</nav>
 			</div>

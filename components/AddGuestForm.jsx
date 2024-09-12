@@ -186,7 +186,7 @@ const AddGuestForm = ({ data }) => {
 					<TextInput
 						id="contact"
 						type="text"
-						name="contact"
+						name="contactNumber"
 						sizing="sm"
 						color={`${
 							errors.contactNumber && touched.contactNumber ? "failure" : "gray"

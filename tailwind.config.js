@@ -15,8 +15,7 @@ module.exports = {
 				accent: "#BFBFBF",
 			},
 			backgroundImage: {
-				"custom-gradient":
-					"linear-gradient(103deg, rgba(22,240,234,0.5410539215686274) 0%, rgba(167,255,244,0.17970938375350143) 100%);",
+				"bg-image": "url(/images/paluanjpg.jpg)",
 			},
 		},
 	},
