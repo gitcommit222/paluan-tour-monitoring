@@ -76,4 +76,19 @@
 	.owners-data-box {
 		@apply flex-1 min-w-[250px] max-w-[400px] min-h-[150px] bg-gray-100 outline-none border-none rounded-xl;
 	}
+
+	.prom-content {
+		@apply px-16 py-8 mb-8;
+	}
+
+	.offers-box {
+		@apply min-w-[300px] p-6 rounded-md bg-white shadow-md flex-1;
+	}
+
+	.prom-spot-box {
+		@apply flex-1 h-[400px] min-w-[350px] max-w-[380px] rounded-lg;
+	}
+	.prom-footer {
+		@apply h-[100px] w-full border bg-gray-100 px-16 py-4;
+	}
 }

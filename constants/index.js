@@ -20,3 +20,22 @@ export const navLinks = [
 		icon: "/icons/settings.png",
 	},
 ];
+
+export const promotionNavLinks = [
+	{
+		label: "Home",
+		url: "home",
+	},
+	{
+		label: "Places",
+		url: "places",
+	},
+	{
+		label: "Blogs",
+		url: "blogs",
+	},
+	{
+		label: "About",
+		url: "about",
+	},
+];

@@ -17,8 +17,8 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
 	return (
-		<html lang="en">
-			<body className={`${inter.className} ${poppins.className}`}>
+		<html lang="en" className="scroll-smooth">
+			<body className={`${inter.className} ${poppins.className} `}>
 				<Flowbite theme={{ theme: customTheme }}>{children}</Flowbite>
 			</body>
 		</html>

@@ -11,6 +11,13 @@ import reports from "./icons/report.png";
 import beach1 from "./images/beach1.jpg";
 import beach2 from "./images/beach2.jpg";
 
+import b1 from "./images/b1.jpg";
+import b2 from "./images/b2.jpg";
+import b3 from "./images/b3.jpg";
+import b4 from "./images/b4.jpg";
+import b5 from "./images/b5.jpg";
+import about from "./images/about.png";
+
 import notfound from "./images/pagenotfound.svg";
 
 export {
@@ -23,4 +30,10 @@ export {
 	settings,
 	reports,
 	notfound,
+	b1,
+	b2,
+	b3,
+	b4,
+	b5,
+	about,
 };
