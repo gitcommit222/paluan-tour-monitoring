@@ -11,7 +11,7 @@ const Spots = () => {
 				<Headerbox title="Tourist Spots" subtext="Manage spots here." />
 				<div>
 					<Tooltip content="Add new spot">
-						<Button href="/spots/new-spot/add" color="primary">
+						<Button href="/spots/new-spot/add" color="gray">
 							NEW SPOT
 						</Button>
 					</Tooltip>

@@ -3,11 +3,14 @@ import BarChart from "@/components/BarChartComponent";
 import DataBox from "@/components/DataBox";
 import DoughnutChart from "@/components/DoughnutChartComponent";
 import Headerbox from "@/components/shared/HeaderBox";
+import { useFetchUser } from "@/hooks/useAuth";
 import { tourist } from "@/public";
 import { Button } from "flowbite-react";
 import React from "react";
 
 const Dashboard = () => {
+	const { data: user } = useFetchUser();
+
 	const data = {
 		labels: ["January", "February", "March", "April", "May", "June", "July"],
 		datasets: [
@@ -69,7 +72,7 @@ const Dashboard = () => {
 				<Headerbox
 					type="greeting"
 					title="Hello,"
-					user="Admin!"
+					user={`${user && user.name}!`}
 					subtext="Track tourist spots progress here."
 				/>
 				<div>

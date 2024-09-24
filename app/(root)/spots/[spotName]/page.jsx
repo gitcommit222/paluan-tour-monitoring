@@ -17,7 +17,7 @@ const SingeSpotPage = ({ params }) => {
 					subtext={`Here is the detailed analysis of ${newSpotName} data.`}
 				/>
 				<div>
-					<Button href={`/spots/edit/${1}`} color="primary">
+					<Button href={`/spots/new-spot/edit/${1}`} color="primary">
 						EDIT DETAILS
 					</Button>
 				</div>

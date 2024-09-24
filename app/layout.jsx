@@ -2,6 +2,8 @@ import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { Flowbite } from "flowbite-react";
 import { customTheme } from "@/lib/customTheme";
+import Providers from "@/hoc/Providers";
+import { Toaster } from "react-hot-toast";
 
 const inter = Inter({ subsets: ["latin"] });
 const poppins = Poppins({
@@ -19,7 +21,12 @@ export default function RootLayout({ children }) {
 	return (
 		<html lang="en" className="scroll-smooth">
 			<body className={`${inter.className} ${poppins.className} `}>
-				<Flowbite theme={{ theme: customTheme }}>{children}</Flowbite>
+				<Flowbite theme={{ theme: customTheme }}>
+					<Providers>
+						{children}
+						<Toaster position="bottom-center" />
+					</Providers>
+				</Flowbite>
 			</body>
 		</html>
 	);

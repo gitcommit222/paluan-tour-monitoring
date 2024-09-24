@@ -13,12 +13,22 @@ import Image from "next/image";
 import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 import { useFormik } from "formik";
 import { addSpotSchema } from "@/lib/formSchema";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const SpotDetailsForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
 
-	const formik = useFormik({
-		initialValues: {
+	const {
+		register,
+		handleSubmit,
+		reset,
+		setError,
+		setValue,
+		getValues,
+		formState: { errors, isSubmitting },
+	} = useForm({
+		defaultValues: {
 			spotName: data ? data.spotName : "",
 			category: data ? data.category : "",
 			permitNumber: data ? data.permitNumber : "",
@@ -30,27 +40,24 @@ const SpotDetailsForm = ({ data }) => {
 			contactNumber: data ? data.contactNumber : "",
 			spotCover: data ? data.spotCover : "",
 		},
-		validationSchema: addSpotSchema,
-		onSubmit: ({ spotCover }) => {
-			console.log(`spotCover: ${spotCover}`);
-		},
+		resolver: yupResolver(addSpotSchema),
 	});
 
-	const {
-		errors,
-		touched,
-		values,
-		handleChange,
-		handleSubmit,
-		resetForm,
-		setFieldValue,
-	} = formik;
+	const onSubmit = async (data) => {
+		try {
+			reset();
+		} catch (error) {
+			setError("root", {
+				message: "Invalid Inputs",
+			});
+		}
+	};
 
 	const barangays = getBarangayByMun(175107);
 
 	return (
 		<div>
-			<form onSubmit={handleSubmit}>
+			<form onSubmit={handleSubmit(onSubmit)}>
 				<div className="flex flex-wrap min-w-[400px] gap-10 ">
 					<div className="add-spot-forms space-y-4 min-w-[200px]">
 						<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-4">
@@ -61,16 +68,13 @@ const SpotDetailsForm = ({ data }) => {
 								<Label htmlFor="spotName" value="Place Name" />
 							</div>
 							<TextInput
+								{...register("spotName")}
 								id="spotName"
 								type="text"
 								placeholder="e.g. Maslud Cove"
 								name="spotName"
-								value={values.spotName}
-								onChange={handleChange}
-								color={`${
-									errors.spotName && touched.spotName ? "failure" : "gray"
-								}`}
-								helperText={errors.spotName}
+								color={`${errors.spotName ? "failure" : "gray"}`}
+								helperText={errors.spotName && errors.spotName.message}
 							/>
 						</div>
 						<div>
@@ -78,14 +82,11 @@ const SpotDetailsForm = ({ data }) => {
 								<Label htmlFor="categories" value="Select Categories" />
 							</div>
 							<Select
+								{...register("category")}
 								id="categories"
-								color={`${
-									errors.category && touched.category ? "failure" : "gray"
-								}`}
+								color={`${errors.category ? "failure" : "gray"}`}
 								name="category"
-								onChange={handleChange}
-								value={values.category}
-								helperText={errors.category}
+								helperText={errors.category && errors.category.message}
 							>
 								<option defaultChecked></option>
 								<option>Historial significance</option>
@@ -102,17 +103,12 @@ const SpotDetailsForm = ({ data }) => {
 								<Label htmlFor="permitNumber" value="Permit No." />
 							</div>
 							<TextInput
+								{...register("permitNumber")}
 								id="permitNumber"
 								name="permitNumber"
 								type="text"
-								onChange={handleChange}
-								value={values.permitNumber}
-								color={`${
-									errors.permitNumber && touched.permitNumber
-										? "failure"
-										: "gray"
-								}`}
-								helperText={errors.permitNumber}
+								color={`${errors.permitNumber ? "failure" : "gray"}`}
+								helperText={errors.permitNumber && errors.permitNumber.message}
 							/>
 						</div>
 						<div>
@@ -125,14 +121,11 @@ const SpotDetailsForm = ({ data }) => {
 										<Label htmlFor="barangay" value="Select Barangay" />
 									</div>
 									<Select
+										{...register("barangay")}
 										id="barangay"
 										name="address"
-										color={`${
-											errors.address && touched.address ? "failure" : "gray"
-										}`}
-										onChange={handleChange}
-										value={values.address}
-										helperText={errors.address}
+										color={`${errors.address ? "failure" : "gray"}`}
+										helperText={errors.address && errors.address.message}
 									>
 										<option defaultChecked></option>
 										{barangays.map((brgy) => (
@@ -147,12 +140,13 @@ const SpotDetailsForm = ({ data }) => {
 										<Label htmlFor="specificPlace" value="Specific Place" />
 									</div>
 									<TextInput
+										{...register("specificPlace")}
 										id="specificPlace"
 										type="text"
 										name="specificPlace"
-										onChange={handleChange}
-										value={values.specificPlace}
-										helperText={errors.specificPlace}
+										helperText={
+											errors.specificPlace && errors.specificPlace.message
+										}
 									/>
 								</div>
 							</div>
@@ -166,12 +160,11 @@ const SpotDetailsForm = ({ data }) => {
 									<Label htmlFor="description" value="Description" />
 								</div>
 								<Textarea
+									{...register("description")}
 									id="description"
 									name="description"
 									placeholder="Describe the place..."
 									rows={4}
-									onChange={handleChange}
-									value={values.description}
 								/>
 							</div>
 						</div>
@@ -185,16 +178,13 @@ const SpotDetailsForm = ({ data }) => {
 								<Label htmlFor="ownerName" value="Full Name" />
 							</div>
 							<TextInput
+								{...register("ownerName")}
 								id="ownerName"
 								type="text"
 								placeholder="e.g. John Wick"
 								name="ownerName"
-								onChange={handleChange}
-								value={values.ownerName}
-								color={`${
-									errors.ownerName && touched.ownerName ? "failure" : "gray"
-								}`}
-								helperText={errors.ownerName}
+								color={`${errors.ownerName ? "failure" : "gray"}`}
+								helperText={errors.ownerName && errors.ownerName.message}
 							/>
 						</div>
 						<div>
@@ -202,16 +192,13 @@ const SpotDetailsForm = ({ data }) => {
 								<Label htmlFor="ownerEmail" value="Email Address" />
 							</div>
 							<TextInput
+								{...register("ownerEmail")}
 								id="ownerEmail"
 								type="email"
 								placeholder="e.g. sample@email.com"
 								name="ownerEmail"
-								onChange={handleChange}
-								value={values.ownerEmail}
-								color={`${
-									errors.ownerEmail && touched.ownerEmail ? "failure" : "gray"
-								}`}
-								helperText={errors.ownerEmail}
+								color={`${errors.ownerEmail ? "failure" : "gray"}`}
+								helperText={errors.ownerEmail && errors.ownerEmail.message}
 							/>
 						</div>
 						<div>
@@ -219,18 +206,15 @@ const SpotDetailsForm = ({ data }) => {
 								<Label htmlFor="contactNumber" value="Contact No." />
 							</div>
 							<TextInput
+								{...register("contactNumber")}
 								id="contactNumber"
 								type="text"
 								placeholder="e.g. 09123456789"
 								name="contactNumber"
-								onChange={handleChange}
-								value={values.contactNumber}
-								color={`${
-									errors.contactNumber && touched.contactNumber
-										? "failure"
-										: "gray"
-								}`}
-								helperText={errors.contactNumber}
+								color={`${errors.contactNumber ? "failure" : "gray"}`}
+								helperText={
+									errors.contactNumber && errors.contactNumber.message
+								}
 							/>
 						</div>
 						<div className=" space-y-4">
@@ -278,13 +262,14 @@ const SpotDetailsForm = ({ data }) => {
 										)}
 									</div>
 									<FileInput
+										{...register("spotCover")}
 										id="dropzone-file"
 										className="hidden"
 										accept="image/*"
 										name="spotCover"
 										onChange={(e) => {
 											const file = e.target.files?.[0];
-											setFieldValue("spotCover", file);
+											setValue("spotCover", file);
 											setSelectedImage(
 												file ? URL.createObjectURL(file) : undefined
 											);

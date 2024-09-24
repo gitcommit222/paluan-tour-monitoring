@@ -35,7 +35,7 @@ const Reports = () => {
 				</div>
 			</div>
 			<div>
-				<div className="overflow-x-auto">
+				<div className="overflow-x-auto ">
 					<Table>
 						<Table.Head>
 							<Table.HeadCell>Guest Name</Table.HeadCell>
@@ -43,9 +43,9 @@ const Reports = () => {
 							<Table.HeadCell>Gender</Table.HeadCell>
 							<Table.HeadCell>Address</Table.HeadCell>
 							<Table.HeadCell>Spot Visited</Table.HeadCell>
-							<Table.HeadCell>Actions</Table.HeadCell>
+							<Table.HeadCell>Date Visited</Table.HeadCell>
 						</Table.Head>
-						<Table.Body className="divide-y">
+						<Table.Body className="divide-y text-[14px]">
 							<Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
 								<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
 									Alexis Cadahin
@@ -54,20 +54,7 @@ const Reports = () => {
 								<Table.Cell>Male</Table.Cell>
 								<Table.Cell>Paluan, Occidental Mindoro</Table.Cell>
 								<Table.Cell>Calawagan</Table.Cell>
-								<Table.Cell className="flex gap-2">
-									<Link
-										href="#"
-										className="font-medium text-cyan-600 hover:underline dark:text-cyan-500"
-									>
-										Edit
-									</Link>
-									<Link
-										href="#"
-										className="font-medium text-red-600 hover:underline dark:text-red-500"
-									>
-										Delete
-									</Link>
-								</Table.Cell>
+								<Table.Cell>September 25, 2024</Table.Cell>
 							</Table.Row>
 						</Table.Body>
 					</Table>

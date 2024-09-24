@@ -81,8 +81,8 @@ const PromotionsPage = () => {
 					</ul>
 				</div>
 				<div className="w-[250px] flex justify-end">
-					<Button size="sm" color="primary">
-						Contact
+					<Button size="sm" color="primary" href="/sign-in">
+						Login
 					</Button>
 				</div>
 			</nav>
@@ -98,7 +98,7 @@ const PromotionsPage = () => {
 								Paluan, Occidental Mindoro, Philippines
 							</p>
 						</div>
-						<div className=" backdrop-blur-lg rounded-lg  md:w-[600px] shadow-md p-4  flex items-center justify-between flex-wrap">
+						<div className="backdrop-blur-lg rounded-lg  md:w-[600px] shadow-md p-4  flex items-center justify-between flex-wrap">
 							<div className="md:flex-1 pr-28">
 								<FloatingLabel
 									variant="standard"

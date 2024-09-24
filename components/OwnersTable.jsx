@@ -12,11 +12,12 @@ const OwnersTable = () => {
 					<Table.HeadCell>Gender</Table.HeadCell>
 					<Table.HeadCell>Address</Table.HeadCell>
 					<Table.HeadCell>Contact</Table.HeadCell>
+					<Table.HeadCell>Date</Table.HeadCell>
 					<Table.HeadCell>
 						<span>Actions</span>
 					</Table.HeadCell>
 				</Table.Head>
-				<Table.Body className="divide-y">
+				<Table.Body className="divide-y text-[12px]">
 					<Table.Row className="bg-white">
 						<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
 							Rheymark Estonanto
@@ -25,6 +26,7 @@ const OwnersTable = () => {
 						<Table.Cell>Male</Table.Cell>
 						<Table.Cell>Sta. Cruz</Table.Cell>
 						<Table.Cell>09123123123</Table.Cell>
+						<Table.Cell>09-23-24</Table.Cell>
 						<Table.Cell className="flex gap-2">
 							<Link
 								href="#"

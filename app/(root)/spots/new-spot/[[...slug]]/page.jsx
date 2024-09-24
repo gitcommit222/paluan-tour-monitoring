@@ -11,7 +11,9 @@ const AddNewSpotPage = ({ params }) => {
 
 	if (params.slug.includes("edit") && params.slug.length <= 1) notFound();
 
-	let data = null;
+	let data = {
+		spotName: "Test",
+	};
 	return (
 		<section>
 			<Headerbox

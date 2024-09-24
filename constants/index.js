@@ -1,7 +1,7 @@
 export const navLinks = [
 	{
 		label: "Dashboard",
-		url: "/",
+		url: "/dashboard",
 		icon: "/icons/pie-chart.png",
 	},
 	{
