@@ -15,9 +15,17 @@ import { useFormik } from "formik";
 import { addSpotSchema } from "@/lib/formSchema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAddSpot } from "@/hooks/useAddSpot";
+import toast from "react-hot-toast";
 
 const SpotDetailsForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
+
+	const {
+		mutateAsync: addSpotMutation,
+		isSuccess: isAddSpotSuccess,
+		isPending: isAddSpotPending,
+	} = useAddSpot();
 
 	const {
 		register,
@@ -44,8 +52,44 @@ const SpotDetailsForm = ({ data }) => {
 	});
 
 	const onSubmit = async (data) => {
+		const {
+			spotName,
+			category,
+			permitNumber,
+			address,
+			specificPlace,
+			description,
+			ownerName,
+			ownerEmail,
+			contactNumber,
+			spotCover,
+		} = data;
+		const spotData = {
+			name: spotName,
+			category,
+			permitNo: permitNumber,
+			barangay: address,
+			street: specificPlace,
+			description,
+			ownerName,
+			email: ownerEmail,
+			phone: contactNumber,
+			thumbnail: spotCover,
+		};
+
+		if (!selectedImage) {
+			console.error("No file selected");
+			return;
+		}
+
 		try {
+			await toast.promise(addSpotMutation({ file: selectedImage, spotData }), {
+				success: "Spot added!",
+				loading: "Adding spot...",
+				error: "Error adding spot.",
+			});
 			reset();
+			setSelectedImage("");
 		} catch (error) {
 			setError("root", {
 				message: "Invalid Inputs",
@@ -89,13 +133,10 @@ const SpotDetailsForm = ({ data }) => {
 								helperText={errors.category && errors.category.message}
 							>
 								<option defaultChecked></option>
-								<option>Historial significance</option>
-								<option>Cultural value</option>
-								<option>Political significance</option>
-								<option>Nature</option>
-								<option>Natural or built beauty</option>
-								<option>Leisure</option>
-								<option>Amusement and fun</option>
+								<option value="beach">Beach</option>
+								<option value="mountain">Mountain</option>
+								<option value="urban">Urban</option>
+								<option value="rural">Rural</option>
 							</Select>
 						</div>
 						<div>
@@ -121,15 +162,15 @@ const SpotDetailsForm = ({ data }) => {
 										<Label htmlFor="barangay" value="Select Barangay" />
 									</div>
 									<Select
-										{...register("barangay")}
+										{...register("address")}
 										id="barangay"
 										name="address"
 										color={`${errors.address ? "failure" : "gray"}`}
 										helperText={errors.address && errors.address.message}
 									>
 										<option defaultChecked></option>
-										{barangays.map((brgy) => (
-											<option key={brgy.name} value={brgy.name}>
+										{barangays.map((brgy, i) => (
+											<option key={brgy.name} value={i}>
 												{brgy.name}
 											</option>
 										))}

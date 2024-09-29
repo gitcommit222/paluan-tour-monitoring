@@ -20,7 +20,7 @@ const ProtectedRoutes = ({ children, roles }) => {
 		}
 	});
 
-	if (!user || (user === undefined && !isLoading)) {
+	if (!user && !isLoading) {
 		return <p>Loading...</p>;
 	}
 

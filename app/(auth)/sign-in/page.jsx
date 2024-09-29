@@ -49,7 +49,7 @@ const SignInPage = () => {
 		const { isSuccess, isError, data, error } = login;
 
 		if (isSuccess) {
-			toast.success(`Welcome, ${data?.user.name}!`);
+			toast.success(`Welcome, ${data?.user?.name}!`);
 			router.push("/dashboard");
 		} else if (isError) {
 			console.error("Login failed:", error);
