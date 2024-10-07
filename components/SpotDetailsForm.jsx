@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
 	Button,
 	FileInput,
@@ -11,11 +11,10 @@ import {
 import Image from "next/image";
 
 import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
-import { useFormik } from "formik";
 import { addSpotSchema } from "@/lib/formSchema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAddSpot } from "@/hooks/useAddSpot";
+import { useAddSpot } from "@/hooks/useSpot";
 import toast from "react-hot-toast";
 
 const SpotDetailsForm = ({ data }) => {
@@ -31,77 +30,109 @@ const SpotDetailsForm = ({ data }) => {
 		register,
 		handleSubmit,
 		reset,
-		setError,
 		setValue,
-		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm({
 		defaultValues: {
-			spotName: data ? data.spotName : "",
-			category: data ? data.category : "",
-			permitNumber: data ? data.permitNumber : "",
-			address: data ? data.address : "",
-			specificPlace: data ? data.specificPlace : "",
-			description: data ? data.description : "",
-			ownerName: data ? data.ownerName : "",
-			ownerEmail: data ? data.ownerEmail : "",
-			contactNumber: data ? data.contactNumber : "",
-			spotCover: data ? data.spotCover : "",
+			spotName: "",
+			category: "",
+			permitNumber: "",
+			address: "",
+			specificPlace: "",
+			description: "",
+			ownerName: "",
+			ownerEmail: "",
+			contactNumber: "",
+			spotCover: "",
 		},
 		resolver: yupResolver(addSpotSchema),
 	});
 
-	const onSubmit = async (data) => {
-		const {
-			spotName,
-			category,
-			permitNumber,
-			address,
-			specificPlace,
-			description,
-			ownerName,
-			ownerEmail,
-			contactNumber,
-			spotCover,
-		} = data;
-		const spotData = {
-			name: spotName,
-			category,
-			permitNo: permitNumber,
-			barangay: address,
-			street: specificPlace,
-			description,
-			ownerName,
-			email: ownerEmail,
-			phone: contactNumber,
-			thumbnail: spotCover,
-		};
+	// UseEffect to reset form values when `data` becomes available
+	useEffect(() => {
+		if (data) {
+			reset({
+				spotName: data.name || "",
+				category: data.category || "",
+				permitNumber: data.permitNumber || "",
+				address: data.Address.barangay || "",
+				specificPlace: data.specificPlace || "",
+				description: data.description || "",
+				ownerName: data.User.name || "",
+				ownerEmail: data.User.email || "",
+				contactNumber: data.contactNumber || "",
+				spotCover: data.spotCover || "",
+			});
 
-		if (!selectedImage) {
-			console.error("No file selected");
-			return;
+			if (data.spotCover) {
+				setSelectedImage(data.spotCover);
+			}
 		}
+	}, [data, reset]);
 
+	const onSubmit = async (data) => {
 		try {
+			console.log("Form data:", data);
+			const {
+				spotName,
+				category,
+				permitNumber,
+				address,
+				specificPlace,
+				description,
+				ownerName,
+				ownerEmail,
+				contactNumber,
+				spotCover,
+			} = data;
+			const spotData = {
+				name: spotName,
+				category,
+				permitNo: permitNumber,
+				barangay: address,
+				street: specificPlace,
+				description,
+				ownerName,
+				email: ownerEmail,
+				phone: contactNumber,
+				thumbnail: spotCover,
+			};
+
+			if (!selectedImage) {
+				console.error("No file selected");
+				return;
+			}
+
 			await toast.promise(addSpotMutation({ file: selectedImage, spotData }), {
 				success: "Spot added!",
 				loading: "Adding spot...",
 				error: "Error adding spot.",
 			});
+
 			reset();
 			setSelectedImage("");
 		} catch (error) {
+			console.error("Error during submission:", error);
 			setError("root", {
 				message: "Invalid Inputs",
 			});
 		}
 	};
 
+	if (Object.keys(errors).length) {
+		console.log("Validation errors:", errors);
+	}
+
 	const barangays = getBarangayByMun(175107);
 
+	console.log(getBarangayByMun(175107));
+
 	return (
-		<div>
-			<form onSubmit={handleSubmit(onSubmit)}>
+		<div className="relative">
+			<form
+				onSubmit={handleSubmit(onSubmit)}
+				className={`${isAddSpotPending ? "pointer-events-none" : ""}`}
+			>
 				<div className="flex flex-wrap min-w-[400px] gap-10 ">
 					<div className="add-spot-forms space-y-4 min-w-[200px]">
 						<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-4">
@@ -308,6 +339,8 @@ const SpotDetailsForm = ({ data }) => {
 										className="hidden"
 										accept="image/*"
 										name="spotCover"
+										color={`${errors.spotCover ? "failure" : "gray"}`}
+										helperText={errors.spotCover && errors.spotCover.message}
 										onChange={(e) => {
 											const file = e.target.files?.[0];
 											setValue("spotCover", file);
@@ -325,14 +358,14 @@ const SpotDetailsForm = ({ data }) => {
 					<Button
 						color="gray"
 						onClick={() => {
-							resetForm();
+							reset();
 							setSelectedImage("");
 						}}
 					>
 						Reset
 					</Button>
-					<Button type="submit" color="primary">
-						Submit
+					<Button type="submit" disabled={isSubmitting} color="primary">
+						{isSubmitting ? "Adding spot..." : "Submit"}
 					</Button>
 				</div>
 			</form>

@@ -1,10 +1,13 @@
+"use client";
 import Headerbox from "@/components/shared/HeaderBox";
 import SpotsCard from "@/components/SpotsCard";
+import { useFetchSpots } from "@/hooks/useSpot";
 import { beach1, beach2, spot } from "@/public";
 import { Button, Tooltip } from "flowbite-react";
 import React from "react";
 
 const Spots = () => {
+	const { data: spots, isLoading: isSpotListFetching } = useFetchSpots();
 	return (
 		<section>
 			<div className="flex justify-between items-center">
@@ -18,22 +21,19 @@ const Spots = () => {
 				</div>
 			</div>
 			<div className="flex flex-wrap gap-5">
-				<div>
-					<SpotsCard
-						headerTitle="Calawagan Resort"
-						imageUrl={beach1}
-						description="Paluan, Occidental Mindoro"
-						owner="Rheymark Estonanto"
-					/>
-				</div>
-				<div>
-					<SpotsCard
-						headerTitle="Maslud Cove"
-						imageUrl={beach2}
-						description="Paluan, Occidental Mindoro"
-						owner="Alexis Cadahin"
-					/>
-				</div>
+				{spots &&
+					!isSpotListFetching &&
+					spots.resorts.map((spot) => (
+						<div key={spot.id}>
+							<SpotsCard
+								headerTitle={spot?.name}
+								imageUrl={spot?.thumbnail ? spot.thumbnail : beach1}
+								description="Paluan, Occidental Mindoro"
+								owner="Rheymark Estonanto"
+								spotId={spot.id}
+							/>
+						</div>
+					))}
 			</div>
 		</section>
 	);

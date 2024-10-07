@@ -8,10 +8,12 @@ const loginUser = async ({ username, password }) => {
 };
 
 export const useLogin = () => {
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: loginUser,
 		onSuccess: (data) => {
 			localStorage.setItem("accessToken", data.accessToken);
+			queryClient.invalidateQueries(["user"]);
 		},
 		onError: () => console.log("Error"),
 	});

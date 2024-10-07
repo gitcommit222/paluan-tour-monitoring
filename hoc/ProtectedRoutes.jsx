@@ -1,4 +1,5 @@
 "use client";
+import Loader from "@/components/shared/Loader";
 import { useFetchUser } from "@/hooks/useAuth";
 import { notFound, useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -21,7 +22,11 @@ const ProtectedRoutes = ({ children, roles }) => {
 	});
 
 	if (!user && !isLoading) {
-		return <p>Loading...</p>;
+		return (
+			<p>
+				<Loader />
+			</p>
+		);
 	}
 
 	// if (roles && !roles.includes(user?.role)) {

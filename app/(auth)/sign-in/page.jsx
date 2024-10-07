@@ -12,6 +12,7 @@ import toast from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Loader from "@/components/shared/Loader";
 
 const SignInPage = () => {
 	const login = useLogin();
@@ -46,10 +47,16 @@ const SignInPage = () => {
 	};
 
 	useEffect(() => {
-		const { isSuccess, isError, data, error } = login;
+		const {
+			isSuccess,
+
+			isError,
+			data,
+			error,
+		} = login;
 
 		if (isSuccess) {
-			toast.success(`Welcome, ${data?.user?.name}!`);
+			toast.success(`Welcome, ${data?.user?.name || "user"}!`);
 			router.push("/dashboard");
 		} else if (isError) {
 			console.error("Login failed:", error);

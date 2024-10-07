@@ -9,13 +9,31 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import CustomPopover from "./shared/CustomPopOver";
 import { MdPreview } from "react-icons/md";
 import Link from "next/link";
+import { useDeleteResort } from "@/hooks/useSpot";
+import toast from "react-hot-toast";
 
 const SpotsCard = ({
 	imageUrl,
 	headerTitle,
 	description,
 	owner = "Unknown",
+	spotId,
 }) => {
+	const { mutateAsync: deleteSpot, isPending: isDeleteResortPending } =
+		useDeleteResort();
+
+	const handleDeleteSpot = async (spotId) => {
+		try {
+			await toast.promise(deleteSpot(spotId), {
+				success: "Spot deleted!",
+				loading: "Deleting spot...",
+				error: "Error deleting spot.",
+			});
+		} catch (error) {
+			console.log(error);
+		}
+	};
+
 	return (
 		<div className="max-w-[300px] min-w-[330px] rounded-xl shadow-md">
 			<div className="border w-full h-[250px] rounded-xl  relative">
@@ -48,12 +66,12 @@ const SpotsCard = ({
 										</Link>
 									</Tooltip>
 									<Tooltip content="Edit" placement="right">
-										<button>
+										<Link href={`/spots/new-spot/edit/${spotId}`}>
 											<CiEdit className="text-blue-400" size={20} />
-										</button>
+										</Link>
 									</Tooltip>
 									<Tooltip content="Delete" placement="right">
-										<button>
+										<button onClick={() => handleDeleteSpot(spotId)}>
 											<FaRegTrashCan className="text-red-500" />
 										</button>
 									</Tooltip>

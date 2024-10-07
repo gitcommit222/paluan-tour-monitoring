@@ -41,3 +41,46 @@ export const useAddSpot = () => {
 		},
 	});
 };
+
+const fetchSpots = async () => {
+	const response = await api.get("/resorts");
+
+	return response.data;
+};
+
+export const useFetchSpots = () => {
+	return useQuery({
+		queryKey: ["spots"],
+		queryFn: fetchSpots,
+	});
+};
+
+const deleteResort = async (resortId) => {
+	const response = await api.delete(`/resorts/${resortId}`);
+
+	return response.data;
+};
+
+export const useDeleteResort = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: deleteResort,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["spots"]);
+		},
+	});
+};
+
+const fetchSingleSpot = async (spotId) => {
+	const response = await api.get(`/resorts/${spotId}`);
+
+	return response.data;
+};
+
+export const useFetchSingleSpot = (spotId) => {
+	return useQuery({
+		queryKey: ["spot", spotId],
+		queryFn: () => fetchSingleSpot(spotId),
+		enabled: !!spotId,
+	});
+};
