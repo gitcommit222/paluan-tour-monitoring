@@ -4,12 +4,14 @@ import { Flowbite } from "flowbite-react";
 import { customTheme } from "@/lib/customTheme";
 import Providers from "@/hoc/Providers";
 import { Toaster } from "react-hot-toast";
+import localFont from "next/font/local";
 
 const inter = Inter({ subsets: ["latin"] });
-const poppins = Poppins({
-	subsets: ["latin"],
-	weight: ["300", "400"],
+
+const poppins = localFont({
+	src: "./fonts/Poppins-Regular.ttf",
 	variable: "--font-poppins",
+	weight: "100 300 400 900",
 });
 
 export const metadata = {
@@ -20,7 +22,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
 	return (
 		<html lang="en" className="scroll-smooth">
-			<body className={`${inter.className} ${poppins.className} `}>
+			<body className={`${poppins.className} antialiased`}>
 				<Flowbite theme={{ theme: customTheme }}>
 					<Providers>
 						{children}
