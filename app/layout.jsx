@@ -1,12 +1,9 @@
-import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 import { Flowbite } from "flowbite-react";
 import { customTheme } from "@/lib/customTheme";
 import Providers from "@/hoc/Providers";
 import { Toaster } from "react-hot-toast";
 import localFont from "next/font/local";
-
-const inter = Inter({ subsets: ["latin"] });
 
 const poppins = localFont({
 	src: "./fonts/Poppins-Regular.ttf",

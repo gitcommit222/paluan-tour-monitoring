@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import Loader from "@/components/shared/Loader";
+import { loadGetInitialProps } from "next/dist/shared/lib/utils";
 
 const SignInPage = () => {
 	const login = useLogin();
@@ -55,9 +55,19 @@ const SignInPage = () => {
 			error,
 		} = login;
 
-		if (isSuccess) {
-			toast.success(`Welcome, ${data?.user?.name || "user"}!`);
-			router.push("/dashboard");
+		if (isSuccess && login.data?.user?.role) {
+			toast.success(`Welcome, ${login.data.user.name || "user"}!`);
+
+			// Make sure you're accessing the role correctly
+			const userRole = login.data.user.role;
+
+			if (userRole === "admin") {
+				router.push("/dashboard");
+			} else if (userRole === "resortOwner") {
+				router.push("/owners");
+			} else {
+				router.push("/home"); // Default redirection if no specific role
+			}
 		} else if (isError) {
 			console.error("Login failed:", error);
 		}

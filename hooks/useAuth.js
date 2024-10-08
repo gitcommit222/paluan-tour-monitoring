@@ -13,6 +13,7 @@ export const useLogin = () => {
 		mutationFn: loginUser,
 		onSuccess: (data) => {
 			localStorage.setItem("accessToken", data.accessToken);
+			queryClient.setQueryData(["user"], data.user);
 			queryClient.invalidateQueries(["user"]);
 		},
 		onError: () => console.log("Error"),
