@@ -67,19 +67,19 @@ const Dashboard = () => {
 		},
 	};
 	return (
-		<section>
-			<div className="flex justify-between items-center">
+		<section className="p-4 max-w-full overflow-x-hidden">
+			<div className="flex flex-col sm:flex-row justify-between items-center mb-6">
 				<Headerbox
 					type="greeting"
 					title="Hello,"
 					user={`${user && user.name}!`}
 					subtext="Track tourist spots progress here."
 				/>
-				<div>
+				<div className="mt-4 sm:mt-0">
 					<Button color="primary">EXPORT</Button>
 				</div>
 			</div>
-			<div className="flex gap-4 flex-wrap w-full">
+			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
 				<DataBox icon={tourist} title="Tourists Spots" data="5" color="blue" />
 				<DataBox
 					icon={tourist}
@@ -95,11 +95,11 @@ const Dashboard = () => {
 					color="yellow"
 				/>
 			</div>
-			<div className="flex gap-2 flex-wrap mt-10">
-				<div className="border p-5 h-[500px] flex-1 rounded-lg min-w-[600px]">
+			<div className="flex flex-col lg:flex-row gap-4 mt-10">
+				<div className="border p-5 h-[400px] lg:h-[500px] w-full lg:w-3/5 rounded-lg overflow-hidden">
 					<BarChart data={data} options={options} />
 				</div>
-				<div className="border p-5 h-[500px] w-[40%] min-w-[600px] rounded-lg">
+				<div className="border p-5 h-[400px] lg:h-[500px] w-full lg:w-2/5 rounded-lg overflow-hidden">
 					<DoughnutChart />
 				</div>
 			</div>

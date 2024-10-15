@@ -5,9 +5,12 @@ import { useFetchSpots } from "@/hooks/useSpot";
 import { beach1, beach2, spot } from "@/public";
 import { Button, Tooltip } from "flowbite-react";
 import React from "react";
+import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 
 const Spots = () => {
 	const { data: spots, isLoading: isSpotListFetching } = useFetchSpots();
+	const barangay = getBarangayByMun(175107);
+
 	return (
 		<section>
 			<div className="flex justify-between items-center">
@@ -28,8 +31,8 @@ const Spots = () => {
 							<SpotsCard
 								headerTitle={spot?.name}
 								imageUrl={spot?.thumbnail ? spot.thumbnail : beach1}
-								description="Paluan, Occidental Mindoro"
-								owner="Rheymark Estonanto"
+								description={`Paluan, Occidental Mindoro`}
+								owner={spot?.User?.name}
 								spotId={spot.id}
 							/>
 						</div>

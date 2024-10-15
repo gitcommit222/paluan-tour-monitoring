@@ -1,6 +1,7 @@
 "use client";
 import DataBox from "@/components/DataBox";
 import Headerbox from "@/components/shared/HeaderBox";
+import SpotReportsTable from "@/components/SpotReportsTable";
 import { beach1, tourist } from "@/public";
 import { Button, Table, Tooltip } from "flowbite-react";
 import Image from "next/image";
@@ -8,7 +9,9 @@ import React from "react";
 
 const SingeSpotPage = ({ params }) => {
 	const { spotName } = params;
-	const newSpotName = spotName.replace("%20", " ");
+	const newSpotName = spotName.replace(/%20/g, " ");
+
+	console.log(spotName);
 	return (
 		<section>
 			<div className="flex justify-between items-center">
@@ -33,7 +36,7 @@ const SingeSpotPage = ({ params }) => {
 					{newSpotName}
 				</h1>
 			</div>
-			<div className="h-screen">
+			<div>
 				<div className="w-full gap-3 flex items-center justify-between py-4 flex-wrap">
 					<DataBox title="Guests" />
 					<DataBox color="green" title="Male Guests" />
@@ -41,6 +44,7 @@ const SingeSpotPage = ({ params }) => {
 					<DataBox color="red" title="Children Guests" />
 				</div>
 			</div>
+			<SpotReportsTable />
 		</section>
 	);
 };

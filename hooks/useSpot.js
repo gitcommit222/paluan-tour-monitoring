@@ -84,3 +84,36 @@ export const useFetchSingleSpot = (spotId) => {
 		enabled: !!spotId,
 	});
 };
+
+const updateSpot = async ({ file, spotData, id }) => {
+	const formData = new FormData();
+	if (file) {
+		formData.append("image", file);
+	} else {
+		throw new Error("No file selected");
+	}
+
+	for (const key in spotData) {
+		if (spotData.hasOwnProperty(key)) {
+			formData.append(key, spotData[key]);
+		}
+	}
+
+	const response = await api.put(`/resorts/${id}`, formData, {
+		headers: {
+			"Content-Type": "multipart/form-data",
+		},
+	});
+
+	return response.data;
+};
+
+export const useUpdateSpot = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: updateSpot,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["spots"]);
+		},
+	});
+};

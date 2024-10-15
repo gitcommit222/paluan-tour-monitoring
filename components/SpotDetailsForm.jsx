@@ -14,7 +14,7 @@ import { getBarangayByMun } from "phil-reg-prov-mun-brgy";
 import { addSpotSchema } from "@/lib/formSchema";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useAddSpot } from "@/hooks/useSpot";
+import { useAddSpot, useUpdateSpot } from "@/hooks/useSpot";
 import toast from "react-hot-toast";
 
 const SpotDetailsForm = ({ data }) => {
@@ -27,10 +27,17 @@ const SpotDetailsForm = ({ data }) => {
 	} = useAddSpot();
 
 	const {
+		mutateAsync: updateSpotMutation,
+		isSuccess: isUpdateSpotSuccess,
+		isPending: isUpdateSpotPending,
+	} = useUpdateSpot();
+
+	const {
 		register,
 		handleSubmit,
 		reset,
 		setValue,
+		setError,
 		formState: { errors, isSubmitting },
 	} = useForm({
 		defaultValues: {
@@ -38,7 +45,6 @@ const SpotDetailsForm = ({ data }) => {
 			category: "",
 			permitNumber: "",
 			address: "",
-			specificPlace: "",
 			description: "",
 			ownerName: "",
 			ownerEmail: "",
@@ -48,20 +54,19 @@ const SpotDetailsForm = ({ data }) => {
 		resolver: yupResolver(addSpotSchema),
 	});
 
-	// UseEffect to reset form values when `data` becomes available
 	useEffect(() => {
 		if (data) {
+			console.log("data", data);
 			reset({
-				spotName: data.name || "",
-				category: data.category || "",
-				permitNumber: data.permitNumber || "",
-				address: data.Address.barangay || "",
-				specificPlace: data.specificPlace || "",
-				description: data.description || "",
-				ownerName: data.User.name || "",
-				ownerEmail: data.User.email || "",
-				contactNumber: data.contactNumber || "",
-				spotCover: data.spotCover || "",
+				spotName: data?.name || "",
+				category: data?.category || "",
+				permitNumber: data?.permitNo || "",
+				address: data?.Address.barangay || "",
+				description: data?.description || "",
+				ownerName: data?.User?.name || "",
+				ownerEmail: data?.User?.email || "",
+				contactNumber: data?.contactNumber || "",
+				spotCover: data?.spotCover || "",
 			});
 
 			if (data.spotCover) {
@@ -70,27 +75,24 @@ const SpotDetailsForm = ({ data }) => {
 		}
 	}, [data, reset]);
 
-	const onSubmit = async (data) => {
+	const onSubmit = async (formData) => {
 		try {
-			console.log("Form data:", data);
 			const {
 				spotName,
 				category,
 				permitNumber,
 				address,
-				specificPlace,
 				description,
 				ownerName,
 				ownerEmail,
 				contactNumber,
 				spotCover,
-			} = data;
+			} = formData;
 			const spotData = {
 				name: spotName,
 				category,
 				permitNo: permitNumber,
 				barangay: address,
-				street: specificPlace,
 				description,
 				ownerName,
 				email: ownerEmail,
@@ -103,14 +105,29 @@ const SpotDetailsForm = ({ data }) => {
 				return;
 			}
 
-			await toast.promise(addSpotMutation({ file: selectedImage, spotData }), {
-				success: "Spot added!",
-				loading: "Adding spot...",
-				error: "Error adding spot.",
-			});
+			if (data) {
+				console.log("data", data);
+				await toast.promise(
+					updateSpotMutation({ file: selectedImage, spotData, id: data?.id }),
+					{
+						success: "Spot updated!",
+						loading: "Updating spot...",
+						error: "Error updating spot.",
+					}
+				);
+			} else {
+				await toast.promise(
+					addSpotMutation({ file: selectedImage, spotData }),
+					{
+						success: "Spot added!",
+						loading: "Adding spot...",
+						error: "Error adding spot.",
+					}
+				);
 
-			reset();
-			setSelectedImage("");
+				reset();
+				setSelectedImage("");
+			}
 		} catch (error) {
 			console.error("Error during submission:", error);
 			setError("root", {
@@ -119,13 +136,7 @@ const SpotDetailsForm = ({ data }) => {
 		}
 	};
 
-	if (Object.keys(errors).length) {
-		console.log("Validation errors:", errors);
-	}
-
 	const barangays = getBarangayByMun(175107);
-
-	console.log(getBarangayByMun(175107));
 
 	return (
 		<div className="relative">
@@ -207,20 +218,6 @@ const SpotDetailsForm = ({ data }) => {
 										))}
 									</Select>
 								</div>
-								<div>
-									<div className="mb-2 block">
-										<Label htmlFor="specificPlace" value="Specific Place" />
-									</div>
-									<TextInput
-										{...register("specificPlace")}
-										id="specificPlace"
-										type="text"
-										name="specificPlace"
-										helperText={
-											errors.specificPlace && errors.specificPlace.message
-										}
-									/>
-								</div>
 							</div>
 						</div>
 						<div>
@@ -236,7 +233,7 @@ const SpotDetailsForm = ({ data }) => {
 									id="description"
 									name="description"
 									placeholder="Describe the place..."
-									rows={4}
+									rows={8}
 								/>
 							</div>
 						</div>
@@ -301,7 +298,7 @@ const SpotDetailsForm = ({ data }) => {
 									<div className="flex flex-col items-center justify-center pb-6 pt-5 ">
 										{selectedImage ? (
 											<Image
-												src={selectedImage}
+												src={data?.spotCover ? data?.spotCover : selectedImage}
 												alt="selectedImage"
 												fill
 												className="object-contain"
@@ -361,6 +358,7 @@ const SpotDetailsForm = ({ data }) => {
 							reset();
 							setSelectedImage("");
 						}}
+						disabled={isSubmitting}
 					>
 						Reset
 					</Button>
