@@ -49,25 +49,31 @@ const PromotionsPage = () => {
 	]);
 
 	return (
-		<section>
+		<section className="promotions-page">
 			<nav
-				className={` w-full h-[50px] px-16 py-10 flex justify-between items-center z-10 ${
+				className={`w-full px-4 sm:px-8 md:px-16 py-5 flex flex-wrap justify-between items-center z-10 transition-all duration-300 ${
 					scrolling ? "fixed bg-white shadow-md" : ""
 				}`}
 			>
-				<div className="w-[250px]">
+				<div className="w-full sm:w-auto mb-4 sm:mb-0">
 					<Link
-						href="/promotions"
+						href="/"
 						onClick={() => {
 							setActive("Home");
 							window.scrollTo(0, 0);
 						}}
 					>
-						<Image src={logo} height={150} width={150} alt="logo" />
+						<Image
+							src={logo}
+							height={100}
+							width={100}
+							alt="logo"
+							className="mx-auto sm:mx-0"
+						/>
 					</Link>
 				</div>
-				<div>
-					<ul className="flex items-center gap-10">
+				<div className="w-full sm:w-auto mb-4 sm:mb-0">
+					<ul className="flex flex-wrap justify-center sm:justify-start items-center gap-4 sm:gap-6 md:gap-10">
 						{promotionNavLinks.map((links) => (
 							<li
 								key={links.label}
@@ -75,44 +81,47 @@ const PromotionsPage = () => {
 									activeSection == links.url ? "text-primary" : ""
 								}`}
 							>
-								<Link href={`/promotions#${links.url}`}>{links.label}</Link>
+								<Link href={`/${links.url}`}>{links.label}</Link>
 							</li>
 						))}
 					</ul>
 				</div>
-				<div className="w-[250px] flex justify-end">
+				<div className="w-full sm:w-auto flex justify-center sm:justify-end">
 					<Button size="sm" color="primary" href="/sign-in">
 						Login
 					</Button>
 				</div>
 			</nav>
 			<div ref={homeSection.ref} className="prom-content" id="home">
-				<div className="relative rounded-2xl w-full h-[60%] min-h-[400px] flex items-center justify-center">
-					<div className="bg-prom-bg-image bg-no-repeat rounded-2xl bg-cover filter w-full hidden md:block lg:h-[400px] brightness-75 shadow-md" />
-					<div className="absolute space-y-5">
+				<div className="relative rounded-2xl w-full min-h-[400px] flex items-center justify-center">
+					<div className="bg-prom-bg-image bg-no-repeat rounded-2xl bg-cover filter w-full hidden md:block h-[400px] brightness-75 shadow-md" />
+					<div className="absolute space-y-5 px-4 text-center">
 						<div>
-							<h1 className="font-bold  text-[45px] text-center text-white tracking-wider">
+							<h1 className="font-bold text-3xl md:text-[45px] text-white tracking-wider">
 								TRAVEL AND TOUR IN PALUAN
 							</h1>
-							<p className="text-center text-white font-light">
+							<p className="text-white font-light">
 								Paluan, Occidental Mindoro, Philippines
 							</p>
 						</div>
-						<div className="backdrop-blur-lg rounded-lg  md:w-[600px] shadow-md p-4  flex items-center justify-between flex-wrap">
-							<div className="md:flex-1 pr-28">
+						<div className="backdrop-blur-lg rounded-lg w-full max-w-[600px] shadow-md p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+							<div className="w-full sm:w-2/3">
 								<FloatingLabel
 									variant="standard"
 									label="Where you want to go?"
 									className="text-white"
 								/>
 							</div>
-							<Button className="h-full tracking-wider bg-cyan-600" size="lg">
+							<Button
+								className="w-full sm:w-auto tracking-wider bg-cyan-600"
+								size="lg"
+							>
 								EXPLORE NOW
 							</Button>
 						</div>
 					</div>
 				</div>
-				<div className="flex flex-wrap gap-3 py-8 mt-3">
+				<div className="flex flex-wrap justify-center gap-6 py-8 mt-3">
 					<Promos
 						title="Get Best Prices"
 						icon={<IoPricetagsOutline size={65} className="text-primary" />}

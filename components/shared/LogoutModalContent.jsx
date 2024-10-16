@@ -3,7 +3,7 @@ import { Button } from "flowbite-react";
 import { useState } from "react";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
-const LogoutModalContent = () => {
+const LogoutModalContent = ({ handleLogout }) => {
 	const [openModal, setOpenModal] = useState(false);
 	return (
 		<div className="text-center">
@@ -12,7 +12,7 @@ const LogoutModalContent = () => {
 				Are you sure you want to logout?
 			</h3>
 			<div className="flex justify-center gap-4">
-				<Button color="failure" onClick={() => console.log("clicked")}>
+				<Button color="failure" onClick={handleLogout}>
 					{"Yes, I'm sure"}
 				</Button>
 				<Button color="gray" onClick={() => setOpenModal(false)}>

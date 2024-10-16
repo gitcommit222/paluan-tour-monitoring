@@ -9,6 +9,7 @@ const CustomModal = ({
 	size = "lg",
 	btnColor,
 	type = "form",
+	handleLogout,
 }) => {
 	const [openModal, setOpenModal] = useState(false);
 
@@ -24,8 +25,9 @@ const CustomModal = ({
 						<div className="flex justify-center gap-4">
 							<Button
 								color="failure"
-								onClick={async () => {
+								onClick={() => {
 									setOpenModal(false);
+									handleLogout();
 								}}
 							>
 								{"Yes, I'm sure"}

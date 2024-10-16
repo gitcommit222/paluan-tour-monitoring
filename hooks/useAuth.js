@@ -1,5 +1,6 @@
 import api from "../utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 
 const loginUser = async ({ username, password }) => {
 	const response = await api.post("/auth/login", { username, password });
@@ -17,6 +18,23 @@ export const useLogin = () => {
 			queryClient.invalidateQueries(["user"]);
 		},
 		onError: () => console.log("Error"),
+	});
+};
+
+const logoutUser = () => {
+	localStorage.removeItem("accessToken");
+};
+
+export const useLogout = () => {
+	const router = useRouter();
+	return useMutation({
+		mutationFn: logoutUser,
+		onSuccess: () => {
+			router.push("/sign-in");
+		},
+		onError: () => {
+			toast.error("Error logging out.");
+		},
 	});
 };
 

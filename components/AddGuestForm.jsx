@@ -17,9 +17,8 @@ const AddGuestForm = ({ data }) => {
 		handleSubmit,
 		reset,
 		setError,
-		trigger,
+		watch,
 		setValue,
-		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm({
 		defaultValues: {
@@ -38,6 +37,41 @@ const AddGuestForm = ({ data }) => {
 		resolver: yupResolver(addOwnerGuest),
 	});
 
+	const watchRegion = watch("region");
+	const watchProvince = watch("province");
+	const watchMunicipality = watch("municipality");
+
+	const [provinces, setProvinces] = React.useState([]);
+	const [municipalities, setMunicipalities] = React.useState([]);
+	const [barangays, setBarangays] = React.useState([]);
+
+	React.useEffect(() => {
+		if (watchRegion) {
+			const newProvinces = getProvincesByRegion(watchRegion);
+			setProvinces(newProvinces);
+			setValue("province", "");
+			setValue("municipality", "");
+			setValue("barangay", "");
+		}
+	}, [watchRegion, setValue]);
+
+	React.useEffect(() => {
+		if (watchProvince) {
+			const newMunicipalities = getCityMunByProvince(watchProvince);
+			setMunicipalities(newMunicipalities);
+			setValue("municipality", "");
+			setValue("barangay", "");
+		}
+	}, [watchProvince, setValue]);
+
+	React.useEffect(() => {
+		if (watchMunicipality) {
+			const newBarangays = getBarangayByMun(watchMunicipality);
+			setBarangays(newBarangays);
+			setValue("barangay", "");
+		}
+	}, [watchMunicipality, setValue]);
+
 	const onSubmit = async (data) => {
 		try {
 			reset();
@@ -51,10 +85,6 @@ const AddGuestForm = ({ data }) => {
 	const handleSelectedDate = (date) => {
 		setValue("dateVisited", new Date(date).toISOString().split("T")[0]);
 	};
-
-	const provinces = getProvincesByRegion(17);
-	const municipalities = getCityMunByProvince(1751);
-	const barangays = getBarangayByMun(175106);
 
 	return (
 		<div>
@@ -118,7 +148,7 @@ const AddGuestForm = ({ data }) => {
 							color={`${errors.region ? "failure" : "gray"}`}
 							helperText={errors.region && errors.region.message}
 						>
-							<option defaultChecked></option>
+							<option value="">Select Region</option>
 							{regions.map((reg) => (
 								<option value={reg.reg_code} key={reg.reg_code}>
 									{reg.name}
@@ -137,8 +167,9 @@ const AddGuestForm = ({ data }) => {
 							sizing="sm"
 							color={`${errors.province ? "failure" : "gray"}`}
 							helperText={errors.province && errors.province.message}
+							disabled={!watchRegion}
 						>
-							<option defaultChecked></option>
+							<option value="">Select Province</option>
 							{provinces.map((prov) => (
 								<option value={prov.prov_code} key={prov.prov_code}>
 									{prov.name}
@@ -157,8 +188,9 @@ const AddGuestForm = ({ data }) => {
 							sizing="sm"
 							color={`${errors.municipality ? "failure" : "gray"}`}
 							helperText={errors.municipality && errors.municipality.message}
+							disabled={!watchProvince}
 						>
-							<option defaultChecked></option>
+							<option value="">Select Municipality</option>
 							{municipalities.map((mun) => (
 								<option value={mun.mun_code} key={mun.mun_code}>
 									{mun.name}
@@ -177,10 +209,11 @@ const AddGuestForm = ({ data }) => {
 							sizing="sm"
 							color={`${errors.barangay ? "failure" : "gray"}`}
 							helperText={errors.barangay && errors.barangay.message}
+							disabled={!watchMunicipality}
 						>
-							<option defaultChecked></option>
+							<option value="">Select Barangay</option>
 							{barangays.map((brgy) => (
-								<option value={brgy.name} key={brgy.name}>
+								<option value={brgy.brgy_code} key={brgy.brgy_code}>
 									{brgy.name}
 								</option>
 							))}

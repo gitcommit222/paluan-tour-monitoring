@@ -7,6 +7,7 @@ import spot from "./icons/travel-guide.png";
 import dashboard from "./icons/pie-chart.png";
 import settings from "./icons/settings.png";
 import reports from "./icons/report.png";
+import logoutIcon from "./icons/logout.png";
 
 import beach1 from "./images/beach1.jpg";
 import beach2 from "./images/beach2.jpg";
@@ -36,4 +37,5 @@ export {
 	b4,
 	b5,
 	about,
+	logoutIcon,
 };

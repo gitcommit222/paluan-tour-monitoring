@@ -4,13 +4,16 @@ import OwnersTable from "@/components/OwnersTable";
 import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
 import ProtectedRoutes from "@/hoc/ProtectedRoutes";
+import { useLogout } from "@/hooks/useAuth";
 import { logo } from "@/public";
+import { Tabs } from "flowbite-react";
 import Image from "next/image";
 import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const Home = () => {
+	const { mutate: logout } = useLogout();
 	return (
-		<ProtectedRoutes allowedRoles={["resortOwner"]}>
+		<ProtectedRoutes roles={["resortOwner", "admin"]}>
 			<section className="relative">
 				<div className="w-full shadow-lg z-100 bg-gray-800 h-[80px] flex items-center justify-between px-[100px]">
 					<div>
@@ -28,6 +31,7 @@ const Home = () => {
 								size="md"
 								buttonName="LOGOUT"
 								btnColor="secondary"
+								handleLogout={() => logout()}
 								mainContent={
 									<div className="text-center">
 										<HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
@@ -44,26 +48,35 @@ const Home = () => {
 				<div className="px-[100px] py-[25px]">
 					<div>
 						<Headerbox
-							user="Owner!"
+							user={"Owner"}
 							title="Welcome,"
 							type="greeting"
 							subtext="Manage and view your spot data here."
 						/>
 					</div>
-					<div className="flex gap-2">
-						<div className="flex-1">
-							<OwnersTable />
-						</div>
-						<div className="border rounded-lg min-w-[350px] p-5 space-y-5">
-							<div className="flex justify-between items-center flex-wrap">
-								<h3 className="font-semibold text-[18px] mb-2">Add Guests</h3>
-								<div>
-									<p className="text-red-500 text-[14px]">* required fields.</p>
+					<Tabs color="gray">
+						<Tabs.Item title="Guests">
+							<div className="flex gap-2">
+								<div className="flex-1">
+									<OwnersTable />
+								</div>
+								<div className="border rounded-lg max-w-[350px] p-5 space-y-5">
+									<div className="flex justify-between items-center flex-wrap">
+										<h3 className="font-semibold text-[18px] mb-2">
+											Add Guests
+										</h3>
+										<div>
+											<p className="text-red-500 text-[14px]">
+												* required fields.
+											</p>
+										</div>
+									</div>
+									<AddGuestForm />
 								</div>
 							</div>
-							<AddGuestForm />
-						</div>
-					</div>
+						</Tabs.Item>
+						<Tabs.Item title="Resort"></Tabs.Item>
+					</Tabs>
 				</div>
 			</section>
 		</ProtectedRoutes>
