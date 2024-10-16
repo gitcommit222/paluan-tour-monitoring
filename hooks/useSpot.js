@@ -117,3 +117,25 @@ export const useUpdateSpot = () => {
 		},
 	});
 };
+
+const fetchResortByOwner = async (ownerId) => {
+	const response = await api.get(`/resorts/owner/${ownerId}`);
+
+	return response.data;
+};
+
+export const useFetchResortByOwner = (ownerId) => {
+	return useQuery({
+		queryKey: ["resortByOwner", ownerId],
+		queryFn: () => fetchResortByOwner(ownerId),
+		enabled: !!ownerId,
+	});
+};
+
+const addGuest = async (guestData) => {
+	const response = await api.post("/guests", guestData);
+
+	return response.data;
+};
+
+export const useAddGuest = () => {};

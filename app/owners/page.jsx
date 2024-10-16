@@ -3,8 +3,10 @@ import AddGuestForm from "@/components/AddGuestForm";
 import OwnersTable from "@/components/OwnersTable";
 import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
+import SpotDetailsForm from "@/components/SpotDetailsForm";
 import ProtectedRoutes from "@/hoc/ProtectedRoutes";
-import { useLogout } from "@/hooks/useAuth";
+import { useFetchUser, useLogout } from "@/hooks/useAuth";
+import { useFetchResortByOwner } from "@/hooks/useSpot";
 import { logo } from "@/public";
 import { Tabs } from "flowbite-react";
 import Image from "next/image";
@@ -12,8 +14,11 @@ import { HiOutlineExclamationCircle } from "react-icons/hi";
 
 const Home = () => {
 	const { mutate: logout } = useLogout();
+	const { data: user } = useFetchUser();
+	const { data: resorts } = useFetchResortByOwner(user?.id);
+	console.log(resorts);
 	return (
-		<ProtectedRoutes roles={["resortOwner", "admin"]}>
+		<ProtectedRoutes roles={["resortOwner", ""]}>
 			<section className="relative">
 				<div className="w-full shadow-lg z-100 bg-gray-800 h-[80px] flex items-center justify-between px-[100px]">
 					<div>
@@ -48,7 +53,7 @@ const Home = () => {
 				<div className="px-[100px] py-[25px]">
 					<div>
 						<Headerbox
-							user={"Owner"}
+							user={`${user ? user.name : "Owner"}`}
 							title="Welcome,"
 							type="greeting"
 							subtext="Manage and view your spot data here."
@@ -75,7 +80,9 @@ const Home = () => {
 								</div>
 							</div>
 						</Tabs.Item>
-						<Tabs.Item title="Resort"></Tabs.Item>
+						<Tabs.Item title="Resort">
+							<SpotDetailsForm data={resorts && resorts.resorts[0]} />
+						</Tabs.Item>
 					</Tabs>
 				</div>
 			</section>

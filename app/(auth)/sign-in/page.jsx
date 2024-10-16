@@ -1,9 +1,8 @@
 "use client";
-import { useLogin } from "@/hooks/useAuth";
+import { useFetchUser, useLogin } from "@/hooks/useAuth";
 import { signInSchema } from "@/lib/formSchema";
 import { logo } from "@/public";
 import { Button, FloatingLabel, Label, TextInput } from "flowbite-react";
-import { useFormik } from "formik";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -12,7 +11,6 @@ import toast from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { loadGetInitialProps } from "next/dist/shared/lib/utils";
 
 const SignInPage = () => {
 	const login = useLogin();
@@ -51,7 +49,6 @@ const SignInPage = () => {
 			isSuccess,
 
 			isError,
-			data,
 			error,
 		} = login;
 
@@ -66,7 +63,7 @@ const SignInPage = () => {
 			} else if (userRole === "resortOwner") {
 				router.push("/owners");
 			} else {
-				router.push("/home"); // Default redirection if no specific role
+				router.push("/");
 			}
 		} else if (isError) {
 			console.error("Login failed:", error);

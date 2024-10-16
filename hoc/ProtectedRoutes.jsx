@@ -18,9 +18,6 @@ const ProtectedRoutes = ({ children, roles }) => {
 				router.push("/sign-in");
 				toast.error("Please sign in.");
 			} else if (roles && (!user.role || !roles.includes(user.role))) {
-				console.log("User role not found in allowed roles");
-				console.log("User role:", user.role);
-				console.log("Allowed roles:", roles);
 				router.push("/unauthorized");
 				toast.error("You don't have permission to access this page.");
 			}

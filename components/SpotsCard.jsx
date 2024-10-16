@@ -36,13 +36,12 @@ const SpotsCard = ({
 
 	return (
 		<div className="max-w-[300px] min-w-[330px] rounded-xl shadow-md">
-			<div className="border w-full h-[250px] rounded-xl  relative">
+			<div className="border w-full h-[250px] rounded-t-xl  relative">
 				<Image
 					src={imageUrl}
-					objectFit="cover"
 					fill
 					alt="spot image"
-					className="rounded-t-xl "
+					className="rounded-t-xl object-contain"
 				/>
 			</div>
 			<div className="space-y-1 p-4">
