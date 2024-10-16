@@ -81,7 +81,7 @@ const Home = () => {
 							</div>
 						</Tabs.Item>
 						<Tabs.Item title="Resort">
-							<SpotDetailsForm data={resorts && resorts.resorts[0]} />
+							<SpotDetailsForm data={resorts && resorts?.resorts[0]} />
 						</Tabs.Item>
 					</Tabs>
 				</div>

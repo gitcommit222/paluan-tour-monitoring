@@ -20,6 +20,8 @@ import toast from "react-hot-toast";
 const SpotDetailsForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
 
+	console.log(`selectedImage: ${selectedImage}`);
+
 	const {
 		mutateAsync: addSpotMutation,
 		isSuccess: isAddSpotSuccess,
@@ -66,12 +68,8 @@ const SpotDetailsForm = ({ data }) => {
 				ownerName: data?.User?.name || "",
 				ownerEmail: data?.User?.email || "",
 				contactNumber: data?.contactNumber || "",
-				spotCover: data?.spotCover || "",
+				spotCover: data?.thumbnail || "",
 			});
-
-			if (data.spotCover) {
-				setSelectedImage(data.spotCover);
-			}
 		}
 	}, [data, reset]);
 
@@ -99,11 +97,6 @@ const SpotDetailsForm = ({ data }) => {
 				phone: contactNumber,
 				thumbnail: spotCover,
 			};
-
-			if (!selectedImage) {
-				console.error("No file selected");
-				return;
-			}
 
 			if (data) {
 				console.log("data", data);
@@ -298,7 +291,7 @@ const SpotDetailsForm = ({ data }) => {
 									<div className="flex flex-col items-center justify-center pb-6 pt-5 ">
 										{selectedImage ? (
 											<Image
-												src={data?.spotCover ? data?.spotCover : selectedImage}
+												src={selectedImage}
 												alt="selectedImage"
 												fill
 												className="object-contain"
@@ -339,11 +332,17 @@ const SpotDetailsForm = ({ data }) => {
 										color={`${errors.spotCover ? "failure" : "gray"}`}
 										helperText={errors.spotCover && errors.spotCover.message}
 										onChange={(e) => {
-											const file = e.target.files?.[0];
-											setValue("spotCover", file);
-											setSelectedImage(
-												file ? URL.createObjectURL(file) : undefined
-											);
+											if (data) {
+												setValue("spotCover", data?.thumbnail);
+												setSelectedImage(data?.thumbnail);
+											} else {
+												const file = e.target.files?.[0];
+
+												setValue("spotCover", file);
+												setSelectedImage(
+													file ? URL.createObjectURL(file) : undefined
+												);
+											}
 										}}
 									/>
 								</Label>
