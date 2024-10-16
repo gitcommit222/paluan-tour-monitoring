@@ -25,7 +25,33 @@ module.exports = {
 				"bg-image": "url(/images/paluanjpg.jpg)",
 				"prom-bg-image": "url(/images/prom.jpg)",
 			},
+			keyframes: {
+				arrows: {
+					"0%": { transform: "rotate(45deg)" },
+					"100%": { transform: "rotate(405deg)" },
+				},
+				ringStroke: {
+					"0%, 100%": {
+						strokeDashoffset: "452",
+						transform: "rotate(-45deg)",
+					},
+					"50%": {
+						strokeDashoffset: "169.5",
+						transform: "rotate(-180deg)",
+					},
+				},
+				tick: {
+					"0%, 3%, 47%, 100%": { strokeDashoffset: "-12" },
+					"14%, 36%": { strokeDashoffset: "0" },
+				},
+			},
+			animation: {
+				arrows: "arrows 2s linear infinite",
+				ringStroke: "ringStroke 2s linear infinite",
+				tick: "tick 2s linear infinite",
+			},
 		},
 	},
+
 	plugins: [flowbite.plugin()],
 };

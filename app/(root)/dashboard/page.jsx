@@ -4,7 +4,7 @@ import DataBox from "@/components/DataBox";
 import DoughnutChart from "@/components/DoughnutChartComponent";
 import Headerbox from "@/components/shared/HeaderBox";
 import { useFetchUser } from "@/hooks/useAuth";
-import { tourist } from "@/public";
+import { spot, tourist } from "@/public";
 import { Button } from "flowbite-react";
 import React from "react";
 
@@ -80,7 +80,7 @@ const Dashboard = () => {
 				</div>
 			</div>
 			<div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 w-full">
-				<DataBox icon={tourist} title="Tourists Spots" data="5" color="blue" />
+				<DataBox icon={spot} title="Tourists Spots" data="5" color="blue" />
 				<DataBox
 					icon={tourist}
 					title="Total Tourist"

@@ -81,7 +81,7 @@ const PromotionsPage = () => {
 									activeSection == links.url ? "text-primary" : ""
 								}`}
 							>
-								<Link href={`/${links.url}`}>{links.label}</Link>
+								<Link href={`#${links.url}`}>{links.label}</Link>
 							</li>
 						))}
 					</ul>

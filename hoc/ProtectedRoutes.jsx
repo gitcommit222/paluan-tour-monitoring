@@ -1,5 +1,5 @@
 "use client";
-import Loader from "@/components/shared/Loader";
+import Loader from "@/components/Loader";
 import { useFetchUser } from "@/hooks/useAuth";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
