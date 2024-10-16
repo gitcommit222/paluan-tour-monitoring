@@ -89,8 +89,6 @@ const updateSpot = async ({ file, spotData, id }) => {
 	const formData = new FormData();
 	if (file) {
 		formData.append("image", file);
-	} else {
-		throw new Error("No file selected");
 	}
 
 	for (const key in spotData) {

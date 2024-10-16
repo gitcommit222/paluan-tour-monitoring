@@ -18,7 +18,7 @@ const Home = () => {
 	const { data: resorts } = useFetchResortByOwner(user?.id);
 	console.log(resorts);
 	return (
-		<ProtectedRoutes roles={["resortOwner", ""]}>
+		<ProtectedRoutes roles={["resortOwner", "admin"]}>
 			<section className="relative">
 				<div className="w-full shadow-lg z-100 bg-gray-800 h-[80px] flex items-center justify-between px-[100px]">
 					<div>
@@ -81,7 +81,11 @@ const Home = () => {
 							</div>
 						</Tabs.Item>
 						<Tabs.Item title="Resort">
-							<SpotDetailsForm data={resorts && resorts?.resorts[0]} />
+							{resorts ? (
+								<SpotDetailsForm data={resorts && resorts?.resorts[0]} />
+							) : (
+								<p className="text-center text-gray-500">No resort found.</p>
+							)}
 						</Tabs.Item>
 					</Tabs>
 				</div>

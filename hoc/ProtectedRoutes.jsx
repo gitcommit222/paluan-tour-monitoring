@@ -9,9 +9,6 @@ const ProtectedRoutes = ({ children, roles }) => {
 	const { data: user, isLoading, error, isError } = useFetchUser();
 	const router = useRouter();
 
-	console.log("User:", user);
-	console.log("Roles:", roles);
-
 	useEffect(() => {
 		if (!isLoading) {
 			if (!user) {

@@ -44,11 +44,16 @@ module.exports = {
 					"0%, 3%, 47%, 100%": { strokeDashoffset: "-12" },
 					"14%, 36%": { strokeDashoffset: "0" },
 				},
+				glimmer: {
+					"0%": { transform: "translateX(-100%)" },
+					"100%": { transform: "translateX(100%)" },
+				},
 			},
 			animation: {
 				arrows: "arrows 2s linear infinite",
 				ringStroke: "ringStroke 2s linear infinite",
 				tick: "tick 2s linear infinite",
+				glimmer: "glimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite",
 			},
 		},
 	},

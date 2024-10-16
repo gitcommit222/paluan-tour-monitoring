@@ -20,8 +20,6 @@ import toast from "react-hot-toast";
 const SpotDetailsForm = ({ data }) => {
 	const [selectedImage, setSelectedImage] = useState("");
 
-	console.log(`selectedImage: ${selectedImage}`);
-
 	const {
 		mutateAsync: addSpotMutation,
 		isSuccess: isAddSpotSuccess,
@@ -40,6 +38,7 @@ const SpotDetailsForm = ({ data }) => {
 		reset,
 		setValue,
 		setError,
+		getValues,
 		formState: { errors, isSubmitting },
 	} = useForm({
 		defaultValues: {
@@ -47,6 +46,7 @@ const SpotDetailsForm = ({ data }) => {
 			category: "",
 			permitNumber: "",
 			address: "",
+			street: "",
 			description: "",
 			ownerName: "",
 			ownerEmail: "",
@@ -58,18 +58,19 @@ const SpotDetailsForm = ({ data }) => {
 
 	useEffect(() => {
 		if (data) {
-			console.log("data", data);
 			reset({
 				spotName: data?.name || "",
 				category: data?.category || "",
 				permitNumber: data?.permitNo || "",
 				address: data?.Address.barangay || "",
+				street: data?.Address.street || "",
 				description: data?.description || "",
 				ownerName: data?.User?.name || "",
 				ownerEmail: data?.User?.email || "",
 				contactNumber: data?.contactNumber || "",
 				spotCover: data?.thumbnail || "",
 			});
+			setSelectedImage(data?.thumbnail || "");
 		}
 	}, [data, reset]);
 
@@ -80,6 +81,7 @@ const SpotDetailsForm = ({ data }) => {
 				category,
 				permitNumber,
 				address,
+				street,
 				description,
 				ownerName,
 				ownerEmail,
@@ -91,6 +93,7 @@ const SpotDetailsForm = ({ data }) => {
 				category,
 				permitNo: permitNumber,
 				barangay: address,
+				street,
 				description,
 				ownerName,
 				email: ownerEmail,
@@ -101,7 +104,11 @@ const SpotDetailsForm = ({ data }) => {
 			if (data) {
 				console.log("data", data);
 				await toast.promise(
-					updateSpotMutation({ file: selectedImage, spotData, id: data?.id }),
+					updateSpotMutation({
+						file: selectedImage instanceof File ? selectedImage : null,
+						spotData,
+						id: data?.id,
+					}),
 					{
 						success: "Spot updated!",
 						loading: "Updating spot...",
@@ -211,6 +218,19 @@ const SpotDetailsForm = ({ data }) => {
 										))}
 									</Select>
 								</div>
+								<div>
+									<div className="mb-2 block" aria-labelledby="default-popover">
+										<Label htmlFor="street" value="Street" />
+									</div>
+									<TextInput
+										{...register("street")}
+										id="street"
+										name="street"
+										type="text"
+										color={`${errors.street ? "failure" : "gray"}`}
+										helperText={errors.street && errors.street.message}
+									/>
+								</div>
 							</div>
 						</div>
 						<div>
@@ -279,14 +299,14 @@ const SpotDetailsForm = ({ data }) => {
 								}
 							/>
 						</div>
-						<div className=" space-y-4">
-							<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat mb-5">
+						<div className="space-y-4">
+							<h3 className="text-[18px] font-medium text-gray-500 font-Montserrat">
 								Spot Cover Image
 							</h3>
-							<div className="flex w-full items-center justify-center h-full">
+							<div className="flex w-full items-center justify-center">
 								<Label
 									htmlFor="dropzone-file"
-									className="flex h-80 w-full cursor-pointer flex-col relative items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
+									className="flex min-h-[415px] w-full cursor-pointer flex-col relative items-center justify-center rounded-lg border-2 border-dashed border-gray-300 bg-gray-50 hover:bg-gray-100"
 								>
 									<div className="flex flex-col items-center justify-center pb-6 pt-5 ">
 										{selectedImage ? (
@@ -332,16 +352,10 @@ const SpotDetailsForm = ({ data }) => {
 										color={`${errors.spotCover ? "failure" : "gray"}`}
 										helperText={errors.spotCover && errors.spotCover.message}
 										onChange={(e) => {
-											if (data) {
-												setValue("spotCover", data?.thumbnail);
-												setSelectedImage(data?.thumbnail);
-											} else {
-												const file = e.target.files?.[0];
-
+											const file = e.target.files?.[0];
+											if (file) {
 												setValue("spotCover", file);
-												setSelectedImage(
-													file ? URL.createObjectURL(file) : undefined
-												);
+												setSelectedImage(URL.createObjectURL(file));
 											}
 										}}
 									/>

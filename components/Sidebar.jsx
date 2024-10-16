@@ -42,7 +42,11 @@ const Sidebar = () => {
 												: "text-gray-100"
 										}`}
 									>
-										<Link href={item.url} className="sidebar-link">
+										<Link
+											href={item.url}
+											className="sidebar-link"
+											prefetch={true}
+										>
 											<Image
 												src={item.icon}
 												alt="nav items logo"
