@@ -66,7 +66,7 @@ const Home = () => {
 						/>
 					</div>
 					<Tabs color="gray">
-						<Tabs.Item title="Dashboard"></Tabs.Item>
+						{/* <Tabs.Item title="Dashboard"></Tabs.Item> */}
 						<Tabs.Item title="Guests">
 							<div className="flex gap-2">
 								<div className="flex-1">

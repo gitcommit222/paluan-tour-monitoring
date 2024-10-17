@@ -41,7 +41,7 @@ const SpotsCard = ({
 					src={imageUrl}
 					fill
 					alt="spot image"
-					className="rounded-t-xl object-contain"
+					className="rounded-t-xl object-cover"
 				/>
 			</div>
 			<div className="space-y-1 p-4">
