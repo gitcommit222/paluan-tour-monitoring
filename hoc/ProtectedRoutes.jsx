@@ -9,6 +9,8 @@ const ProtectedRoutes = ({ children, roles }) => {
 	const { data: user, isLoading, error, isError } = useFetchUser();
 	const router = useRouter();
 
+	console.log(user);
+
 	useEffect(() => {
 		if (!isLoading) {
 			if (!user) {
@@ -26,7 +28,7 @@ const ProtectedRoutes = ({ children, roles }) => {
 	}
 
 	// Only render children if user is authenticated and authorized
-	return <>{user && (!roles || roles.includes(user.userType)) && children}</>;
+	return <>{user && (!roles || roles.includes(user?.userType)) && children}</>;
 };
 
 export default ProtectedRoutes;

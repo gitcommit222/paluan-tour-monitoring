@@ -1,11 +1,53 @@
 "use client";
 import Headerbox from "@/components/shared/HeaderBox";
-import { Button, Select, Table, TextInput } from "flowbite-react";
-import Link from "next/link";
-import React from "react";
+import { useGetGuests } from "@/hooks/useGuest";
+import { useFetchSpots } from "@/hooks/useSpot";
+import getAddress from "@/utils/getAddress";
+import { format } from "date-fns";
+import { Button, Select, Table, TextInput, Tooltip } from "flowbite-react";
+import React, { useState, useMemo } from "react";
 import { CiSearch } from "react-icons/ci";
+import * as XLSX from "xlsx";
 
 const Reports = () => {
+	const { data: guests } = useGetGuests();
+	const { data: spots } = useFetchSpots();
+	const [searchTerm, setSearchTerm] = useState("");
+	const [selectedSpotId, setSelectedSpotId] = useState("All");
+
+	const filteredGuests = useMemo(() => {
+		if (!guests) return [];
+		return guests.tourists.filter((guest) => {
+			const matchesSearch = guest.name
+				.toLowerCase()
+				.includes(searchTerm.toLowerCase());
+			const matchesSpot =
+				selectedSpotId === "All" || guest.resort?.id === selectedSpotId;
+			return matchesSearch && matchesSpot;
+		});
+	}, [guests, searchTerm, selectedSpotId]);
+
+	const exportToExcel = () => {
+		const workbook = XLSX.utils.book_new();
+		const worksheet = XLSX.utils.json_to_sheet(
+			filteredGuests.map((guest) => ({
+				"Guest Name": guest.name,
+				Age: guest.age,
+				Gender: guest.gender,
+				Address: getAddress(
+					guest.region,
+					guest.province,
+					guest.municipality,
+					guest.barangay
+				),
+				"Spot Visited": guest.resort?.name,
+				"Date Visited": format(guest.visitDate, "MM/dd/yyyy"),
+			}))
+		);
+		XLSX.utils.book_append_sheet(workbook, worksheet, "Guests");
+		XLSX.writeFile(workbook, "guests_report.xlsx");
+	};
+
 	return (
 		<section>
 			<div className="flex items-center justify-between">
@@ -16,22 +58,34 @@ const Reports = () => {
 							id="search"
 							type="text"
 							icon={CiSearch}
-							placeholder="Search..."
+							placeholder="Search name..."
 							required
 							color="gray"
+							value={searchTerm}
+							onChange={(e) => setSearchTerm(e.target.value)}
 						/>
 					</div>
 					<div className="max-w-lg">
-						<Select id="spots" required>
-							<option>All</option>
-							<option>Resort 1</option>
-							<option>Resort 2</option>
-							<option>Resort 3</option>
+						<Select
+							id="spots"
+							required
+							value={selectedSpotId}
+							onChange={(e) => setSelectedSpotId(e.target.value)}
+						>
+							<option value="All">All</option>
+							{spots &&
+								spots.resorts.map((spot) => (
+									<option key={spot.id} value={spot.id}>
+										{spot.name}
+									</option>
+								))}
 						</Select>
 					</div>
-					<div>
-						<Button color="primary">EXPORT</Button>
-					</div>
+					<Tooltip content="Export as Excel" className="mt-4 sm:mt-0">
+						<Button color="primary" onClick={exportToExcel}>
+							EXPORT
+						</Button>
+					</Tooltip>
 				</div>
 			</div>
 			<div>
@@ -46,16 +100,30 @@ const Reports = () => {
 							<Table.HeadCell>Date Visited</Table.HeadCell>
 						</Table.Head>
 						<Table.Body className="divide-y text-[14px]">
-							<Table.Row className="bg-white dark:border-gray-700 dark:bg-gray-800">
-								<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
-									Alexis Cadahin
-								</Table.Cell>
-								<Table.Cell>20</Table.Cell>
-								<Table.Cell>Male</Table.Cell>
-								<Table.Cell>Paluan, Occidental Mindoro</Table.Cell>
-								<Table.Cell>Calawagan</Table.Cell>
-								<Table.Cell>September 25, 2024</Table.Cell>
-							</Table.Row>
+							{filteredGuests.map((guest) => (
+								<Table.Row
+									key={guest.id}
+									className="bg-white dark:border-gray-700 dark:bg-gray-800"
+								>
+									<Table.Cell className="whitespace-nowrap font-medium text-gray-900 dark:text-white">
+										{guest.name}
+									</Table.Cell>
+									<Table.Cell>{guest.age}</Table.Cell>
+									<Table.Cell>{guest.gender}</Table.Cell>
+									<Table.Cell>
+										{getAddress(
+											guest.region,
+											guest.province,
+											guest.municipality,
+											guest.barangay
+										)}
+									</Table.Cell>
+									<Table.Cell>{guest.resort?.name}</Table.Cell>
+									<Table.Cell>
+										{format(guest.visitDate, "MM/dd/yyyy")}
+									</Table.Cell>
+								</Table.Row>
+							))}
 						</Table.Body>
 					</Table>
 				</div>

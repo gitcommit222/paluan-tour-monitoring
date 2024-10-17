@@ -27,10 +27,12 @@ const logoutUser = () => {
 
 export const useLogout = () => {
 	const router = useRouter();
+	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: logoutUser,
 		onSuccess: () => {
-			router.push("/sign-in");
+			router.push("/");
+			queryClient.clear(["user"]);
 		},
 		onError: () => {
 			toast.error("Error logging out.");

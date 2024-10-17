@@ -31,6 +31,20 @@ export const useGetGuests = () => {
 	});
 };
 
+const getTouristByResortId = async (id) => {
+	const response = await api.get(`/guest/tourist-by-resort/${id}`);
+
+	return response.data;
+};
+
+export const useGetTouristByResortId = (resortId) => {
+	return useQuery({
+		queryKey: ["touristByResortId", resortId],
+		queryFn: () => getTouristByResortId(resortId),
+		enabled: !!resortId,
+	});
+};
+
 const updateGuest = async (guest) => {
 	const response = await api.put(`/guest/update-guest/${guest.id}`, guest);
 

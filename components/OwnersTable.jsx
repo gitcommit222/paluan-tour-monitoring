@@ -1,15 +1,17 @@
 "use client";
-import { useDeleteGuest, useGetGuests } from "@/hooks/useGuest";
+import { useDeleteGuest, useGetTouristByResortId } from "@/hooks/useGuest";
 import getAddress from "@/utils/getAddress";
 import { format } from "date-fns";
 import { Table } from "flowbite-react";
-import Link from "next/link";
 import toast from "react-hot-toast";
 
-const OwnersTable = () => {
-	const { data: guests, isLoading: isLoadingGuests } = useGetGuests();
+const OwnersTable = ({ resortId }) => {
+	const { data: guests, isLoading: isLoadingGuests } =
+		useGetTouristByResortId(resortId);
 	const { mutateAsync: deleteGuest, isLoading: isLoadingDelete } =
 		useDeleteGuest();
+	console.log(`resortId: ${resortId}`);
+	console.log(guests);
 
 	const handleDelete = async (id) => {
 		await toast.promise(deleteGuest(id), {
@@ -51,9 +53,7 @@ const OwnersTable = () => {
 									)}
 								</Table.Cell>
 								<Table.Cell>{guest.contactNumber}</Table.Cell>
-								<Table.Cell>
-									{format(guest.visitDate, "MMM dd, yyyy")}
-								</Table.Cell>
+								<Table.Cell>{format(guest.visitDate, "MM/dd/yyyy")}</Table.Cell>
 								<Table.Cell className="flex">
 									<button
 										onClick={() => handleDelete(guest.id)}
@@ -61,12 +61,6 @@ const OwnersTable = () => {
 									>
 										Delete
 									</button>
-									{/* <Link
-								href="#"
-								className="font-medium text-red-600 hover:underline"
-							>
-								Delete
-							</Link> */}
 								</Table.Cell>
 							</Table.Row>
 						))}

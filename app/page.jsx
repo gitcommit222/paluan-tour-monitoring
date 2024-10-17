@@ -2,10 +2,17 @@
 import Promos from "@/components/promotions/promos";
 import { promotionNavLinks } from "@/constants";
 import { about, b1, b2, b3, b4, b5, beach1, logo } from "@/public";
-import { Button, FloatingLabel, Rating, TextInput } from "flowbite-react";
+import {
+	Avatar,
+	Button,
+	FloatingLabel,
+	Rating,
+	TextInput,
+} from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 import { IoPricetagsOutline } from "react-icons/io5";
 import { FaVirusCovidSlash } from "react-icons/fa6";
@@ -17,15 +24,22 @@ import { FaInstagramSquare } from "react-icons/fa";
 
 import { useInView } from "@/lib/useInView";
 import Place from "@/components/promotions/Place";
+import { useFetchUser, useLogout } from "@/hooks/useAuth";
+import { Popover } from "flowbite";
 
 const PromotionsPage = () => {
 	const [activeSection, setActiveSection] = useState("");
 	const [scrolling, setScrolling] = useState(false);
 
+	const router = useRouter();
+	const { mutate: logout } = useLogout();
+
 	const homeSection = useInView({ threshold: 0.5 });
 	const aboutSection = useInView({ threshold: 0.5 });
 	const placesSection = useInView({ threshold: 0.5 });
 	const blogSection = useInView({ threshold: 0.5 });
+
+	const { data: user } = useFetchUser();
 
 	useEffect(() => {
 		const handleScroll = () => {
@@ -47,6 +61,10 @@ const PromotionsPage = () => {
 		placesSection.isInView,
 		blogSection.isInView,
 	]);
+
+	const handleLogout = () => {
+		logout();
+	};
 
 	return (
 		<section className="promotions-page">
@@ -87,9 +105,20 @@ const PromotionsPage = () => {
 					</ul>
 				</div>
 				<div className="w-full sm:w-auto flex justify-center sm:justify-end">
-					<Button size="sm" color="primary" href="/sign-in">
-						Login
-					</Button>
+					{user ? (
+						<div className="flex items-center gap-4">
+							<Avatar size="sm" rounded>
+								{user.name}
+							</Avatar>
+							<Button size="sm" color="secondary" onClick={handleLogout}>
+								Logout
+							</Button>
+						</div>
+					) : (
+						<Button size="sm" color="primary" href="/sign-in">
+							Login
+						</Button>
+					)}
 				</div>
 			</nav>
 			<div ref={homeSection.ref} className="prom-content" id="home">

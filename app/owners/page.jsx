@@ -83,7 +83,7 @@ const Home = () => {
 											</p>
 										</div>
 									</div>
-									<AddGuestForm />
+									<AddGuestForm resortId={resorts?.resorts[0]?.id} />
 								</div>
 							</div>
 						</Tabs.Item>
