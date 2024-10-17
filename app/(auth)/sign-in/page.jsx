@@ -11,6 +11,7 @@ import toast from "react-hot-toast";
 
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { getFirstWord } from "@/utils/getFirstWord";
 
 const SignInPage = () => {
 	const login = useLogin();
@@ -53,7 +54,9 @@ const SignInPage = () => {
 		} = login;
 
 		if (isSuccess && login.data?.user?.role) {
-			toast.success(`Welcome, ${login.data.user.name || "user"}!`);
+			toast.success(
+				`Welcome, ${getFirstWord(login.data.user.name) || "user"}!`
+			);
 
 			// Make sure you're accessing the role correctly
 			const userRole = login.data.user.role;

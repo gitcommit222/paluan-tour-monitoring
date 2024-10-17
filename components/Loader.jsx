@@ -2,7 +2,7 @@ import React from "react";
 
 const Loader = () => {
 	return (
-		<div className="fixed inset-0 flex justify-center items-center bg-black bg-opacity-50">
+		<div className="fixed inset-0 flex flex-col justify-center items-center bg-black bg-opacity-50">
 			<div className="bg-white rounded-lg p-6">
 				<svg
 					className="w-36 h-36"
@@ -30,7 +30,7 @@ const Loader = () => {
 								cy="80"
 								r="72"
 								fill="none"
-								stroke="hsl(223,90%,55%)"
+								stroke="#70B1E1"
 								strokeWidth="16"
 								strokeDasharray="452.39 452.39"
 								strokeDashoffset="452"
@@ -133,6 +133,12 @@ const Loader = () => {
 						</g>
 					</g>
 				</svg>
+			</div>
+			<div className="mt-4 text-white text-2xl font-bold animate-pulse">
+				Loading
+				<span className="animate-[ellipsis_1.5s_steps(4,end)_infinite]">
+					...
+				</span>
 			</div>
 		</div>
 	);

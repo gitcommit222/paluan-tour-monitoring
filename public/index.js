@@ -8,6 +8,8 @@ import dashboard from "./icons/pie-chart.png";
 import settings from "./icons/settings.png";
 import reports from "./icons/report.png";
 import logoutIcon from "./icons/logout.png";
+import male from "./icons/traveler.png";
+import female from "./icons/travelerFemale.png";
 
 import beach1 from "./images/beach1.jpg";
 import beach2 from "./images/beach2.jpg";
@@ -38,4 +40,6 @@ export {
 	b5,
 	about,
 	logoutIcon,
+	male,
+	female,
 };

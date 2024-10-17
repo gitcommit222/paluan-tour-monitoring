@@ -4,9 +4,10 @@ import DataBox from "@/components/DataBox";
 import DoughnutChart from "@/components/DoughnutChartComponent";
 import Headerbox from "@/components/shared/HeaderBox";
 import { useFetchUser } from "@/hooks/useAuth";
-import { spot, tourist } from "@/public";
+import { female, male, spot, tourist } from "@/public";
 import { Button } from "flowbite-react";
 import React from "react";
+import { getFirstWord } from "@/utils/getFirstWord";
 
 const Dashboard = () => {
 	const { data: user } = useFetchUser();
@@ -68,11 +69,11 @@ const Dashboard = () => {
 	};
 	return (
 		<section className="p-4 max-w-full overflow-x-hidden">
-			<div className="flex flex-col sm:flex-row justify-between items-center mb-6">
+			<div className="flex flex-col sm:flex-row justify-between items-center mb-1">
 				<Headerbox
 					type="greeting"
 					title="Hello,"
-					user={`${user && user.name}!`}
+					user={`${user && getFirstWord(user.name)}!`}
 					subtext="Track tourist spots progress here."
 				/>
 				<div className="mt-4 sm:mt-0">
@@ -87,16 +88,16 @@ const Dashboard = () => {
 					data="1,000"
 					color="green"
 				/>
-				<DataBox icon={tourist} title="Male Tourist" data="500" color="red" />
+				<DataBox icon={male} title="Male Tourist" data="500" color="red" />
 				<DataBox
-					icon={tourist}
+					icon={female}
 					title="Female Tourist"
 					data="500"
 					color="yellow"
 				/>
 			</div>
 			<div className="flex flex-col lg:flex-row gap-4 mt-10">
-				<div className="border p-5 h-[400px] lg:h-[500px] w-full lg:w-3/5 rounded-lg overflow-hidden">
+				<div className="border p-5 w-full lg:w-3/5 rounded-lg overflow-hidden">
 					<BarChart data={data} options={options} />
 				</div>
 				<div className="border p-5 h-[400px] lg:h-[500px] w-full lg:w-2/5 rounded-lg overflow-hidden">

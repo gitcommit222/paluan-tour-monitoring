@@ -102,7 +102,6 @@ const SpotDetailsForm = ({ data }) => {
 			};
 
 			if (data) {
-				console.log("data", data);
 				await toast.promise(
 					updateSpotMutation({
 						file: selectedImage instanceof File ? selectedImage : null,
