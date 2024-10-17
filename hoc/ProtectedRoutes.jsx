@@ -14,7 +14,7 @@ const ProtectedRoutes = ({ children, roles }) => {
 			if (!user) {
 				router.push("/sign-in");
 				toast.error("Please sign in.");
-			} else if (roles && (!user.role || !roles.includes(user.role))) {
+			} else if (roles && (!user.userType || !roles.includes(user.userType))) {
 				router.push("/unauthorized");
 				toast.error("You don't have permission to access this page.");
 			}
@@ -26,7 +26,7 @@ const ProtectedRoutes = ({ children, roles }) => {
 	}
 
 	// Only render children if user is authenticated and authorized
-	return <>{user && (!roles || roles.includes(user.role)) && children}</>;
+	return <>{user && (!roles || roles.includes(user.userType)) && children}</>;
 };
 
 export default ProtectedRoutes;

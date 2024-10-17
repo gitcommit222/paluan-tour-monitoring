@@ -116,7 +116,10 @@ const BarChart = ({ data, title = "Resort Progress" }) => {
 	};
 
 	return (
-		<div className="rounded-lg p-6 ">
+		<div
+			className="rounded-lg p-6 
+		"
+		>
 			<h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
 				{title}
 			</h2>

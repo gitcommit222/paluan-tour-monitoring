@@ -6,8 +6,6 @@ const addSpot = async ({ file, spotData }) => {
 		const formData = new FormData();
 		if (file) {
 			formData.append("image", file);
-		} else {
-			throw new Error("No file selected");
 		}
 
 		for (const key in spotData) {

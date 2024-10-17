@@ -1,5 +1,5 @@
 "use client";
-import { useFetchUser, useLogin } from "@/hooks/useAuth";
+import { useLogin } from "@/hooks/useAuth";
 import { signInSchema } from "@/lib/formSchema";
 import { logo } from "@/public";
 import { Button, FloatingLabel, Label, TextInput } from "flowbite-react";
@@ -53,13 +53,13 @@ const SignInPage = () => {
 			error,
 		} = login;
 
-		if (isSuccess && login.data?.user?.role) {
+		if (isSuccess && login.data?.user?.userType) {
 			toast.success(
 				`Welcome, ${getFirstWord(login.data.user.name) || "user"}!`
 			);
 
 			// Make sure you're accessing the role correctly
-			const userRole = login.data.user.role;
+			const userRole = login.data.user.userType;
 
 			if (userRole === "admin") {
 				router.push("/dashboard");

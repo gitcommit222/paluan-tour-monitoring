@@ -70,7 +70,7 @@ const Home = () => {
 						<Tabs.Item title="Guests">
 							<div className="flex gap-2">
 								<div className="flex-1">
-									<OwnersTable />
+									<OwnersTable resortId={resorts?.resorts[0]?.id} />
 								</div>
 								<div className="border rounded-lg max-w-[350px] p-5 space-y-5">
 									<div className="flex justify-between items-center flex-wrap">

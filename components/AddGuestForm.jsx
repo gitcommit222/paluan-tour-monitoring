@@ -1,5 +1,4 @@
 import React from "react";
-import { useFormik } from "formik";
 import { addOwnerGuest } from "@/lib/formSchema";
 import { Button, Datepicker, Label, Select, TextInput } from "flowbite-react";
 import {
@@ -10,8 +9,13 @@ import {
 } from "phil-reg-prov-mun-brgy";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { useAddGuest } from "@/hooks/useGuest";
+import toast from "react-hot-toast";
+import { useFetchSpots } from "@/hooks/useSpot";
 
-const AddGuestForm = ({ data }) => {
+const AddGuestForm = ({ data, resortId }) => {
+	const { mutateAsync: addGuest, isLoading } = useAddGuest();
+	const { data: resorts } = useFetchSpots();
 	const {
 		register,
 		handleSubmit,
@@ -72,10 +76,30 @@ const AddGuestForm = ({ data }) => {
 		}
 	}, [watchMunicipality, setValue]);
 
-	const onSubmit = async (data) => {
+	const onSubmit = async (formData) => {
 		try {
+			await toast.promise(
+				addGuest({
+					name: formData.fullName,
+					age: parseInt(formData.age),
+					gender: formData.gender,
+					region: formData.region,
+					province: formData.province,
+					municipality: formData.municipality,
+					barangay: formData.barangay,
+					resortId,
+					contactNumber: formData.contactNumber,
+					visitDate: formData.dateVisited,
+				}),
+				{
+					loading: "Adding Guest...",
+					success: "Guest added successfully!",
+					error: "Failed to add guest",
+				}
+			);
 			reset();
 		} catch (error) {
+			console.error("Error adding guest:", error);
 			setError("root", {
 				message: "Invalid Inputs",
 			});
@@ -136,6 +160,7 @@ const AddGuestForm = ({ data }) => {
 							</Select>
 						</div>
 					</div>
+
 					<div>
 						<div className="mb-2 block">
 							<Label htmlFor="region" value="Region *" />
@@ -150,7 +175,7 @@ const AddGuestForm = ({ data }) => {
 						>
 							<option value="">Select Region</option>
 							{regions.map((reg) => (
-								<option value={reg.reg_code} key={reg.reg_code}>
+								<option value={reg.reg_code} key={reg.name}>
 									{reg.name}
 								</option>
 							))}
@@ -171,7 +196,7 @@ const AddGuestForm = ({ data }) => {
 						>
 							<option value="">Select Province</option>
 							{provinces.map((prov) => (
-								<option value={prov.prov_code} key={prov.prov_code}>
+								<option value={prov.prov_code} key={prov.name}>
 									{prov.name}
 								</option>
 							))}
@@ -192,7 +217,7 @@ const AddGuestForm = ({ data }) => {
 						>
 							<option value="">Select Municipality</option>
 							{municipalities.map((mun) => (
-								<option value={mun.mun_code} key={mun.mun_code}>
+								<option value={mun.mun_code} key={mun.name}>
 									{mun.name}
 								</option>
 							))}
@@ -213,7 +238,7 @@ const AddGuestForm = ({ data }) => {
 						>
 							<option value="">Select Barangay</option>
 							{barangays.map((brgy) => (
-								<option value={brgy.brgy_code} key={brgy.brgy_code}>
+								<option value={brgy.brgy_code} key={brgy.name}>
 									{brgy.name}
 								</option>
 							))}
@@ -251,8 +276,13 @@ const AddGuestForm = ({ data }) => {
 					<Button color="gray" onClick={() => reset()} className="flex-1">
 						Reset
 					</Button>
-					<Button type="submit" className="flex-1" color="primary">
-						Save
+					<Button
+						type="submit"
+						disabled={isSubmitting}
+						className="flex-1"
+						color="primary"
+					>
+						{isSubmitting ? "Saving..." : "Save"}
 					</Button>
 				</div>
 			</form>
