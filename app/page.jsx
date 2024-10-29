@@ -26,6 +26,7 @@ import { useInView } from "@/lib/useInView";
 import Place from "@/components/promotions/Place";
 import { useFetchUser, useLogout } from "@/hooks/useAuth";
 import { Popover } from "flowbite";
+import { useFetchSpots } from "@/hooks/useSpot";
 
 const PromotionsPage = () => {
 	const [activeSection, setActiveSection] = useState("");
@@ -33,6 +34,8 @@ const PromotionsPage = () => {
 
 	const router = useRouter();
 	const { mutate: logout } = useLogout();
+
+	const { data: places } = useFetchSpots();
 
 	const homeSection = useInView({ threshold: 0.5 });
 	const aboutSection = useInView({ threshold: 0.5 });
@@ -65,6 +68,8 @@ const PromotionsPage = () => {
 	const handleLogout = () => {
 		logout();
 	};
+
+	console.log(places);
 
 	return (
 		<section className="promotions-page">
@@ -180,12 +185,9 @@ const PromotionsPage = () => {
 			>
 				<h1 className="font-semibold text-[35px]">Recommended Destinations</h1>
 				<div className=" w-full flex flex-wrap gap-7 justify-center py-5">
-					<Place imgUrl={b1} />
-					<Place imgUrl={b2} />
-					<Place imgUrl={b3} />
-					<Place imgUrl={b4} />
-					<Place imgUrl={b5} />
-					<Place imgUrl={beach1} />
+					{places?.resorts?.map((place) => (
+						<Place key={place.id} {...place} />
+					))}
 				</div>
 			</div>
 			<div className="prom-content" id="blogs" ref={blogSection.ref}>
