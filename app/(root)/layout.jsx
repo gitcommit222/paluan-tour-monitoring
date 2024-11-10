@@ -9,7 +9,9 @@ export default function RootLayout({ children }) {
 		<main className="root">
 			<Suspense fallback={<WhiteBackdrop />}>
 				<ProtectedRoutes roles={["admin"]}>
-					<Sidebar />
+					<div className="fixed">
+						<Sidebar />
+					</div>
 					<section className="p-10 ml-[250px] w-full">{children}</section>
 				</ProtectedRoutes>
 			</Suspense>

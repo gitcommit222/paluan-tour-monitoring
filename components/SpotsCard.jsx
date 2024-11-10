@@ -60,7 +60,7 @@ const SpotsCard = ({
 							mainContent={
 								<div className="flex gap-1 flex-col justify-center items-center">
 									<Tooltip content="View Details" placement="right">
-										<Link href={`/spots/${headerTitle}`}>
+										<Link href={`/spots/${spotId}`}>
 											<MdPreview className="text-green-500" size={19} />
 										</Link>
 									</Tooltip>

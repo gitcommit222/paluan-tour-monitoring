@@ -2,12 +2,21 @@ import { Rating } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
-import { FaBus } from "react-icons/fa";
-import { FaPlaneDeparture } from "react-icons/fa";
-import { FaCar } from "react-icons/fa";
+import { FaBus, FaPlaneDeparture, FaCar } from "react-icons/fa";
 import { GoArrowUpRight } from "react-icons/go";
+import { useFetchRatingsByResort } from "../../hooks/useReview";
 
-const Place = ({ id, thumbnail, title, description, rate }) => {
+const Place = ({ id, thumbnail, name, description }) => {
+	const { data: ratings } = useFetchRatingsByResort(id);
+
+	const averageRating =
+		ratings?.data?.length > 0
+			? (
+					ratings.data.reduce((acc, curr) => acc + curr.rating, 0) /
+					ratings.data.length
+			  ).toFixed(1)
+			: 0;
+
 	return (
 		<div className="prom-spot-box">
 			<div className="relative w-full h-[65%]">
@@ -20,7 +29,7 @@ const Place = ({ id, thumbnail, title, description, rate }) => {
 			</div>
 			<div className="flex justify-between py-2 space-y-2">
 				<div className="space-y-1">
-					<h3 className="font-medium text-[23px] tracking-wide">{title}</h3>
+					<h3 className="font-medium text-[23px] tracking-wide">{name}</h3>
 					<p className="text-gray-400 text-[12px] font-light">{description}</p>
 				</div>
 				<div className="space-y-1 flex flex-col items-end">
@@ -29,16 +38,18 @@ const Place = ({ id, thumbnail, title, description, rate }) => {
 							<Rating.Star
 								key={index}
 								className={
-									index < Math.floor(rate) ? "text-secondary" : "text-gray-300"
+									index < Math.floor(averageRating)
+										? "text-secondary"
+										: "text-accent"
 								}
 								filled={true}
 							/>
 						))}
 					</Rating>
 					<p className="text-[14px] font-light">
-						{rate?.toFixed(1)
-							? `${rate?.toFixed(1)} Ratings`
-							: "No ratings yet"}{" "}
+						{ratings?.data?.length > 0
+							? `${averageRating} (${ratings.data.length} rating/s)`
+							: "No ratings yet"}
 					</p>
 				</div>
 			</div>

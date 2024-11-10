@@ -7,7 +7,7 @@ import {
 	useUpdateRating,
 	useDeleteRating,
 } from "@/hooks/useReview";
-import { useFetchSingleSpot } from "@/hooks/useSpot";
+import { useFetchSingleSpot, useFetchSpotImages } from "@/hooks/useSpot";
 import { Carousel, Rating, Tooltip } from "flowbite-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -15,6 +15,7 @@ import React, { useState } from "react";
 import toast from "react-hot-toast";
 import { IoArrowBackCircle } from "react-icons/io5";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
+import { logo } from "@/public";
 
 const getInitials = (name) => {
 	if (!name) return "?";
@@ -32,6 +33,10 @@ const ResortPage = ({ params }) => {
 	const [comment, setComment] = useState("");
 	const { data: spot } = useFetchSingleSpot(resortId);
 	const router = useRouter();
+
+	const { data: spotImages } = useFetchSpotImages(resortId);
+
+	console.log(spotImages);
 
 	const { data: user } = useFetchUser();
 
@@ -103,7 +108,6 @@ const ResortPage = ({ params }) => {
 		}
 	};
 
-	// Calculate average rating
 	const averageRating =
 		ratings?.data?.length > 0
 			? (
@@ -129,31 +133,29 @@ const ResortPage = ({ params }) => {
 				<div className="flex h-full">
 					<div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
 						<div className="w-full h-[50%]">
-							<Carousel pauseOnHover>
-								<Image
-									src={spot?.result.thumbnail}
-									alt="..."
-									width={500}
-									height={500}
-									className="object-cover"
-								/>
-								<img
-									src="https://flowbite.com/docs/images/carousel/carousel-2.svg"
-									alt="..."
-								/>
-								<img
-									src="https://flowbite.com/docs/images/carousel/carousel-3.svg"
-									alt="..."
-								/>
-								<img
-									src="https://flowbite.com/docs/images/carousel/carousel-4.svg"
-									alt="..."
-								/>
-								<img
-									src="https://flowbite.com/docs/images/carousel/carousel-5.svg"
-									alt="..."
-								/>
-							</Carousel>
+							{(spot?.result?.thumbnail || spotImages?.data?.length > 0) && (
+								<Carousel pauseOnHover>
+									{spot?.result?.thumbnail && (
+										<Image
+											src={spot.result.thumbnail || logo}
+											alt="Resort thumbnail"
+											width={500}
+											height={500}
+											className="object-cover w-full h-full"
+										/>
+									)}
+									{spotImages?.map((image, index) => (
+										<Image
+											key={index}
+											src={image.imageUrl ? image.imageUrl : logo}
+											alt={`Resort image ${index + 1}`}
+											className="object-cover w-full h-full"
+											width={500}
+											height={500}
+										/>
+									))}
+								</Carousel>
+							)}
 						</div>
 						<div className="flex justify-between mt-2">
 							<div>

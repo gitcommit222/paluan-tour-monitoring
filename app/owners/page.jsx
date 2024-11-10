@@ -6,13 +6,19 @@ import Headerbox from "@/components/shared/HeaderBox";
 import SpotDetailsForm from "@/components/SpotDetailsForm";
 import ProtectedRoutes from "@/hoc/ProtectedRoutes";
 import { useFetchUser, useLogout } from "@/hooks/useAuth";
-import { useFetchResortByOwner } from "@/hooks/useSpot";
+import {
+	useFetchResortByOwner,
+	useAddSpotImage,
+	useDeleteSpotImage,
+	useFetchSpotImages,
+} from "@/hooks/useSpot";
+import { useFetchRatingsByResort } from "@/hooks/useReview";
 import { logo } from "@/public";
 import { getFirstWord } from "@/utils/getFirstWord";
 import { Button, Label, Tabs, Textarea } from "flowbite-react";
 import Image from "next/image";
 import { useState } from "react";
-import { HiOutlineExclamationCircle } from "react-icons/hi";
+import { HiOutlineExclamationCircle, HiTrash, HiPlus } from "react-icons/hi";
 
 const Home = () => {
 	const [showReplyInput, setShowReplyInput] = useState(false);
@@ -20,6 +26,12 @@ const Home = () => {
 	const { data: user } = useFetchUser();
 	const { data: resorts } = useFetchResortByOwner(user?.id);
 	const [replyInputId, setReplyInputId] = useState(null);
+	const { data: ratingsData } = useFetchRatingsByResort(
+		resorts?.resorts[0]?.id
+	);
+	const { mutate: addImage } = useAddSpotImage();
+	const { mutate: deleteImage } = useDeleteSpotImage();
+	const { data: spotImages } = useFetchSpotImages(resorts?.resorts[0]?.id);
 
 	return (
 		<ProtectedRoutes roles={["resortOwner", "admin"]}>
@@ -98,49 +110,33 @@ const Home = () => {
 							<div className="space-y-6">
 								<div className="flex items-center justify-between">
 									<h2 className="text-2xl font-medium">
-										3 REVIEWS OF {resorts?.resorts[0]?.name.toUpperCase()}
+										{ratingsData?.data?.length || 0} REVIEWS OF{" "}
+										{resorts?.resorts[0]?.name?.toUpperCase()}
 									</h2>
 									<div className="flex items-center">
-										<div className="text-yellow-400 text-2xl">★★★★☆</div>
+										<div className="text-yellow-400 text-2xl">
+											{"★".repeat(Math.floor(ratingsData?.averageRating || 0))}
+											{"☆".repeat(
+												5 - Math.floor(ratingsData?.averageRating || 0)
+											)}
+										</div>
 										<span className="ml-2 text-gray-600">
-											4.7 rating based on 3 ratings
+											{ratingsData?.averageRating?.toFixed(1) || 0} rating based
+											on {ratingsData?.data?.length || 0} ratings
 										</span>
 									</div>
 								</div>
 								<div className="space-y-4">
-									{[
-										{
-											name: "Dave",
-											date: "March 16, 2024 at 11:02 am",
-											rating: 5,
-											title: "The best almond latte in town!",
-											content:
-												"I always start my day with an almond latte from Marco's Cafe!",
-										},
-										{
-											name: "Martha",
-											date: "September 29, 2024 at 10:59 am",
-											rating: 4,
-											title: "Great atmosphere",
-											content:
-												"The staff are friendly and the coffee was good.",
-										},
-										{
-											name: "Casey",
-											date: "October 3, 2024 at 11:35 am",
-											rating: 5,
-											title: "Incredible coffee",
-											content:
-												"This place is fantastic! Best resort in town ☕",
-										},
-									].map((review, index) => (
-										<div key={index} className="border-b pb-4">
+									{ratingsData?.data?.map((review, index) => (
+										<div key={review.id} className="border-b pb-4">
 											<div className="flex justify-between items-start">
 												<div>
 													<p className="font-semibold">
-														{index + 1}. By {review.name}
+														{index + 1}. By {review.guest.name}
 													</p>
-													<p className="text-sm text-gray-500">{review.date}</p>
+													<p className="text-sm text-gray-500">
+														{new Date(review.createdAt).toLocaleString()}
+													</p>
 													<div className="text-yellow-400">
 														{"★".repeat(review.rating)}
 														{"☆".repeat(5 - review.rating)}
@@ -150,12 +146,12 @@ const Home = () => {
 													<button
 														onClick={() =>
 															setReplyInputId(
-																replyInputId === index ? null : index
+																replyInputId === review.id ? null : review.id
 															)
 														}
 														className="text-blue-500 hover:underline"
 													>
-														{replyInputId === index
+														{replyInputId === review.id
 															? "Cancel"
 															: "Comment on this review"}
 													</button>
@@ -163,19 +159,18 @@ const Home = () => {
 											</div>
 											<div className="flex justify-between">
 												<div>
-													<h3 className="font-bold mt-2">{review.title}</h3>
-													<p>{review.content}</p>
+													<p>{review.comment}</p>
 												</div>
-												{replyInputId === index && (
+												{replyInputId === review.id && (
 													<div className="flex flex-col justify-end items-end">
 														<Textarea
-															id={`reply-${index}`}
-															name={`reply-${index}`}
+															id={`reply-${review.id}`}
+															name={`reply-${review.id}`}
 															placeholder="Reply to this review..."
 															cols={50}
 															rows={4}
 														/>
-														<Button className="mt-2 " color="primary">
+														<Button className="mt-2" color="primary">
 															Send
 														</Button>
 													</div>
@@ -184,6 +179,70 @@ const Home = () => {
 										</div>
 									))}
 								</div>
+							</div>
+						</Tabs.Item>
+						<Tabs.Item title="Images">
+							<div className="space-y-8">
+								<div className="flex justify-between items-center">
+									<h2 className="text-2xl font-medium">Resort Images</h2>
+									<div className="flex items-center gap-2">
+										<input
+											type="file"
+											id="imageUpload"
+											className="hidden"
+											onChange={(e) => {
+												const file = e.target.files[0];
+												if (file) {
+													addImage({
+														resortId: resorts?.resorts[0]?.id,
+														file,
+													});
+												}
+											}}
+											accept="image/*"
+										/>
+										<Button
+											color="primary"
+											size="lg"
+											onClick={() =>
+												document.getElementById("imageUpload").click()
+											}
+											className="px-6"
+										>
+											<HiPlus className="mr-2 text-xl" /> Add Image
+										</Button>
+									</div>
+								</div>
+
+								{spotImages?.length === 0 ? (
+									<div className="text-center py-12 bg-gray-50 rounded-lg">
+										<HiPlus className="mx-auto text-4xl text-gray-400 mb-3" />
+										<p className="text-gray-500">
+											No images yet. Add some to showcase your resort!
+										</p>
+									</div>
+								) : (
+									<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+										{spotImages?.map((image) => (
+											<div
+												key={image.id}
+												className="relative group shadow-lg rounded-md"
+											>
+												<img
+													src={image.imageUrl}
+													alt="Resort"
+													className="w-full h-64 object-contain rounded-lg"
+												/>
+												<button
+													onClick={() => deleteImage(image.id)}
+													className="absolute top-2 right-2 p-2 bg-red-500 rounded-full text-white opacity-0 group-hover:opacity-100 transition-opacity"
+												>
+													<HiTrash />
+												</button>
+											</div>
+										))}
+									</div>
+								)}
 							</div>
 						</Tabs.Item>
 					</Tabs>

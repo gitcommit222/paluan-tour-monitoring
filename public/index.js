@@ -20,6 +20,7 @@ import b3 from "./images/b3.jpg";
 import b4 from "./images/b4.jpg";
 import b5 from "./images/b5.jpg";
 import about from "./images/about.png";
+import child from "./icons/child.png";
 
 import notfound from "./images/pagenotfound.svg";
 
@@ -42,4 +43,5 @@ export {
 	logoutIcon,
 	male,
 	female,
+	child,
 };

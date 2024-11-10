@@ -128,10 +128,79 @@ export const useFetchResortByOwner = (ownerId) => {
 	});
 };
 
-const addGuest = async (guestData) => {
-	const response = await api.post("/guests", guestData);
+const addSpotImage = async ({ resortId, file }) => {
+	const formData = new FormData();
+	formData.append("resortId", resortId);
+	formData.append("image", file);
+
+	const response = await api.post("/spotimages", formData, {
+		headers: {
+			"Content-Type": "multipart/form-data",
+		},
+	});
 
 	return response.data;
 };
 
-export const useAddGuest = () => {};
+export const useAddSpotImage = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: addSpotImage,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["spots"]);
+		},
+	});
+};
+
+const deleteSpotImage = async (id) => {
+	const response = await api.delete(`/spotimages/${id}`);
+
+	return response.data;
+};
+
+export const useDeleteSpotImage = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: deleteSpotImage,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["spots"]);
+		},
+	});
+};
+
+const updateSpotImage = async ({ id, file }) => {
+	const formData = new FormData();
+	formData.append("image", file);
+
+	const response = await api.put(`/spotimages/${id}`, formData, {
+		headers: {
+			"Content-Type": "multipart/form-data",
+		},
+	});
+
+	return response.data;
+};
+
+export const useUpdateSpotImage = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: updateSpotImage,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["spots"]);
+		},
+	});
+};
+
+const fetchSpotImages = async (resortId) => {
+	const response = await api.get(`/spotimages/${resortId}`);
+
+	return response.data;
+};
+
+export const useFetchSpotImages = (resortId) => {
+	return useQuery({
+		queryKey: ["spotImages", resortId],
+		queryFn: () => fetchSpotImages(resortId),
+		enabled: !!resortId,
+	});
+};
