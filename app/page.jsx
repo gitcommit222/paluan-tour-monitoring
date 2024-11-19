@@ -85,8 +85,8 @@ const PromotionsPage = () => {
 					>
 						<Image
 							src={logo}
-							height={50}
-							width={50}
+							height={100}
+							width={100}
 							alt="logo"
 							className="object-contain"
 						/>

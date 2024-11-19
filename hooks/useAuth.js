@@ -2,6 +2,28 @@ import api from "../utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 
+const createUser = async ({ name, email, username, password, userType }) => {
+	const response = await api.post("/auth/", {
+		name,
+		username,
+		password,
+		userType,
+		email,
+	});
+
+	return response.data;
+};
+
+export const userCreateUser = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: createUser,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["user"]);
+		},
+	});
+};
+
 const loginUser = async ({ username, password }) => {
 	const response = await api.post("/auth/login", { username, password });
 
@@ -53,5 +75,32 @@ export const useFetchUser = () => {
 		retry: false,
 		staleTime: Infinity,
 		cacheTime: Infinity,
+	});
+};
+
+const fetchUsers = async () => {
+	const response = await api.get("/auth/");
+
+	return response.data;
+};
+
+export const useFetchUsers = () => {
+	return useQuery({
+		queryKey: ["users"],
+		queryFn: fetchUsers,
+	});
+};
+
+const deleteUser = async (id) => {
+	await api.delete(`/auth/${id}`);
+};
+
+export const useDeleteUser = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: deleteUser,
+		onSuccess: () => {
+			queryClient.invalidateQueries(["users"]);
+		},
 	});
 };

@@ -15,6 +15,11 @@ export const navLinks = [
 		icon: "/icons/travel-guide.png",
 	},
 	{
+		label: "Users",
+		url: "/users",
+		icon: "/icons/group.png",
+	},
+	{
 		label: "Settings",
 		url: "/settings",
 		icon: "/icons/settings.png",

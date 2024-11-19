@@ -1,5 +1,5 @@
 "use client";
-import { navLinks } from "@/constants";
+import { navLinks, promotionNavLinks } from "@/constants";
 import { Drawer } from "flowbite-react";
 import { useState } from "react";
 import { IoMenu } from "react-icons/io5";
@@ -20,7 +20,7 @@ const NavDrawer = () => {
 				<Drawer.Header title="Home" />
 				<Drawer.Items>
 					<div className="flex flex-col gap-4">
-						{navLinks.map((link) => (
+						{promotionNavLinks.map((link) => (
 							<div key={link.label} href={link.url}>
 								{link.label}
 							</div>
