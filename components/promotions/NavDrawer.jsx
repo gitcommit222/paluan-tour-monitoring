@@ -21,7 +21,7 @@ const NavDrawer = () => {
 				<Drawer.Items>
 					<div className="flex flex-col gap-4">
 						{promotionNavLinks.map((link) => (
-							<div key={link.label} href={link.url}>
+							<div key={link.label} href={`#${link.url}`}>
 								{link.label}
 							</div>
 						))}
