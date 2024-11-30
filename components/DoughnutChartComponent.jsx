@@ -2,15 +2,31 @@
 import React from "react";
 import { Doughnut } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { useGetGuests } from "@/hooks/useGuest";
+import { useFetchSpots } from "@/hooks/useSpot";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const DoughnutChart = () => {
-	const resortsData = [
-		{ name: "Resort 1", guests: 190 },
-		{ name: "Resort 2", guests: 170 },
-		{ name: "Resort 3", guests: 140 },
-	];
+	const { data: guests } = useGetGuests();
+	const { data: spots } = useFetchSpots();
+
+	// Early return if data is not available
+	if (!guests?.tourists || !spots?.resorts) {
+		return <div>Loading...</div>;
+	}
+
+	// Calculate guests per resort
+	const resortsData = spots.resorts.map((resort) => {
+		const guestCount = guests.tourists.filter(
+			(tourist) => tourist.resortId === resort.id
+		).length;
+
+		return {
+			name: resort.name,
+			guests: guestCount,
+		};
+	});
 
 	const maxGuestsResort = resortsData.reduce((max, resort) =>
 		resort.guests > max.guests ? resort : max
@@ -20,7 +36,7 @@ const DoughnutChart = () => {
 		labels: resortsData.map((resort) => resort.name),
 		datasets: [
 			{
-				label: "Number of Guests in July",
+				label: "Number of Guests",
 				data: resortsData.map((resort) => resort.guests),
 				backgroundColor: resortsData.map(
 					(resort) =>
@@ -48,7 +64,7 @@ const DoughnutChart = () => {
 			},
 			title: {
 				display: true,
-				text: `Highlighting Resort with Most Guests in July: ${maxGuestsResort.name}`,
+				text: `Highlighting Resort with Most Guests: ${maxGuestsResort.name}`,
 			},
 		},
 	};

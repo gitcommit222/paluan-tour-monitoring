@@ -278,6 +278,7 @@ const SpotDetailsForm = ({ data }) => {
 								type="email"
 								placeholder="e.g. sample@email.com"
 								name="ownerEmail"
+								disabled={data?.User?.email}
 								color={`${errors.ownerEmail ? "failure" : "gray"}`}
 								helperText={errors.ownerEmail && errors.ownerEmail.message}
 							/>

@@ -20,106 +20,44 @@ ChartJS.register(
 	Legend
 );
 
-const BarChart = ({ data, title = "Resort Progress" }) => {
+const BarChart = ({ data, options, title = "Resort Progress" }) => {
 	const [selectedMonth, setSelectedMonth] = useState("all");
 	const [selectedResort, setSelectedResort] = useState("all");
 	const [filteredData, setFilteredData] = useState(data);
 
-	// Filter data based on selected month and resort
 	useEffect(() => {
-		const filtered = data.datasets
-			.map((dataset) => ({
-				...dataset,
-				data: dataset.data.filter((_, index) => {
-					const monthMatch =
-						selectedMonth === "all" ||
-						data.labels[index].includes(selectedMonth);
-					const resortMatch =
-						selectedResort === "all" || dataset.label === selectedResort;
-					return monthMatch && resortMatch;
-				}),
-			}))
-			.filter((dataset) => dataset.data.length > 0);
+		if (!data?.datasets) return;
 
-		setFilteredData({
-			labels: data.labels.filter((label, index) => {
-				const monthMatch =
-					selectedMonth === "all" || label.includes(selectedMonth);
-				const resortMatch =
-					selectedResort === "all" ||
-					filtered.some((d) => d.data[index] !== undefined);
-				return monthMatch && resortMatch;
-			}),
-			datasets: filtered,
-		});
+		let filtered = {
+			labels: [...data.labels],
+			datasets: [...data.datasets],
+		};
+
+		// Filter by month
+		if (selectedMonth !== "all") {
+			const monthIndex = data.labels.findIndex((label) =>
+				label.toLowerCase().startsWith(selectedMonth.toLowerCase())
+			);
+
+			filtered.labels = [data.labels[monthIndex]];
+			filtered.datasets = data.datasets.map((dataset) => ({
+				...dataset,
+				data: [dataset.data[monthIndex]],
+			}));
+		}
+
+		// Filter by resort
+		if (selectedResort !== "all") {
+			filtered.datasets = filtered.datasets.filter(
+				(dataset) => dataset.label === selectedResort
+			);
+		}
+
+		setFilteredData(filtered);
 	}, [data, selectedMonth, selectedResort]);
 
-	const options = {
-		responsive: true,
-		maintainAspectRatio: false,
-		plugins: {
-			legend: {
-				position: "top",
-				labels: {
-					font: {
-						size: 14,
-						weight: "bold",
-					},
-				},
-			},
-			title: {
-				display: true,
-				text: title,
-				font: {
-					size: 20,
-					weight: "bold",
-				},
-				padding: {
-					top: 10,
-					bottom: 30,
-				},
-			},
-			tooltip: {
-				backgroundColor: "rgba(0, 0, 0, 0.8)",
-				titleFont: {
-					size: 16,
-				},
-				bodyFont: {
-					size: 14,
-				},
-				padding: 12,
-				cornerRadius: 6,
-			},
-		},
-		scales: {
-			x: {
-				grid: {
-					display: false,
-				},
-				ticks: {
-					font: {
-						size: 12,
-					},
-				},
-			},
-			y: {
-				grid: {
-					color: "rgba(0, 0, 0, 0.1)",
-				},
-				ticks: {
-					font: {
-						size: 12,
-					},
-				},
-			},
-		},
-	};
-
 	return (
-		<div
-			className="rounded-lg p-6 
-		"
-		>
+		<div className="rounded-lg p-6">
 			<h2 className="text-2xl font-bold text-gray-800 mb-6 text-center">
 				{title}
 			</h2>
@@ -138,18 +76,11 @@ const BarChart = ({ data, title = "Resort Progress" }) => {
 						className="p-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="all">All Months</option>
-						<option value="Jan">January</option>
-						<option value="Feb">February</option>
-						<option value="Mar">March</option>
-						<option value="Apr">April</option>
-						<option value="May">May</option>
-						<option value="Jun">June</option>
-						<option value="Jul">July</option>
-						<option value="Aug">August</option>
-						<option value="Sep">September</option>
-						<option value="Oct">October</option>
-						<option value="Nov">November</option>
-						<option value="Dec">December</option>
+						{data?.labels?.map((month, index) => (
+							<option key={index} value={month}>
+								{month}
+							</option>
+						))}
 					</select>
 				</div>
 				<div className="flex items-center">
@@ -166,7 +97,7 @@ const BarChart = ({ data, title = "Resort Progress" }) => {
 						className="p-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
 					>
 						<option value="all">All Resorts</option>
-						{data.datasets.map((dataset, index) => (
+						{data?.datasets?.map((dataset, index) => (
 							<option key={index} value={dataset.label}>
 								{dataset.label}
 							</option>

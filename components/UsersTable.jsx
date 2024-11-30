@@ -1,21 +1,28 @@
 "use client";
 import { useDeleteUser, useFetchUsers } from "@/hooks/useAuth";
-import { Table } from "flowbite-react";
-import React from "react";
+import { Table, Modal } from "flowbite-react";
+import React, { useState } from "react";
 import toast from "react-hot-toast";
 
 const UsersTable = () => {
 	const { data: users } = useFetchUsers();
 	const { mutateAsync: deleteUser } = useDeleteUser();
+	const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+	const [userToDelete, setUserToDelete] = useState(null);
 
-	const handleDeleteUser = async (id) => {
-		await toast.promise(deleteUser(id), {
+	const handleDeleteUser = async () => {
+		if (!userToDelete) return;
+
+		await toast.promise(deleteUser(userToDelete), {
 			success: "User deleted.",
 			loading: "Deleting user...",
 			error: "Failed deleting user",
 		});
+
+		setIsDeleteModalOpen(false);
+		setUserToDelete(null);
 	};
-	console.log(users);
+
 	return (
 		<div className="overflow-x-auto">
 			<Table>
@@ -40,11 +47,11 @@ const UsersTable = () => {
 								<Table.Cell>{user?.email}</Table.Cell>
 								<Table.Cell className="capitalize">{user?.userType}</Table.Cell>
 								<Table.Cell className="flex gap-2">
-									{/* <button className="text-blue-500 hover:underline">
-										Edit
-									</button> */}
 									<button
-										onClick={() => handleDeleteUser(user?.id)}
+										onClick={() => {
+											setUserToDelete(user?.id);
+											setIsDeleteModalOpen(true);
+										}}
 										className="text-red-500 hover:underline"
 									>
 										Delete
@@ -54,6 +61,40 @@ const UsersTable = () => {
 						))}
 				</Table.Body>
 			</Table>
+			<Modal
+				show={isDeleteModalOpen}
+				onClose={() => setIsDeleteModalOpen(false)}
+				size="sm"
+			>
+				<Modal.Header>
+					<div className="flex justify-between items-center w-full">
+						<span>Confirm Delete</span>
+					</div>
+				</Modal.Header>
+				<Modal.Body>
+					<div className="space-y-6">
+						<p className="text-gray-600">
+							Are you sure you want to delete this user?
+						</p>
+					</div>
+				</Modal.Body>
+				<Modal.Footer>
+					<div className="flex gap-2 w-full">
+						<button
+							onClick={handleDeleteUser}
+							className="flex-1 bg-red-500 hover:bg-red-600 text-white font-medium py-2 px-4 rounded-md"
+						>
+							Yes, I'm sure
+						</button>
+						<button
+							onClick={() => setIsDeleteModalOpen(false)}
+							className="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md"
+						>
+							No, cancel
+						</button>
+					</div>
+				</Modal.Footer>
+			</Modal>
 		</div>
 	);
 };

@@ -1,8 +1,15 @@
 import api from "../utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
-const createUser = async ({ name, email, username, password, userType }) => {
+const createUser = async ({
+	name,
+	email,
+	username,
+	password,
+	userType = "guest",
+}) => {
 	const response = await api.post("/auth/", {
 		name,
 		username,
@@ -14,12 +21,17 @@ const createUser = async ({ name, email, username, password, userType }) => {
 	return response.data;
 };
 
-export const userCreateUser = () => {
+export const useSignup = () => {
 	const queryClient = useQueryClient();
 	return useMutation({
 		mutationFn: createUser,
 		onSuccess: () => {
 			queryClient.invalidateQueries(["user"]);
+		},
+		onError: (error) => {
+			const errorMessage =
+				error.response?.data?.message || "Error creating account";
+			toast.error(errorMessage);
 		},
 	});
 };
@@ -43,8 +55,10 @@ export const useLogin = () => {
 	});
 };
 
-const logoutUser = () => {
-	localStorage.removeItem("accessToken");
+const logoutUser = async () => {
+	const response = await api.post("/auth/logout");
+
+	return response.data;
 };
 
 export const useLogout = () => {
@@ -55,6 +69,7 @@ export const useLogout = () => {
 		onSuccess: () => {
 			router.push("/");
 			queryClient.clear(["user"]);
+			localStorage.removeItem("accessToken");
 		},
 		onError: () => {
 			toast.error("Error logging out.");
@@ -102,5 +117,49 @@ export const useDeleteUser = () => {
 		onSuccess: () => {
 			queryClient.invalidateQueries(["users"]);
 		},
+	});
+};
+
+const updateProfile = async ({ name, email, phone, username }) => {
+	const response = await api.put("/auth/profile", {
+		name,
+		email,
+		phone,
+		username,
+	});
+	return response.data;
+};
+
+export const useUpdateProfile = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: updateProfile,
+		onSuccess: (data) => {
+			queryClient.setQueryData(["user"], (oldData) => ({
+				...oldData,
+				...data,
+			}));
+			queryClient.invalidateQueries(["user"]);
+		},
+		onError: (error) => {
+			const errorMessage =
+				error.response?.data?.message || "Error updating profile";
+			toast.error(errorMessage);
+		},
+	});
+};
+
+const changePassword = async ({ oldPassword, newPassword }) => {
+	const response = await api.put("/auth/change-password", {
+		oldPassword,
+		newPassword,
+	});
+	return response.data;
+};
+
+export const useChangePassword = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: changePassword,
 	});
 };

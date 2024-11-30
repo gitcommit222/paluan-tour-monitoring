@@ -111,20 +111,22 @@ const SignInPage = () => {
 					)}
 					<div className="space-y-2">
 						<Button
-							className="w-full"
-							color="primary"
+							className="w-full flex justify-center py-2.5 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
 							type="submit"
 							disabled={isSubmitting}
 						>
 							{isSubmitting ? "Logging in..." : "Login"}
 						</Button>
 						<div className="w-full">
-							<Link
-								href="/sign-in"
-								className="text-white text-[14px] hover:text-primary text-end"
-							>
-								Forgot password?
-							</Link>
+							<p className="text-white text-[14px]">
+								Dont have an account?{" "}
+								<Link
+									href="/sign-up"
+									className="text-blue-500 hover:underline text-[14px] hover:text-primary text-end"
+								>
+									Sign up
+								</Link>
+							</p>
 						</div>
 					</div>
 				</form>

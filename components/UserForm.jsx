@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Label, Modal, Select, TextInput } from "flowbite-react";
-import { userCreateUser } from "@/hooks/useAuth";
+import { useSignup } from "@/hooks/useAuth";
 
 const UserForm = ({ data }) => {
 	const [openModal, setOpenModal] = useState(false);
@@ -25,7 +25,7 @@ const UserForm = ({ data }) => {
 		},
 	});
 
-	const { mutateAsync: createUser } = userCreateUser();
+	const { mutateAsync: createUser } = useSignup();
 
 	const onSubmit = async (formData) => {
 		setOpenModal(false);
