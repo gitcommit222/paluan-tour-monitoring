@@ -10,7 +10,7 @@ import { MdPreview } from "react-icons/md";
 import Link from "next/link";
 import { useDeleteResort } from "@/hooks/useSpot";
 import toast from "react-hot-toast";
-import CustomPopOver from "../components/shared/CustomPopOver";
+import CustomPopover from "./shared/CustomPopover";
 
 const SpotsCard = ({
 	imageUrl,
@@ -50,7 +50,7 @@ const SpotsCard = ({
 						{headerTitle}
 					</h5>
 					<div className="py-1 rounded-sm hover:bg-gray-50">
-						<CustomPopOver
+						<CustomPopover
 							trigger="hover"
 							button={
 								<button>
