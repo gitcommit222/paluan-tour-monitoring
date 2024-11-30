@@ -133,28 +133,25 @@ const PromotionsPage = () => {
 			<div className="mt-20">
 				<div ref={homeSection.ref} className="prom-content" id="home">
 					<div className="relative rounded-2xl w-full min-h-[400px] flex items-center justify-center">
-						<div className="bg-prom-bg-image bg-no-repeat rounded-2xl bg-cover filter w-full hidden md:block h-[400px] brightness-75 shadow-md" />
-						<div className="absolute space-y-5 px-4 text-center">
-							<div>
-								<h1 className="font-bold text-3xl md:text-[45px] text-white tracking-wider">
+						<div className="bg-prom-bg-image bg-no-repeat rounded-2xl bg-cover filter w-full h-[400px] brightness-75 shadow-md" />
+						<div className="absolute space-y-5 px-4 text-center w-full max-w-[90%] md:max-w-[600px]">
+							<div className="space-y-2">
+								<h1 className="font-bold text-2xl sm:text-3xl md:text-[45px] text-white tracking-wider">
 									TRAVEL AND TOUR IN PALUAN
 								</h1>
-								<p className="text-white font-light">
+								<p className="text-white font-light text-sm sm:text-base">
 									Paluan, Occidental Mindoro, Philippines
 								</p>
 							</div>
-							<div className="backdrop-blur-lg rounded-lg w-full max-w-[600px] shadow-md p-4 flex flex-col sm:flex-row items-center justify-between gap-4">
-								<div className="w-full sm:w-2/3">
-									<FloatingLabel
-										variant="standard"
-										label="Where you want to go?"
-										className="text-white"
+							<div className="flex flex-col gap-3 w-full">
+								<div className="relative w-full">
+									<input
+										type="text"
+										placeholder="Where you want to go?"
+										className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-md text-white placeholder-white/80 border-b-2 border-white/50 focus:outline-none"
 									/>
 								</div>
-								<Button
-									className="w-full sm:w-auto tracking-wider bg-cyan-600"
-									size="lg"
-								>
+								<Button className="w-full py-3 bg-[#0891b2] hover:bg-[#0891b2]/90 text-white font-medium rounded-lg">
 									EXPLORE NOW
 								</Button>
 							</div>

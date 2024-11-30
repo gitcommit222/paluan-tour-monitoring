@@ -1,11 +1,12 @@
 "use client";
 import { navLinks, promotionNavLinks } from "@/constants";
 import { Drawer } from "flowbite-react";
+import Link from "next/link";
 import { useState } from "react";
 import { IoMenu } from "react-icons/io5";
 
 const NavDrawer = () => {
-	const [isOpen, setIsOpen] = useState(true);
+	const [isOpen, setIsOpen] = useState(false);
 
 	const handleClose = () => setIsOpen(false);
 
@@ -21,9 +22,9 @@ const NavDrawer = () => {
 				<Drawer.Items>
 					<div className="flex flex-col gap-4">
 						{promotionNavLinks.map((link) => (
-							<div key={link.label} href={`#${link.url}`}>
+							<Link key={link.label} href={`#${link.url}`}>
 								{link.label}
-							</div>
+							</Link>
 						))}
 					</div>
 				</Drawer.Items>
