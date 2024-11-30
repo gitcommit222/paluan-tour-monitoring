@@ -1,5 +1,5 @@
 "use client";
-import Promos from "@/components/promotions/promos";
+import Promos from "../components/promotions/Promos";
 import { promotionNavLinks } from "@/constants";
 import { about, b1, b2, b3, b4, b5, beach1, logo } from "@/public";
 import {

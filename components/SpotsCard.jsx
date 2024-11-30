@@ -6,11 +6,11 @@ import Image from "next/image";
 import { FaRegTrashCan } from "react-icons/fa6";
 import { CiEdit } from "react-icons/ci";
 import { BsThreeDotsVertical } from "react-icons/bs";
-import CustomPopover from "./shared/CustomPopOver";
 import { MdPreview } from "react-icons/md";
 import Link from "next/link";
 import { useDeleteResort } from "@/hooks/useSpot";
 import toast from "react-hot-toast";
+import CustomPopover from "./shared/CustomPopover";
 
 const SpotsCard = ({
 	imageUrl,
