@@ -10,7 +10,7 @@ import { MdPreview } from "react-icons/md";
 import Link from "next/link";
 import { useDeleteResort } from "@/hooks/useSpot";
 import toast from "react-hot-toast";
-import CustomPopOver from "@/components/shared/CustomPopOver";
+import CustomPopOver from "../components/shared/CustomPopOver";
 
 const SpotsCard = ({
 	imageUrl,
