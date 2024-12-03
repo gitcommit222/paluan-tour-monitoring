@@ -51,9 +51,14 @@ const ResortPage = ({ params }) => {
 	const { mutateAsync: deleteReview } = useDeleteRating();
 
 	const [editingReview, setEditingReview] = useState(null);
+	const [guestRatingCode, setGuestRatingCode] = useState("");
 
 	const handleAddReview = async () => {
 		try {
+			if (!guestRatingCode) {
+				toast.error("Guest rating code is required");
+				return;
+			}
 			if (editingReview) {
 				await toast.promise(
 					updateReview({
@@ -74,6 +79,7 @@ const ResortPage = ({ params }) => {
 						rating: userRating,
 						comment,
 						guestId: parseInt(user?.id),
+						guestRatingCode,
 					}),
 					{
 						loading: "Adding review...",
@@ -83,6 +89,7 @@ const ResortPage = ({ params }) => {
 				);
 			}
 			setUserRating(0);
+			setGuestRatingCode("");
 			setComment("");
 			setEditingReview(null);
 		} catch (error) {
@@ -215,6 +222,15 @@ const ResortPage = ({ params }) => {
 								</Rating>
 							</div>
 
+							<input
+								type="text"
+								className="w-full p-3 border rounded-lg text-[14px] mb-2"
+								placeholder="Enter guest rating code"
+								value={guestRatingCode}
+								onChange={(e) => setGuestRatingCode(e.target.value)}
+								disabled={!user}
+							/>
+
 							<textarea
 								className="w-full p-3 border rounded-lg resize-none text-[14px]"
 								rows={4}
@@ -230,12 +246,16 @@ const ResortPage = ({ params }) => {
 							/>
 							<button
 								className={`mt-2 px-4 py-2 rounded-lg ${
-									userRating
+									userRating && guestRatingCode
 										? "bg-primary text-white hover:bg-primary/90"
 										: "bg-gray-300 text-gray-500 cursor-not-allowed"
 								}`}
 								disabled={
-									!userRating || !user || isCreatingReview || isUpdatingReview
+									!userRating ||
+									!user ||
+									isCreatingReview ||
+									isUpdatingReview ||
+									!guestRatingCode
 								}
 								onClick={handleAddReview}
 							>

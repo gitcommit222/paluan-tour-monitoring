@@ -1,12 +1,19 @@
 import api from "../utils/api";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-const createRating = async ({ resortId, rating, comment, guestId }) => {
+const createRating = async ({
+	resortId,
+	rating,
+	comment,
+	guestId,
+	guestRatingCode,
+}) => {
 	const response = await api.post("/ratings", {
 		resortId,
 		rating,
 		comment,
 		guestId,
+		guestRatingCode,
 	});
 
 	return response.data;

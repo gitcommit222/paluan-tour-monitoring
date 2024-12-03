@@ -67,7 +67,7 @@ const Home = () => {
 					</nav>
 				</div>
 				<div className="px-[100px] py-[25px]">
-					<div>
+					<div className="mb-2">
 						<Headerbox
 							user={`${user ? getFirstWord(user.name) : "Owner"}!`}
 							title="Welcome,"
@@ -76,6 +76,12 @@ const Home = () => {
 								resorts ? resorts?.resorts[0]?.name : "your spot"
 							} data here.`}
 						/>
+						<p className="text-gray-500">
+							Guest Rating Code:{" "}
+							<span className="font-semibold text-black">
+								{resorts?.resorts[0]?.guestRatingCode}
+							</span>
+						</p>
 					</div>
 					<Tabs color="gray">
 						{/* <Tabs.Item title="Dashboard"></Tabs.Item> */}
