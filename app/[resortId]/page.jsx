@@ -125,7 +125,7 @@ const ResortPage = ({ params }) => {
 
 	return (
 		<section className="h-screen overflow-hidden">
-			<div className="h-[60px] w-full bg-primary px-6 flex items-center gap-2">
+			<div className="h-[60px] w-full bg-primary px-4 sm:px-6 flex items-center gap-2">
 				<Tooltip content="Back">
 					<button
 						onClick={() => router.back()}
@@ -136,10 +136,10 @@ const ResortPage = ({ params }) => {
 					</button>
 				</Tooltip>
 			</div>
-			<div className=" h-[calc(100vh-60px)]">
-				<div className="flex h-full">
-					<div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
-						<div className="w-full h-[50%]">
+			<div className="h-[calc(100vh-60px)]">
+				<div className="flex flex-col lg:flex-row h-full">
+					<div className="flex-1 p-2 sm:p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
+						<div className="w-full h-[300px] lg:h-[50%]">
 							{(spot?.result?.thumbnail || spotImages?.data?.length > 0) && (
 								<Carousel pauseOnHover>
 									{spot?.result?.thumbnail && (
@@ -164,14 +164,16 @@ const ResortPage = ({ params }) => {
 								</Carousel>
 							)}
 						</div>
-						<div className="flex justify-between mt-2">
+						<div className="flex flex-col sm:flex-row justify-between mt-2 gap-4">
 							<div>
-								<h1 className="text-2xl  font-semibold">{spot?.result.name}</h1>
+								<h1 className="text-xl sm:text-2xl font-semibold">
+									{spot?.result.name}
+								</h1>
 								<p className="text-gray-400 text-sm font-light">
 									{spot?.result.description}
 								</p>
 							</div>
-							<div className="flex justify-center flex-col items-start">
+							<div className="flex justify-start sm:justify-center flex-col items-start">
 								<Rating>
 									{[...Array(5)].map((_, index) => (
 										<Rating.Star
@@ -193,7 +195,7 @@ const ResortPage = ({ params }) => {
 							</div>
 						</div>
 
-						<div className="mt-8 border-t pt-4">
+						<div className="mt-4 lg:mt-8 border-t pt-4">
 							<h2 className="text-xl font-semibold mb-4">
 								{editingReview ? "Edit Review" : "Leave a Review"}
 							</h2>
@@ -279,14 +281,14 @@ const ResortPage = ({ params }) => {
 							)}
 						</div>
 					</div>
-					<div className="flex-1 p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
-						<h2 className="text-xl font-semibold mb-4">
+					<div className="flex-1 p-2 sm:p-4 overflow-y-auto border-t lg:border-t-0 lg:border-l scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
+						<h2 className="text-lg sm:text-xl font-semibold mb-4">
 							Reviews & Ratings ({ratings?.data?.length || 0})
 						</h2>
 						{ratings?.data?.map((review, index) => (
-							<div key={index} className="mb-4 border-b pb-4">
+							<div key={index} className="mb-3 sm:mb-4 border-b pb-3 sm:pb-4">
 								<div className="flex items-center justify-between mb-2">
-									<div className="flex items-center gap-3">
+									<div className="flex items-center gap-2 sm:gap-3">
 										<div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
 											{getInitials(review.guest?.name)}
 										</div>

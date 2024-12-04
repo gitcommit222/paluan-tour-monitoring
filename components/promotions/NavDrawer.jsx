@@ -26,7 +26,7 @@ const NavDrawer = ({ onLogout }) => {
 				className="max-w-[250px]"
 			>
 				<Drawer.Header title="Home" />
-				<Drawer.Items className="flex flex-col justify-between h-full ">
+				<Drawer.Items className="flex flex-col pb-[20%] justify-between h-full ">
 					<div className="flex flex-col gap-4">
 						{promotionNavLinks.map((link) => (
 							<Link key={link.label} href={`#${link.url}`}>
@@ -34,7 +34,7 @@ const NavDrawer = ({ onLogout }) => {
 							</Link>
 						))}
 					</div>
-					<div className="sm:flex items-center gap-4 mt-[90%] border">
+					<div className="sm:flex items-center gap-4  border">
 						{user ? (
 							<div className="flex items-center gap-4">
 								<Avatar size="sm" rounded>
