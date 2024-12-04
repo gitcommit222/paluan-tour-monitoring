@@ -30,6 +30,7 @@ import NavDrawer from "@/components/promotions/NavDrawer";
 const PromotionsPage = () => {
 	const [activeSection, setActiveSection] = useState("");
 	const [scrolling, setScrolling] = useState(false);
+	const [searchQuery, setSearchQuery] = useState("");
 
 	const router = useRouter();
 	const { mutate: logout } = useLogout();
@@ -66,6 +67,30 @@ const PromotionsPage = () => {
 
 	const handleLogout = () => {
 		logout();
+	};
+
+	const handleSearch = (query) => {
+		setSearchQuery(query);
+	};
+
+	const executeSearch = () => {
+		if (!searchQuery.trim()) return;
+
+		// Filter places that match the search query
+		const filteredPlaces = places?.resorts?.filter(
+			(place) =>
+				place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+				place.location.toLowerCase().includes(searchQuery.toLowerCase())
+		);
+
+		// Navigate to places section with filtered results
+		const placesElement = document.getElementById("places");
+		if (placesElement) {
+			placesElement.scrollIntoView({ behavior: "smooth" });
+		}
+
+		// You could also use router to navigate with query params
+		// router.push(`/?search=${encodeURIComponent(searchQuery)}#places`);
 	};
 
 	return (
@@ -149,9 +174,13 @@ const PromotionsPage = () => {
 										type="text"
 										placeholder="Where you want to go?"
 										className="w-full px-4 py-3 rounded-lg bg-white/10 backdrop-blur-md text-white placeholder-white/80 border-b-2 border-white/50 focus:outline-none"
+										onChange={(e) => handleSearch(e.target.value)}
 									/>
 								</div>
-								<Button className="w-full py-3 bg-[#0891b2] hover:bg-[#0891b2]/90 text-white font-medium rounded-lg">
+								<Button
+									className="w-full py-3 bg-[#0891b2] hover:bg-[#0891b2]/90 text-white font-medium rounded-lg"
+									onClick={executeSearch}
+								>
 									EXPLORE NOW
 								</Button>
 							</div>
