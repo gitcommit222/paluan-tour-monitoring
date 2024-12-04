@@ -40,11 +40,12 @@ const Dashboard = () => {
 	};
 
 	const prepareChartData = () => {
-		if (!spots?.resorts)
+		if (!spots?.resorts || !guests?.tourists) {
 			return {
 				labels: [],
 				datasets: [],
 			};
+		}
 
 		const months = Array.from({ length: 12 }, (_, i) => {
 			return new Date(2024, i).toLocaleString("default", { month: "long" });
@@ -52,7 +53,7 @@ const Dashboard = () => {
 
 		return {
 			labels: months,
-			datasets: spots?.resorts?.map((resort, index) => {
+			datasets: spots.resorts.map((resort, index) => {
 				const colors = [
 					{ bg: "rgb(254 226 226)", border: "rgba(255, 99, 132, 1)" },
 					{ bg: "rgba(54, 162, 235, 0.2)", border: "rgba(54, 162, 235, 1)" },
@@ -60,11 +61,13 @@ const Dashboard = () => {
 				];
 
 				const resortTourists =
-					guests?.tourists?.filter(
-						(tourist) => tourist.resortId === resort.id
+					guests.tourists.filter(
+						(tourist) => tourist?.resortId === resort.id
 					) || [];
 
 				const touristsByMonth = resortTourists.reduce((acc, tourist) => {
+					if (!tourist?.createdAt) return acc;
+
 					const month = new Date(tourist.createdAt).toLocaleString("default", {
 						month: "long",
 					});
