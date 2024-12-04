@@ -34,7 +34,7 @@ const NavDrawer = ({ onLogout }) => {
 							</Link>
 						))}
 					</div>
-					<div className="sm:flex items-center gap-4 mt-[100%] border">
+					<div className="sm:flex items-center gap-4 mt-[90%] border">
 						{user ? (
 							<div className="flex items-center gap-4">
 								<Avatar size="sm" rounded>
