@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const instance = axios.create({
-	baseURL: "http://localhost:4000",
+	baseURL: "https://paluan-server-main.onrender.com",
 	withCredentials: true,
 });
 
@@ -29,7 +29,7 @@ instance.interceptors.response.use(
 
 			try {
 				const response = await axios.post(
-					`http://localhost:4000/auth/refresh-token`,
+					`https://paluan-server-main.onrender.com/auth/refresh-token`,
 					{},
 					{
 						withCredentials: true,
