@@ -185,7 +185,7 @@ const PromotionsPage = () => {
 					id="places"
 					ref={placesSection.ref}
 				>
-					<h1 className="font-semibold text-[35px]">
+					<h1 className="font-semibold text-[35px] text-center">
 						Recommended Destinations
 					</h1>
 					<div className=" w-full flex flex-wrap gap-7 justify-center py-5">
