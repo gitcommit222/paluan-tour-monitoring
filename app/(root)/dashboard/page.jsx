@@ -59,11 +59,12 @@ const Dashboard = () => {
 					{ bg: "rgba(75, 192, 192, 0.2)", border: "rgba(75, 192, 192, 1)" },
 				];
 
-				const resortTourists = guests?.tourists?.filter(
-					(tourist) => tourist.resortId === resort.id
-				);
+				const resortTourists =
+					guests?.tourists?.filter(
+						(tourist) => tourist.resortId === resort.id
+					) || [];
 
-				const touristsByMonth = resortTourists?.reduce((acc, tourist) => {
+				const touristsByMonth = resortTourists.reduce((acc, tourist) => {
 					const month = new Date(tourist.createdAt).toLocaleString("default", {
 						month: "long",
 					});
@@ -73,7 +74,7 @@ const Dashboard = () => {
 
 				return {
 					label: resort.name,
-					data: months.map((month) => touristsByMonth?.[month] || 0),
+					data: months.map((month) => touristsByMonth[month] || 0),
 					backgroundColor: colors[index % colors.length].bg,
 					borderColor: colors[index % colors.length].border,
 					borderWidth: 1,
