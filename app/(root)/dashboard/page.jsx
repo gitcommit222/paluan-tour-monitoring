@@ -60,20 +60,27 @@ const Dashboard = () => {
 					{ bg: "rgba(75, 192, 192, 0.2)", border: "rgba(75, 192, 192, 1)" },
 				];
 
-				const resortTourists =
-					guests.tourists.filter(
-						(tourist) => tourist?.resortId === resort.id
-					) || [];
+				const resortTourists = Array.isArray(guests.tourists)
+					? guests.tourists.filter(
+							(tourist) => tourist && tourist.resortId === resort.id
+					  )
+					: [];
 
-				const touristsByMonth = resortTourists.reduce((acc, tourist) => {
-					if (!tourist?.createdAt) return acc;
+				const touristsByMonth = (resortTourists || []).reduce(
+					(acc, tourist) => {
+						if (!tourist?.createdAt) return acc;
 
-					const month = new Date(tourist.createdAt).toLocaleString("default", {
-						month: "long",
-					});
-					acc[month] = (acc[month] || 0) + 1;
-					return acc;
-				}, {});
+						const month = new Date(tourist.createdAt).toLocaleString(
+							"default",
+							{
+								month: "long",
+							}
+						);
+						acc[month] = (acc[month] || 0) + 1;
+						return acc;
+					},
+					{}
+				);
 
 				return {
 					label: resort.name,
