@@ -28,8 +28,14 @@ const DoughnutChart = () => {
 		};
 	});
 
-	const maxGuestsResort = resortsData.reduce((max, resort) =>
-		resort.guests > max.guests ? resort : max
+	// Add safety check for empty array
+	if (resortsData.length === 0) {
+		return <div>No resort data available</div>;
+	}
+
+	const maxGuestsResort = resortsData.reduce(
+		(max, resort) => (resort.guests > max.guests ? resort : max),
+		resortsData[0] // Provide initial value
 	);
 
 	const data = {
