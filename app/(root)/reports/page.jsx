@@ -16,13 +16,19 @@ const Reports = () => {
 	const [selectedSpotId, setSelectedSpotId] = useState("All");
 
 	const filteredGuests = useMemo(() => {
-		if (!guests) return [];
+		if (!guests || !guests.tourists || !Array.isArray(guests.tourists)) return [];
+		
 		return guests.tourists.filter((guest) => {
-			const matchesSearch = guest.name
-				.toLowerCase()
-				.includes(searchTerm.toLowerCase());
-			const matchesSpot =
-				selectedSpotId === "All" || guest.resort?.id === selectedSpotId;
+			if (!guest || !guest.name) return false;
+			
+			const matchesSearch = 
+				guest.name.toLowerCase().includes((searchTerm || '').toLowerCase()) ||
+				(guest.resort?.name || '').toLowerCase().includes((searchTerm || '').toLowerCase());
+			
+			const matchesSpot = 
+				selectedSpotId === "All" || 
+				(guest.resort && guest.resort.id.toString() === selectedSpotId.toString());
+			
 			return matchesSearch && matchesSpot;
 		});
 	}, [guests, searchTerm, selectedSpotId]);
@@ -58,7 +64,7 @@ const Reports = () => {
 							id="search"
 							type="text"
 							icon={CiSearch}
-							placeholder="Search name..."
+							placeholder="Search name or resort..."
 							required
 							color="gray"
 							value={searchTerm}
@@ -82,7 +88,7 @@ const Reports = () => {
 						</Select>
 					</div>
 					<Tooltip content="Export as Excel" className="mt-4 sm:mt-0">
-						<Button color="primary" onClick={exportToExcel}>
+						<Button color="primary" className="transition-all duration-200 hover:opacity-90 hover:shadow-md" onClick={exportToExcel}>
 							EXPORT
 						</Button>
 					</Tooltip>

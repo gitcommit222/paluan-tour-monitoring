@@ -8,12 +8,12 @@ import {
 	useDeleteRating,
 } from "@/hooks/useReview";
 import { useFetchSingleSpot, useFetchSpotImages } from "@/hooks/useSpot";
-import { Carousel, Rating, Tooltip } from "flowbite-react";
+import { Carousel, Rating, Tooltip, Modal } from "flowbite-react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { IoArrowBackCircle } from "react-icons/io5";
+import { IoArrowBackCircle, IoExpand } from "react-icons/io5";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { logo } from "@/public";
 
@@ -52,6 +52,13 @@ const ResortPage = ({ params }) => {
 
 	const [editingReview, setEditingReview] = useState(null);
 	const [guestRatingCode, setGuestRatingCode] = useState("");
+	const [isFullView, setIsFullView] = useState(false);
+	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+	const allImages = [
+		...(spot?.result?.thumbnail ? [spot.result.thumbnail] : []),
+		...(spotImages?.map(img => img.imageUrl) || [])
+	];
 
 	const handleAddReview = async () => {
 		try {
@@ -139,29 +146,37 @@ const ResortPage = ({ params }) => {
 			<div className="h-[calc(100vh-60px)]">
 				<div className="flex flex-col lg:flex-row h-full">
 					<div className="flex-1 p-2 sm:p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
-						<div className="w-full h-[300px] lg:h-[50%]">
+						<div className="w-full h-[300px] lg:h-[50%] relative">
 							{(spot?.result?.thumbnail || spotImages?.data?.length > 0) && (
-								<Carousel pauseOnHover>
-									{spot?.result?.thumbnail && (
-										<Image
-											src={spot.result.thumbnail || logo}
-											alt="Resort thumbnail"
-											width={500}
-											height={500}
-											className="object-cover w-full h-full"
-										/>
-									)}
-									{spotImages?.map((image, index) => (
-										<Image
-											key={index}
-											src={image.imageUrl ? image.imageUrl : logo}
-											alt={`Resort image ${index + 1}`}
-											className="object-cover w-full h-full"
-											width={500}
-											height={500}
-										/>
-									))}
-								</Carousel>
+								<>
+									<Carousel pauseOnHover>
+										{spot?.result?.thumbnail && (
+											<Image
+												src={spot.result.thumbnail || logo}
+												alt="Resort thumbnail"
+												width={500}
+												height={500}
+												className="object-cover w-full h-full"
+											/>
+										)}
+										{spotImages?.map((image, index) => (
+											<Image
+												key={index}
+												src={image.imageUrl ? image.imageUrl : logo}
+												alt={`Resort image ${index + 1}`}
+												className="object-cover w-full h-full"
+												width={500}
+												height={500}
+											/>
+										))}
+									</Carousel>
+									<button
+										onClick={() => setIsFullView(true)}
+										className="absolute top-4 right-4 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors"
+									>
+										<IoExpand className="text-white" size={20} />
+									</button>
+								</>
 							)}
 						</div>
 						<div className="flex flex-col sm:flex-row justify-between mt-2 gap-4">
@@ -349,6 +364,36 @@ const ResortPage = ({ params }) => {
 					</div>
 				</div>
 			</div>
+			<Modal
+				show={isFullView}
+				onClose={() => setIsFullView(false)}
+				size="7xl"
+				className="!h-screen"
+			>
+				<Modal.Body className="p-0 h-full">
+					<div className="relative h-full">
+						<button
+							onClick={() => setIsFullView(false)}
+							className="absolute top-4 right-4 z-10 bg-black/50 p-2 rounded-full hover:bg-black/70 transition-colors"
+						>
+							<IoArrowBackCircle className="text-white" size={24} />
+						</button>
+						<Carousel className="h-full">
+							{allImages.map((image, index) => (
+								<div key={index} className="relative h-full flex items-center justify-center bg-black">
+									<Image
+										src={image || logo}
+										alt={`Resort image ${index + 1}`}
+										className="object-contain max-h-[90vh]"
+										width={1920}
+										height={1080}
+									/>
+								</div>
+							))}
+						</Carousel>
+					</div>
+				</Modal.Body>
+			</Modal>
 		</section>
 	);
 };

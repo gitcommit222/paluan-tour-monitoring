@@ -20,7 +20,7 @@ ChartJS.register(
 	Legend
 );
 
-const BarChart = ({ data, options, title = "Resort Progress" }) => {
+const BarChart = ({ data, options, title = "Resort Progress", showResortFilter = true }) => {
 	const [selectedMonth, setSelectedMonth] = useState("all");
 	const [selectedResort, setSelectedResort] = useState("all");
 	const [filteredData, setFilteredData] = useState(data);
@@ -83,27 +83,29 @@ const BarChart = ({ data, options, title = "Resort Progress" }) => {
 						))}
 					</select>
 				</div>
-				<div className="flex items-center">
-					<label
-						htmlFor="resort-select"
-						className="mr-2 font-semibold text-gray-700"
-					>
-						Resort:
-					</label>
-					<select
-						id="resort-select"
-						value={selectedResort}
-						onChange={(e) => setSelectedResort(e.target.value)}
-						className="p-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-					>
-						<option value="all">All Resorts</option>
-						{data?.datasets?.map((dataset, index) => (
-							<option key={index} value={dataset.label}>
-								{dataset.label}
-							</option>
-						))}
-					</select>
-				</div>
+				{showResortFilter && (
+					<div className="flex items-center">
+						<label
+							htmlFor="resort-select"
+							className="mr-2 font-semibold text-gray-700"
+						>
+							Resort:
+						</label>
+						<select
+							id="resort-select"
+							value={selectedResort}
+							onChange={(e) => setSelectedResort(e.target.value)}
+							className="p-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+						>
+							<option value="all">All Resorts</option>
+							{data?.datasets?.map((dataset, index) => (
+								<option key={index} value={dataset.label}>
+									{dataset.label}
+								</option>
+							))}
+						</select>
+					</div>
+				)}
 			</div>
 			<div className="bg-white rounded-lg p-4 shadow-inner h-[400px]">
 				<Bar data={filteredData} options={options} />

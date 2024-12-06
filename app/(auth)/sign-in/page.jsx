@@ -117,7 +117,7 @@ const SignInPage = () => {
 						>
 							{isSubmitting ? "Logging in..." : "Login"}
 						</Button>
-						<div className="w-full">
+						<div className="w-full flex justify-between items-center">
 							<p className="text-white text-[14px]">
 								Dont have an account?{" "}
 								<Link
@@ -127,6 +127,12 @@ const SignInPage = () => {
 									Sign up
 								</Link>
 							</p>
+							<Link
+								href="/forgot-password"
+								className="text-blue-500 hover:underline text-[14px] hover:text-primary"
+							>
+								Forgot Password?
+							</Link>
 						</div>
 					</div>
 				</form>
