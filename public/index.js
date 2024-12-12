@@ -21,27 +21,29 @@ import b4 from "./images/b4.jpg";
 import b5 from "./images/b5.jpg";
 import about from "./images/about.png";
 import child from "./icons/child.png";
+import logo3 from "./images/paluan_tour_logo.png";
 
 import notfound from "./images/pagenotfound.svg";
 
 export {
-	logo,
-	tourist,
-	beach1,
-	beach2,
-	spot,
-	dashboard,
-	settings,
-	reports,
-	notfound,
-	b1,
-	b2,
-	b3,
-	b4,
-	b5,
-	about,
-	logoutIcon,
-	male,
-	female,
-	child,
+  logo,
+  tourist,
+  beach1,
+  beach2,
+  spot,
+  dashboard,
+  settings,
+  reports,
+  notfound,
+  b1,
+  b2,
+  b3,
+  b4,
+  b5,
+  about,
+  logoutIcon,
+  male,
+  female,
+  child,
+  logo3,
 };

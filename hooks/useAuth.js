@@ -3,13 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { toast } from "react-hot-toast";
 
-const createUser = async ({
-  name,
-  email,
-  username,
-  password,
-  userType = "guest",
-}) => {
+const createUser = async ({ name, email, username, password, userType }) => {
   const response = await api.post("/auth/", {
     name,
     username,

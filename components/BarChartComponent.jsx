@@ -22,7 +22,7 @@ ChartJS.register(
 
 const BarChart = ({ data, options, title = "Resort Progress", showResortFilter = true }) => {
 	const [selectedMonth, setSelectedMonth] = useState("all");
-	const [selectedResort, setSelectedResort] = useState("all");
+	const [selectedResort, setSelectedResort] = useState(data?.datasets?.[0]?.label || "all");
 	const [filteredData, setFilteredData] = useState(data);
 
 	useEffect(() => {
@@ -83,7 +83,7 @@ const BarChart = ({ data, options, title = "Resort Progress", showResortFilter =
 						))}
 					</select>
 				</div>
-				{showResortFilter && (
+				{showResortFilter && data?.datasets?.length > 1 && (
 					<div className="flex items-center">
 						<label
 							htmlFor="resort-select"
@@ -96,6 +96,7 @@ const BarChart = ({ data, options, title = "Resort Progress", showResortFilter =
 							value={selectedResort}
 							onChange={(e) => setSelectedResort(e.target.value)}
 							className="p-2 border border-gray-300 rounded-md bg-white text-gray-700 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+							disabled={data?.datasets?.length <= 1}
 						>
 							<option value="all">All Resorts</option>
 							{data?.datasets?.map((dataset, index) => (

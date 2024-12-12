@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 import toast from "react-hot-toast";
-import { IoArrowBackCircle, IoExpand } from "react-icons/io5";
+import { IoArrowBackCircle, IoExpand, IoChevronForward } from "react-icons/io5";
 import { FiEdit2, FiTrash2 } from "react-icons/fi";
 import { logo } from "@/public";
 
@@ -36,7 +36,6 @@ const ResortPage = ({ params }) => {
 
 	const { data: spotImages } = useFetchSpotImages(resortId);
 
-	console.log(spotImages);
 
 	const { data: user } = useFetchUser();
 
@@ -54,6 +53,7 @@ const ResortPage = ({ params }) => {
 	const [guestRatingCode, setGuestRatingCode] = useState("");
 	const [isFullView, setIsFullView] = useState(false);
 	const [currentImageIndex, setCurrentImageIndex] = useState(0);
+	const [isReviewsOpen, setIsReviewsOpen] = useState(true);
 
 	const allImages = [
 		...(spot?.result?.thumbnail ? [spot.result.thumbnail] : []),
@@ -145,8 +145,10 @@ const ResortPage = ({ params }) => {
 			</div>
 			<div className="h-[calc(100vh-60px)]">
 				<div className="flex flex-col lg:flex-row h-full">
-					<div className="flex-1 p-2 sm:p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
-						<div className="w-full h-[300px] lg:h-[50%] relative">
+					<div className={`flex-1 p-2 sm:p-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 ${
+						!isReviewsOpen ? 'md:flex-[0.85]' : ''
+					} lg:flex-[0.7]`}>
+						<div className="w-full h-[400px] md:h-[500px] lg:h-[65vh] relative">
 							{(spot?.result?.thumbnail || spotImages?.data?.length > 0) && (
 								<>
 									<Carousel pauseOnHover>
@@ -154,8 +156,8 @@ const ResortPage = ({ params }) => {
 											<Image
 												src={spot.result.thumbnail || logo}
 												alt="Resort thumbnail"
-												width={500}
-												height={500}
+												width={1920}
+												height={1080}
 												className="object-cover w-full h-full"
 											/>
 										)}
@@ -165,8 +167,8 @@ const ResortPage = ({ params }) => {
 												src={image.imageUrl ? image.imageUrl : logo}
 												alt={`Resort image ${index + 1}`}
 												className="object-cover w-full h-full"
-												width={500}
-												height={500}
+												width={1920}
+												height={1080}
 											/>
 										))}
 									</Carousel>
@@ -296,71 +298,90 @@ const ResortPage = ({ params }) => {
 							)}
 						</div>
 					</div>
-					<div className="flex-1 p-2 sm:p-4 overflow-y-auto border-t lg:border-t-0 lg:border-l scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400">
-						<h2 className="text-lg sm:text-xl font-semibold mb-4">
-							Reviews & Ratings ({ratings?.data?.length || 0})
-						</h2>
-						{ratings?.data?.map((review, index) => (
-							<div key={index} className="mb-3 sm:mb-4 border-b pb-3 sm:pb-4">
-								<div className="flex items-center justify-between mb-2">
-									<div className="flex items-center gap-2 sm:gap-3">
-										<div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
-											{getInitials(review.guest?.name)}
-										</div>
-										<div className="flex flex-col">
-											<span className="font-semibold">
-												{review.guest?.name || "Anonymous"}
-											</span>
-											<div className="flex items-center gap-2">
-												<Rating>
-													{[...Array(5)].map((_, idx) => (
-														<Rating.Star
-															key={idx}
-															className={
-																idx < Math.floor(review.rating)
-																	? "text-secondary"
-																	: "text-accent"
-															}
-															filled={true}
-															size="sm"
-														/>
-													))}
-												</Rating>
-												<p className="text-gray-400 text-sm font-light">
-													{review.rating} Rating
-												</p>
+
+					<div className={`transition-all duration-300 ${
+						isReviewsOpen ? 'md:flex-[0.15] lg:flex-[0.3]' : 'md:flex-[0.15] lg:flex-[0.3]'
+					} relative`}>
+						<button
+							onClick={() => setIsReviewsOpen(!isReviewsOpen)}
+							className="hidden md:flex lg:hidden absolute -left-4 top-1/2 -translate-y-1/2 bg-white border shadow-md rounded-full p-2 z-10 hover:bg-gray-50"
+						>
+							<IoChevronForward
+								size={20}
+								className={`transform transition-transform ${
+									isReviewsOpen ? 'rotate-180' : ''
+								}`}
+							/>
+						</button>
+						
+						<div className={`h-full p-2 sm:p-4 overflow-y-auto border-t lg:border-t-0 lg:border-l scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100 hover:scrollbar-thumb-gray-400 ${
+							!isReviewsOpen ? 'md:hidden lg:block' : ''
+						}`}>
+							<h2 className="text-lg sm:text-xl font-semibold mb-4">
+								Reviews & Ratings ({ratings?.data?.length || 0})
+							</h2>
+							{ratings?.data?.map((review, index) => (
+								<div key={index} className="mb-3 sm:mb-4 border-b pb-3 sm:pb-4">
+									<div className="flex items-center justify-between mb-2">
+										<div className="flex items-center gap-2 sm:gap-3">
+											<div className="w-10 h-10 rounded-full bg-primary text-white flex items-center justify-center font-semibold">
+												{getInitials(review.guest?.name)}
+											</div>
+											<div className="flex flex-col">
+												<span className="font-semibold">
+													{review.guest?.name || "Anonymous"}
+												</span>
+												<div className="flex items-center gap-2">
+													<Rating>
+														{[...Array(5)].map((_, idx) => (
+															<Rating.Star
+																key={idx}
+																className={
+																	idx < Math.floor(review.rating)
+																		? "text-secondary"
+																		: "text-accent"
+																}
+																filled={true}
+																size="sm"
+															/>
+														))}
+													</Rating>
+													<p className="text-gray-400 text-sm font-light">
+														{review.rating} Rating
+													</p>
+												</div>
 											</div>
 										</div>
+										{user && user?.id === review.guest?.id && (
+											<div className="flex gap-2">
+												<Tooltip content="Edit">
+													<button
+														onClick={() => handleEditReview(review)}
+														className="p-2 hover:bg-gray-100 rounded-full"
+													>
+														<FiEdit2 className="text-gray-600" size={16} />
+													</button>
+												</Tooltip>
+												<Tooltip content="Delete">
+													<button
+														onClick={() => handleDeleteReview(review.id)}
+														className="p-2 hover:bg-gray-100 rounded-full"
+													>
+														<FiTrash2 className="text-red-500" size={16} />
+													</button>
+												</Tooltip>
+											</div>
+										)}
 									</div>
-									{user && user?.id === review.guest?.id && (
-										<div className="flex gap-2">
-											<Tooltip content="Edit">
-												<button
-													onClick={() => handleEditReview(review)}
-													className="p-2 hover:bg-gray-100 rounded-full"
-												>
-													<FiEdit2 className="text-gray-600" size={16} />
-												</button>
-											</Tooltip>
-											<Tooltip content="Delete">
-												<button
-													onClick={() => handleDeleteReview(review.id)}
-													className="p-2 hover:bg-gray-100 rounded-full"
-												>
-													<FiTrash2 className="text-red-500" size={16} />
-												</button>
-											</Tooltip>
-										</div>
-									)}
+									<div className="ml-[52px]">
+										<p className="text-gray-600">{review.comment}</p>
+										<span className="text-sm text-gray-400">
+											{new Date(review.createdAt).toLocaleDateString()}
+										</span>
+									</div>
 								</div>
-								<div className="ml-[52px]">
-									<p className="text-gray-600">{review.comment}</p>
-									<span className="text-sm text-gray-400">
-										{new Date(review.createdAt).toLocaleDateString()}
-									</span>
-								</div>
-							</div>
-						))}
+							))}
+						</div>
 					</div>
 				</div>
 			</div>

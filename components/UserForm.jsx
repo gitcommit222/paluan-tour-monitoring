@@ -36,7 +36,7 @@ const UserForm = ({ data }) => {
 					username: formData?.username,
 					email: formData?.email,
 					password: "admin123",
-					userType: formData.userType,
+					userType: formData.role,
 				}),
 				{
 					loading: "Creating user...",
@@ -81,6 +81,16 @@ const UserForm = ({ data }) => {
 									<Label htmlFor="small" value="Email" />
 								</div>
 								<TextInput id="small" type="email" {...register("email")} />
+							</div>
+							<div>
+								<div className="mb-1 block">
+									<Label htmlFor="role" value="Role" />
+								</div>
+								<Select id="role" {...register("role")}>
+									<option value="guest">Guest</option>
+									<option value="admin">Admin</option>
+									<option value="resortOwner">Resort Owner</option>
+								</Select>
 							</div>
 							<div className="w-full mt-3 flex gap-2">
 								<button

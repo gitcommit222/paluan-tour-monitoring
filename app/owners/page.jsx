@@ -5,7 +5,7 @@ import CustomModal from "@/components/shared/CustomModal";
 import Headerbox from "@/components/shared/HeaderBox";
 import SpotDetailsForm from "@/components/SpotDetailsForm";
 import ProtectedRoutes from "@/hoc/ProtectedRoutes";
-import { useFetchUser, useLogout } from "@/hooks/useAuth";
+import { useFetchUser, useLogout, useChangePassword } from "@/hooks/useAuth";
 import {
   useFetchResortByOwner,
   useAddSpotImage,
@@ -20,6 +20,7 @@ import Image from "next/image";
 import { useState } from "react";
 import { HiOutlineExclamationCircle, HiTrash, HiPlus } from "react-icons/hi";
 import GuestChartData from "@/components/GuestChartData";
+import toast from "react-hot-toast";
 
 const Home = () => {
   const [showReplyInput, setShowReplyInput] = useState(false);
@@ -30,9 +31,15 @@ const Home = () => {
   const { data: ratingsData } = useFetchRatingsByResort(
     resorts?.resorts[0]?.id
   );
-  const { mutate: addImage } = useAddSpotImage();
-  const { mutate: deleteImage } = useDeleteSpotImage();
+  const { mutateAsync: addImage } = useAddSpotImage();
+  const { mutateAsync: deleteImage } = useDeleteSpotImage();
   const { data: spotImages } = useFetchSpotImages(resorts?.resorts[0]?.id);
+  const { mutateAsync: changePassword } = useChangePassword();
+  const [passwordData, setPasswordData] = useState({
+    currentPassword: "",
+    newPassword: "",
+    confirmPassword: "",
+  });
 
   const computeAverageRating = (ratings) => {
     if (!ratings?.length) return 0;
@@ -41,6 +48,34 @@ const Home = () => {
   };
 
   const averageRating = computeAverageRating(ratingsData?.data);
+
+  const handlePasswordChange = (e) => {
+    setPasswordData({ ...passwordData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (passwordData.newPassword !== passwordData.confirmPassword) {
+      alert("New passwords don't match!");
+      return;
+    }
+    await toast.promise(
+      changePassword({
+        oldPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      }),
+      {
+        loading: "Changing password...",
+        success: "Password changed successfully!",
+        error: "Failed to change password",
+      }
+    );
+    setPasswordData({
+      currentPassword: "",
+      newPassword: "",
+      confirmPassword: "",
+    });
+  };
 
   return (
     <ProtectedRoutes roles={["resortOwner"]}>
@@ -258,6 +293,54 @@ const Home = () => {
                     ))}
                   </div>
                 )}
+              </div>
+            </Tabs.Item>
+            <Tabs.Item title="Change Password">
+              <div className="max-w-md mx-auto p-6 bg-white rounded-lg shadow-md">
+                <h2 className="text-2xl font-medium mb-6">Change Password</h2>
+                <form onSubmit={handleSubmit} className="space-y-4">
+                  <div>
+                    <Label htmlFor="currentPassword">Current Password</Label>
+                    <input
+                      type="password"
+                      id="currentPassword"
+                      name="currentPassword"
+                      value={passwordData.currentPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="newPassword">New Password</Label>
+                    <input
+                      type="password"
+                      id="newPassword"
+                      name="newPassword"
+                      value={passwordData.newPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="confirmPassword">
+                      Confirm New Password
+                    </Label>
+                    <input
+                      type="password"
+                      id="confirmPassword"
+                      name="confirmPassword"
+                      value={passwordData.confirmPassword}
+                      onChange={handlePasswordChange}
+                      className="w-full px-3 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                      required
+                    />
+                  </div>
+                  <Button type="submit" color="primary" className="w-full">
+                    Change Password
+                  </Button>
+                </form>
               </div>
             </Tabs.Item>
           </Tabs>

@@ -1,7 +1,7 @@
 "use client";
 import Promos from "../components/promotions/Promos";
 import { promotionNavLinks } from "@/constants";
-import { about, b1, b2, b3, b4, b5, beach1, logo } from "@/public";
+import { about, b1, b2, b3, b4, b5, beach1, logo, logo3 } from "@/public";
 import {
   Avatar,
   Button,
@@ -116,9 +116,9 @@ const PromotionsPage = () => {
             }}
           >
             <Image
-              src={logo}
-              height={100}
-              width={100}
+              src={logo3}
+              height={150}
+              width={150}
               alt="logo"
               className="object-contain"
             />
