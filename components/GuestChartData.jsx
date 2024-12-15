@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useState } from "react"; // Add useState
 import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -26,18 +26,49 @@ ChartJS.register(
 
 const GuestChartData = ({ resortId }) => {
   const { data: guestData } = useGetTouristByResortId(resortId);
+  const [selectedMonth, setSelectedMonth] = useState("all"); // Add state for month filter
 
-  // Add calculations for DataBox values
-  const totalTourists = guestData?.tourists?.length || 0;
-  const maleTourists = guestData?.tourists?.filter(guest => guest?.gender === "Male").length || 0;
-  const femaleTourists = guestData?.tourists?.filter(guest => guest?.gender === "Female").length || 0;
+  // Get unique months from guest data
+  const getUniqueMonths = () => {
+    if (!guestData?.tourists) return [];
+    
+    const months = guestData.tourists.map(guest => 
+      format(new Date(guest.visitDate), "MMMM yyyy")
+    );
+    return [...new Set(months)];
+  };
+
+  // Add calculations for DataBox values with filtering
+  const calculateStats = () => {
+    if (!guestData?.tourists) return { total: 0, male: 0, female: 0 };
+
+    const filteredGuests = selectedMonth === "all" 
+      ? guestData.tourists
+      : guestData.tourists.filter(guest => 
+          format(new Date(guest.visitDate), "MMMM yyyy") === selectedMonth
+        );
+
+    return {
+      total: filteredGuests.length,
+      male: filteredGuests.filter(guest => guest?.gender === "Male").length,
+      female: filteredGuests.filter(guest => guest?.gender === "Female").length
+    };
+  };
+
+  const stats = calculateStats();
 
   // Process guest data to count guests per month
   const processGuestData = () => {
     if (!guestData?.tourists) return null;
 
     const monthCounts = {};
-    guestData.tourists.forEach((guest) => {
+    const relevantGuests = selectedMonth === "all" 
+      ? guestData.tourists
+      : guestData.tourists.filter(guest => 
+          format(new Date(guest.visitDate), "MMMM yyyy") === selectedMonth
+        );
+
+    relevantGuests.forEach((guest) => {
       const monthYear = format(new Date(guest.visitDate), "MMMM yyyy");
       monthCounts[monthYear] = (monthCounts[monthYear] || 0) + 1;
     });
@@ -88,24 +119,40 @@ const GuestChartData = ({ resortId }) => {
         Guest Statistics
       </h2>
       
-      {/* Add DataBox grid */}
+      {/* Add month filter dropdown */}
+      <div className="mb-6">
+        <select
+          value={selectedMonth}
+          onChange={(e) => setSelectedMonth(e.target.value)}
+          className="w-full md:w-64 p-2 border rounded-lg shadow-sm"
+        >
+          <option value="all">All Months</option>
+          {getUniqueMonths().map((month) => (
+            <option key={month} value={month}>
+              {month}
+            </option>
+          ))}
+        </select>
+      </div>
+
+      {/* DataBox grid */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full mb-6">
         <DataBox
           icon={tourist}
           title="Total Tourist"
-          data={totalTourists.toString()}
+          data={stats.total.toString()}
           color="green"
         />
         <DataBox
           icon={male}
           title="Male Tourist"
-          data={maleTourists.toString()}
+          data={stats.male.toString()}
           color="red"
         />
         <DataBox
           icon={female}
           title="Female Tourist"
-          data={femaleTourists.toString()}
+          data={stats.female.toString()}
           color="yellow"
         />
       </div>

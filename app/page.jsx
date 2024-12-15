@@ -32,6 +32,7 @@ const PromotionsPage = () => {
   const [activeSection, setActiveSection] = useState("");
   const [scrolling, setScrolling] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [filteredPlaces, setFilteredPlaces] = useState(null);
 
   const router = useRouter();
   const { mutateAsync: logout } = useLogout();
@@ -73,25 +74,32 @@ const PromotionsPage = () => {
   const handleSearch = (query) => {
     setSearchQuery(query);
   };
-
   const executeSearch = () => {
-    if (!searchQuery.trim()) return;
+    if (!searchQuery.trim()) {
+      setFilteredPlaces(null); // Reset to show all places when search is empty
+      return;
+    }
 
     // Filter places that match the search query
-    const filteredPlaces = places?.resorts?.filter(
-      (place) =>
-        place.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        place.location.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filtered = places?.resorts?.filter((place) => {
+      if (!place) return false;
 
-    // Navigate to places section with filtered results
+      const nameMatch =
+        place.name?.toLowerCase().includes(searchQuery.toLowerCase()) || false;
+      const locationMatch =
+        place.location?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        false;
+
+      return nameMatch || locationMatch;
+    });
+
+    setFilteredPlaces(filtered || []);
+
+    // Scroll to places section
     const placesElement = document.getElementById("places");
     if (placesElement) {
       placesElement.scrollIntoView({ behavior: "smooth" });
     }
-
-    // You could also use router to navigate with query params
-    // router.push(`/?search=${encodeURIComponent(searchQuery)}#places`);
   };
 
   useEffect(() => {
@@ -224,10 +232,14 @@ const PromotionsPage = () => {
           <h1 className="font-semibold text-[35px] text-center">
             Recommended Destinations
           </h1>
-          <div className=" w-full flex flex-wrap gap-7 justify-center py-5">
-            {places?.resorts?.map((place) => (
-              <Place key={place.id} {...place} />
-            ))}
+          <div className="w-full flex flex-wrap gap-7 justify-center py-5">
+            {filteredPlaces?.length === 0 ? (
+              <p>No places found matching your search.</p>
+            ) : (
+              (filteredPlaces || places?.resorts)?.map((place) => (
+                <Place key={place.id} {...place} />
+              ))
+            )}
           </div>
         </div>
         <div className="prom-content" id="blogs" ref={blogSection.ref}>
