@@ -86,10 +86,8 @@ const UserForm = ({ data }) => {
 								<div className="mb-1 block">
 									<Label htmlFor="role" value="Role" />
 								</div>
-								<Select id="role" {...register("role")}>
-									<option value="guest">Guest</option>
+								<Select id="role" {...register("role")} disabled>
 									<option value="admin">Admin</option>
-									<option value="resortOwner">Resort Owner</option>
 								</Select>
 							</div>
 							<div className="w-full mt-3 flex gap-2">
