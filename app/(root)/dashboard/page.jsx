@@ -68,9 +68,9 @@ const Dashboard = () => {
 
 				const touristsByMonth = (resortTourists || []).reduce(
 					(acc, tourist) => {
-						if (!tourist?.createdAt) return acc;
+						if (!tourist?.visitDate) return acc;
 
-						const month = new Date(tourist.createdAt).toLocaleString(
+						const month = new Date(tourist.visitDate).toLocaleString(
 							"default",
 							{
 								month: "long",
