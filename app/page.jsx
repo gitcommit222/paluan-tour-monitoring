@@ -227,7 +227,7 @@ const PromotionsPage = () => {
 					</div>
 				</div>
 				<div
-					className="prom-content h-full flex flex-col items-center space-y-10"
+					className="prom-content min-h-screen flex flex-col items-center space-y-10"
 					id="places"
 					ref={placesSection.ref}
 				>

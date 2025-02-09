@@ -86,7 +86,7 @@
 	}
 
 	.prom-spot-box {
-		@apply flex-1 h-[400px] min-w-[350px] max-w-[380px] rounded-lg;
+		@apply flex-1  min-w-[350px] max-w-[380px] rounded-lg;
 	}
 	.prom-footer {
 		@apply h-[100px] w-full border bg-gray-100 px-16 py-4;

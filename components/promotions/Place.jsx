@@ -19,7 +19,7 @@ const Place = ({ id, thumbnail, name, description }) => {
 
 	return (
 		<div className="prom-spot-box">
-			<div className="relative w-full h-[65%]">
+			<div className="relative w-full h-[55%]">
 				<Image
 					src={thumbnail}
 					alt="place1"
