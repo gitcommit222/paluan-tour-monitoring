@@ -5,6 +5,7 @@ import React from "react";
 import { FaBus, FaPlaneDeparture, FaCar } from "react-icons/fa";
 import { GoArrowUpRight } from "react-icons/go";
 import { useFetchRatingsByResort } from "../../hooks/useReview";
+import { truncateText } from "@/utils/truncateText";
 
 const Place = ({ id, thumbnail, name, description }) => {
 	const { data: ratings } = useFetchRatingsByResort(id);
@@ -30,7 +31,9 @@ const Place = ({ id, thumbnail, name, description }) => {
 			<div className="flex justify-between py-2 space-y-2">
 				<div className="space-y-1">
 					<h3 className="font-medium text-[23px] tracking-wide">{name}</h3>
-					<p className="text-gray-400 text-[12px] font-light">{description}</p>
+					<p className="text-gray-400 text-[12px] font-light">
+						{truncateText(description, 80)}
+					</p>
 				</div>
 				<div className="space-y-1 flex flex-col items-end">
 					<Rating>
