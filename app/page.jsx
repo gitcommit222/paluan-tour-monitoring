@@ -11,7 +11,7 @@ import {
 } from "flowbite-react";
 import Image from "next/image";
 import Link from "next/link";
-import React, { useEffect, useRef, useState } from "react";
+import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { IoPricetagsOutline } from "react-icons/io5";
@@ -29,6 +29,7 @@ import { useFetchSpots } from "@/hooks/useSpot";
 import NavDrawer from "@/components/promotions/NavDrawer";
 import ProtectedRoutes from "@/hoc/ProtectedRoutes";
 import Weather from "@/components/Weather";
+import MiniLoader from "@/components/Miniloader";
 const PromotionsPage = () => {
 	const [activeSection, setActiveSection] = useState("");
 	const [scrolling, setScrolling] = useState(false);
@@ -234,15 +235,17 @@ const PromotionsPage = () => {
 					<h1 className="font-semibold text-[35px] text-center">
 						Recommended Destinations
 					</h1>
-					<div className="w-full flex flex-wrap gap-7 justify-center py-5">
-						{filteredPlaces?.length === 0 ? (
-							<p>No places found matching your search.</p>
-						) : (
-							(filteredPlaces || places?.resorts)?.map((place) => (
-								<Place key={place.id} {...place} />
-							))
-						)}
-					</div>
+					<Suspense fallback={<MiniLoader />}>
+						<div className="w-full flex flex-wrap gap-7 justify-center py-5">
+							{filteredPlaces?.length === 0 ? (
+								<p>No places found matching your search.</p>
+							) : (
+								(filteredPlaces || places?.resorts)?.map((place) => (
+									<Place key={place.id} {...place} />
+								))
+							)}
+						</div>
+					</Suspense>
 				</div>
 				<div className="prom-content" id="blogs" ref={blogSection.ref}>
 					<h1 className="font-semibold text-[35px] text-center mb-10">Blogs</h1>
