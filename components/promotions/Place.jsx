@@ -32,7 +32,7 @@ const Place = ({ id, thumbnail, name, description }) => {
 				<div className="space-y-1">
 					<h3 className="font-medium text-[18px] tracking-wide">{name}</h3>
 					<p className="text-gray-400 text-[12px] font-light">
-						{truncateText(description, 80)}
+						{truncateText(description, 50)}
 					</p>
 				</div>
 				<div className="space-y-1 flex flex-col items-end">
