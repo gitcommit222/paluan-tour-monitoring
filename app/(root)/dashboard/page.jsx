@@ -165,8 +165,8 @@ const Dashboard = () => {
 					color="yellow"
 				/>
 			</div>
-			<div className="flex flex-col lg:flex-row gap-4 mt-10">
-				<div className="border p-5 w-full lg:w-3/5 rounded-lg overflow-hidden">
+			<div className="flex flex-col gap-4 mt-10">
+				<div className="border p-5 w-full  rounded-lg overflow-hidden">
 					<BarChart
 						data={chartData}
 						options={options}
