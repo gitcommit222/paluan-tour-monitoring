@@ -51,18 +51,13 @@ const Dashboard = () => {
 			return new Date(2024, i).toLocaleString("default", { month: "long" });
 		});
 
-		// Premium color palette with gradient effect
-		const gradientColors = [
-			{ bg: "rgba(101, 116, 205, 0.2)", border: "rgb(101, 116, 205)" }, // Royal Blue
-			{ bg: "rgba(89, 193, 189, 0.2)", border: "rgb(89, 193, 189)" }, // Teal
-			{ bg: "rgba(176, 132, 199, 0.2)", border: "rgb(176, 132, 199)" }, // Lavender
-			{ bg: "rgba(255, 181, 152, 0.2)", border: "rgb(255, 181, 152)" }, // Peach
-			{ bg: "rgba(149, 175, 192, 0.2)", border: "rgb(149, 175, 192)" }, // Steel Blue
-			{ bg: "rgba(134, 168, 132, 0.2)", border: "rgb(134, 168, 132)" }, // Sage
-			{ bg: "rgba(205, 164, 133, 0.2)", border: "rgb(205, 164, 133)" }, // Warm Beige
-			{ bg: "rgba(182, 184, 220, 0.2)", border: "rgb(182, 184, 220)" }, // Periwinkle
-			{ bg: "rgba(157, 193, 170, 0.2)", border: "rgb(157, 193, 170)" }, // Mint
-			{ bg: "rgba(203, 158, 175, 0.2)", border: "rgb(203, 158, 175)" }, // Dusty Rose
+		const colors = [
+			{ bg: "rgb(219 234 254)", border: "rgb(59 130 246)" }, // blue-100, blue-500
+			{ bg: "rgb(220 252 231)", border: "rgb(34 197 94)" }, // green-100, green-500
+			{ bg: "rgb(254 226 226)", border: "rgb(239 68 68)" }, // red-100, red-500
+			{ bg: "rgb(254 249 195)", border: "rgb(234 179 8)" }, // yellow-100, yellow-500
+			{ bg: "rgb(237 233 254)", border: "rgb(139 92 246)" }, // purple-100, purple-500
+			{ bg: "rgb(251 207 232)", border: "rgb(236 72 153)" }, // pink-100, pink-500
 		];
 
 		return {
@@ -93,12 +88,12 @@ const Dashboard = () => {
 				return {
 					label: resort.name,
 					data: months.map((month) => touristsByMonth[month] || 0),
-					backgroundColor: gradientColors[index % gradientColors.length].bg,
-					borderColor: gradientColors[index % gradientColors.length].border,
-					borderWidth: 1.5,
-					borderRadius: 4,
-					barThickness: 16,
-					maxBarThickness: 20,
+					backgroundColor: colors[index % colors.length].bg,
+					borderColor: colors[index % colors.length].border,
+					borderWidth: 1,
+					barThickness: 50, // Add fixed bar thickness
+					maxBarThickness: 55, // Add maximum bar thickness
+					minBarLength: 0, // Add minimum bar length
 				};
 			}),
 		};
@@ -115,99 +110,26 @@ const Dashboard = () => {
 				title: {
 					display: true,
 					text: "Number of Guests",
-					padding: { bottom: 10 },
-					font: {
-						size: 13,
-						weight: 500,
-					},
-					color: "#64748b",
-				},
-				grid: {
-					color: "rgba(226, 232, 240, 0.8)",
-					drawBorder: false,
-				},
-				ticks: {
-					padding: 10,
-					color: "#64748b",
-					font: {
-						size: 11,
-					},
-				},
-				border: {
-					display: false,
 				},
 			},
 			x: {
 				title: {
 					display: true,
 					text: "Months",
-					padding: { top: 10 },
-					font: {
-						size: 13,
-						weight: 500,
-					},
-					color: "#64748b",
-				},
-				grid: {
-					display: false,
-				},
-				ticks: {
-					padding: 5,
-					color: "#64748b",
-					font: {
-						size: 11,
-					},
-				},
-				border: {
-					display: false,
 				},
 			},
 		},
 		plugins: {
 			legend: {
 				position: "top",
-				align: "center",
-				labels: {
-					padding: 15,
-					usePointStyle: true,
-					pointStyle: "circle",
-					font: {
-						size: 11,
-					},
-					color: "#64748b",
-				},
 			},
 			title: {
 				display: true,
-				text: "Resort Guest Distribution",
-				padding: {
-					top: 10,
-					bottom: 25,
-				},
-				font: {
-					size: 15,
-					weight: 600,
-				},
-				color: "#334155",
-			},
-			tooltip: {
-				backgroundColor: "rgba(255, 255, 255, 0.95)",
-				titleColor: "#334155",
-				bodyColor: "#64748b",
-				bodyFont: {
-					size: 11,
-				},
-				titleFont: {
-					size: 12,
-					weight: 600,
-				},
-				padding: 12,
-				borderColor: "rgba(226, 232, 240, 0.8)",
-				borderWidth: 1,
-				boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
-				usePointStyle: true,
+				text: "Number of Guests per Month for Different Resorts",
 			},
 		},
+		barPercentage: 0.9, // Controls the width of the bars relative to the category
+		categoryPercentage: 0.9, // Controls the width of the category containing the bars
 	};
 
 	return (
