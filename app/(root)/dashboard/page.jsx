@@ -91,9 +91,9 @@ const Dashboard = () => {
 					backgroundColor: colors[index % colors.length].bg,
 					borderColor: colors[index % colors.length].border,
 					borderWidth: 1,
-					barThickness: 50, // Add fixed bar thickness
-					maxBarThickness: 55, // Add maximum bar thickness
-					minBarLength: 0, // Add minimum bar length
+					barThickness: 30,
+					maxBarThickness: 35,
+					minBarLength: 0,
 				};
 			}),
 		};
