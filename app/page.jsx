@@ -121,14 +121,14 @@ const PromotionsPage = () => {
 					<Link
 						href="/"
 						onClick={() => {
-							setActive("Home");
+							// setActive("Home");
 							window.scrollTo(0, 0);
 						}}
 					>
 						<Image
 							src={logo3}
-							height={150}
-							width={150}
+							height={180}
+							width={180}
 							alt="logo"
 							className="object-contain"
 						/>

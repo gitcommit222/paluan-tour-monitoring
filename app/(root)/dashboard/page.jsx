@@ -51,15 +51,23 @@ const Dashboard = () => {
 			return new Date(2024, i).toLocaleString("default", { month: "long" });
 		});
 
+		// Premium color palette with gradient effect
+		const gradientColors = [
+			{ bg: "rgba(101, 116, 205, 0.2)", border: "rgb(101, 116, 205)" }, // Royal Blue
+			{ bg: "rgba(89, 193, 189, 0.2)", border: "rgb(89, 193, 189)" }, // Teal
+			{ bg: "rgba(176, 132, 199, 0.2)", border: "rgb(176, 132, 199)" }, // Lavender
+			{ bg: "rgba(255, 181, 152, 0.2)", border: "rgb(255, 181, 152)" }, // Peach
+			{ bg: "rgba(149, 175, 192, 0.2)", border: "rgb(149, 175, 192)" }, // Steel Blue
+			{ bg: "rgba(134, 168, 132, 0.2)", border: "rgb(134, 168, 132)" }, // Sage
+			{ bg: "rgba(205, 164, 133, 0.2)", border: "rgb(205, 164, 133)" }, // Warm Beige
+			{ bg: "rgba(182, 184, 220, 0.2)", border: "rgb(182, 184, 220)" }, // Periwinkle
+			{ bg: "rgba(157, 193, 170, 0.2)", border: "rgb(157, 193, 170)" }, // Mint
+			{ bg: "rgba(203, 158, 175, 0.2)", border: "rgb(203, 158, 175)" }, // Dusty Rose
+		];
+
 		return {
 			labels: months,
 			datasets: spots.resorts.map((resort, index) => {
-				const colors = [
-					{ bg: "rgb(254 226 226)", border: "rgba(255, 99, 132, 1)" },
-					{ bg: "rgba(54, 162, 235, 0.2)", border: "rgba(54, 162, 235, 1)" },
-					{ bg: "rgba(75, 192, 192, 0.2)", border: "rgba(75, 192, 192, 1)" },
-				];
-
 				const resortTourists = Array.isArray(guests.tourists)
 					? guests.tourists.filter(
 							(tourist) => tourist && tourist.resortId === resort.id
@@ -85,9 +93,12 @@ const Dashboard = () => {
 				return {
 					label: resort.name,
 					data: months.map((month) => touristsByMonth[month] || 0),
-					backgroundColor: colors[index % colors.length].bg,
-					borderColor: colors[index % colors.length].border,
-					borderWidth: 1,
+					backgroundColor: gradientColors[index % gradientColors.length].bg,
+					borderColor: gradientColors[index % gradientColors.length].border,
+					borderWidth: 1.5,
+					borderRadius: 4,
+					barThickness: 16,
+					maxBarThickness: 20,
 				};
 			}),
 		};
@@ -104,22 +115,97 @@ const Dashboard = () => {
 				title: {
 					display: true,
 					text: "Number of Guests",
+					padding: { bottom: 10 },
+					font: {
+						size: 13,
+						weight: 500,
+					},
+					color: "#64748b",
+				},
+				grid: {
+					color: "rgba(226, 232, 240, 0.8)",
+					drawBorder: false,
+				},
+				ticks: {
+					padding: 10,
+					color: "#64748b",
+					font: {
+						size: 11,
+					},
+				},
+				border: {
+					display: false,
 				},
 			},
 			x: {
 				title: {
 					display: true,
 					text: "Months",
+					padding: { top: 10 },
+					font: {
+						size: 13,
+						weight: 500,
+					},
+					color: "#64748b",
+				},
+				grid: {
+					display: false,
+				},
+				ticks: {
+					padding: 5,
+					color: "#64748b",
+					font: {
+						size: 11,
+					},
+				},
+				border: {
+					display: false,
 				},
 			},
 		},
 		plugins: {
 			legend: {
 				position: "top",
+				align: "center",
+				labels: {
+					padding: 15,
+					usePointStyle: true,
+					pointStyle: "circle",
+					font: {
+						size: 11,
+					},
+					color: "#64748b",
+				},
 			},
 			title: {
 				display: true,
-				text: "Number of Guests per Month for Different Resorts",
+				text: "Resort Guest Distribution",
+				padding: {
+					top: 10,
+					bottom: 25,
+				},
+				font: {
+					size: 15,
+					weight: 600,
+				},
+				color: "#334155",
+			},
+			tooltip: {
+				backgroundColor: "rgba(255, 255, 255, 0.95)",
+				titleColor: "#334155",
+				bodyColor: "#64748b",
+				bodyFont: {
+					size: 11,
+				},
+				titleFont: {
+					size: 12,
+					weight: 600,
+				},
+				padding: 12,
+				borderColor: "rgba(226, 232, 240, 0.8)",
+				borderWidth: 1,
+				boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
+				usePointStyle: true,
 			},
 		},
 	};
@@ -166,7 +252,7 @@ const Dashboard = () => {
 				/>
 			</div>
 			<div className="flex flex-col gap-4 mt-10">
-				<div className="border p-5 w-full  rounded-lg overflow-hidden">
+				<div className="border p-5 w-full rounded-lg overflow-hidden">
 					<BarChart
 						data={chartData}
 						options={options}
