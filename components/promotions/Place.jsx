@@ -49,7 +49,7 @@ const Place = ({ id, thumbnail, name, description }) => {
 							/>
 						))}
 					</Rating>
-					<p className="text-[14px] font-light">
+					<p className="text-[12px] font-light">
 						{ratings?.data?.length > 0
 							? `${averageRating} (${ratings.data.length} rating/s)`
 							: "No ratings yet"}
