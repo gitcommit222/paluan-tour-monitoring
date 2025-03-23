@@ -1,8 +1,12 @@
 "use client";
-import { useDeleteGuest, useGetTouristByResortId } from "@/hooks/useGuest";
+import {
+	useDeleteGuest,
+	useGetTouristByResortId,
+	useCheckoutGuest,
+} from "@/hooks/useGuest";
 import getAddress from "@/utils/getAddress";
 import { format } from "date-fns";
-import { Table, Modal } from "flowbite-react";
+import { Table, Modal, Button } from "flowbite-react";
 import toast from "react-hot-toast";
 import { useState } from "react";
 
@@ -11,6 +15,7 @@ const OwnersTable = ({ resortId }) => {
 		useGetTouristByResortId(resortId);
 	const { mutateAsync: deleteGuest, isLoading: isLoadingDelete } =
 		useDeleteGuest();
+	const { mutateAsync: checkoutGuest } = useCheckoutGuest();
 	console.log(`resortId: ${resortId}`);
 	console.log(guests);
 
@@ -31,6 +36,19 @@ const OwnersTable = ({ resortId }) => {
 		setDeleteModalOpen(false);
 	};
 
+	const handleCheckout = async (guest) => {
+		if (guest.outDate) {
+			toast.error("Guest has already checked out!");
+			return;
+		}
+
+		await toast.promise(checkoutGuest(guest.id), {
+			loading: "Checking out guest...",
+			success: "Guest checked out successfully",
+			error: "Error checking out guest",
+		});
+	};
+
 	return (
 		<>
 			<div className="overflow-x-auto">
@@ -42,6 +60,7 @@ const OwnersTable = ({ resortId }) => {
 						<Table.HeadCell>Address</Table.HeadCell>
 						<Table.HeadCell>Contact</Table.HeadCell>
 						<Table.HeadCell>Date</Table.HeadCell>
+						<Table.HeadCell>Status</Table.HeadCell>
 						<Table.HeadCell>
 							<span>Actions</span>
 						</Table.HeadCell>
@@ -64,8 +83,25 @@ const OwnersTable = ({ resortId }) => {
 										)}
 									</Table.Cell>
 									<Table.Cell>{guest.contactNumber}</Table.Cell>
-									<Table.Cell>{format(guest.visitDate, "MM/dd/yyyy")}</Table.Cell>
-									<Table.Cell className="flex">
+									<Table.Cell>
+										{format(guest.visitDate, "MM/dd/yyyy")}
+									</Table.Cell>
+									<Table.Cell>
+										{guest.outDate ? (
+											<span className="text-green-600">Checked Out</span>
+										) : (
+											<span className="text-blue-600">Checked In</span>
+										)}
+									</Table.Cell>
+									<Table.Cell className="flex gap-2">
+										{!guest.outDate && (
+											<button
+												onClick={() => handleCheckout(guest)}
+												className="font-medium text-blue-600 hover:underline"
+											>
+												Check Out
+											</button>
+										)}
 										<button
 											onClick={() => handleDeleteClick(guest)}
 											className="font-medium text-red-600 hover:underline"
@@ -79,29 +115,28 @@ const OwnersTable = ({ resortId }) => {
 				</Table>
 			</div>
 
-			<Modal show={deleteModalOpen} onClose={() => setDeleteModalOpen(false)}>
-				<Modal.Header>Confirm Delete</Modal.Header>
+			<Modal
+				show={deleteModalOpen}
+				size="md"
+				onClose={() => setDeleteModalOpen(false)}
+				popup
+			>
+				<Modal.Header />
 				<Modal.Body>
-					<div className="space-y-6">
-						<p className="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-							Are you sure you want to delete {guestToDelete?.name}? This action cannot be undone.
-						</p>
+					<div className="text-center">
+						<h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+							Are you sure you want to delete this guest?
+						</h3>
+						<div className="flex justify-center gap-4">
+							<Button color="failure" onClick={handleConfirmDelete}>
+								Yes, I'm sure
+							</Button>
+							<Button color="gray" onClick={() => setDeleteModalOpen(false)}>
+								No, cancel
+							</Button>
+						</div>
 					</div>
 				</Modal.Body>
-				<Modal.Footer>
-					<button
-						onClick={handleConfirmDelete}
-						className="text-white bg-red-600 hover:bg-red-700 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
-					>
-						Delete
-					</button>
-					<button
-						onClick={() => setDeleteModalOpen(false)}
-						className="text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10"
-					>
-						Cancel
-					</button>
-				</Modal.Footer>
 			</Modal>
 		</>
 	);

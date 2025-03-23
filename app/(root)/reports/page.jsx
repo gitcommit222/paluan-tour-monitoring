@@ -16,19 +16,23 @@ const Reports = () => {
 	const [selectedSpotId, setSelectedSpotId] = useState("All");
 
 	const filteredGuests = useMemo(() => {
-		if (!guests || !guests.tourists || !Array.isArray(guests.tourists)) return [];
-		
+		if (!guests || !guests.tourists || !Array.isArray(guests.tourists))
+			return [];
+
 		return guests.tourists.filter((guest) => {
 			if (!guest || !guest.name) return false;
-			
-			const matchesSearch = 
-				guest.name.toLowerCase().includes((searchTerm || '').toLowerCase()) ||
-				(guest.resort?.name || '').toLowerCase().includes((searchTerm || '').toLowerCase());
-			
-			const matchesSpot = 
-				selectedSpotId === "All" || 
-				(guest.resort && guest.resort.id.toString() === selectedSpotId.toString());
-			
+
+			const matchesSearch =
+				guest.name.toLowerCase().includes((searchTerm || "").toLowerCase()) ||
+				(guest.resort?.name || "")
+					.toLowerCase()
+					.includes((searchTerm || "").toLowerCase());
+
+			const matchesSpot =
+				selectedSpotId === "All" ||
+				(guest.resort &&
+					guest.resort.id.toString() === selectedSpotId.toString());
+
 			return matchesSearch && matchesSpot;
 		});
 	}, [guests, searchTerm, selectedSpotId]);
@@ -48,6 +52,8 @@ const Reports = () => {
 				),
 				"Spot Visited": guest.resort?.name,
 				"Date Visited": format(guest.visitDate, "MM/dd/yyyy"),
+				"Out Date": guest.outDate ? format(guest.outDate, "MM/dd/yyyy") : "N/A",
+				"Duration (Hours)": guest.duration ? `${guest.duration} hrs` : "N/A",
 			}))
 		);
 		XLSX.utils.book_append_sheet(workbook, worksheet, "Guests");
@@ -88,7 +94,11 @@ const Reports = () => {
 						</Select>
 					</div>
 					<Tooltip content="Export as Excel" className="mt-4 sm:mt-0">
-						<Button color="primary" className="transition-all duration-200 hover:opacity-90 hover:shadow-md" onClick={exportToExcel}>
+						<Button
+							color="primary"
+							className="transition-all duration-200 hover:opacity-90 hover:shadow-md"
+							onClick={exportToExcel}
+						>
 							EXPORT
 						</Button>
 					</Tooltip>
@@ -104,6 +114,8 @@ const Reports = () => {
 							<Table.HeadCell>Address</Table.HeadCell>
 							<Table.HeadCell>Spot Visited</Table.HeadCell>
 							<Table.HeadCell>Date Visited</Table.HeadCell>
+							<Table.HeadCell>Out Date</Table.HeadCell>
+							<Table.HeadCell>Duration (Hours)</Table.HeadCell>
 						</Table.Head>
 						<Table.Body className="divide-y text-[14px]">
 							{filteredGuests.map((guest) => (
@@ -127,6 +139,14 @@ const Reports = () => {
 									<Table.Cell>{guest.resort?.name}</Table.Cell>
 									<Table.Cell>
 										{format(guest.visitDate, "MM/dd/yyyy")}
+									</Table.Cell>
+									<Table.Cell>
+										{guest.outDate
+											? format(guest.outDate, "MM/dd/yyyy")
+											: "N/A"}
+									</Table.Cell>
+									<Table.Cell>
+										{guest.duration ? `${guest.duration} hrs` : "N/A"}
 									</Table.Cell>
 								</Table.Row>
 							))}

@@ -312,6 +312,7 @@ const AddGuestForm = ({ data, resortId }) => {
 						<Datepicker
 							{...register("dateVisited")}
 							weekStart={1}
+							disabled
 							name="dateVisited"
 							color={`${errors.dateVisited ? "failure" : "gray"}`}
 							helperText={errors.dateVisited ? errors.dateVisited.message : ""}

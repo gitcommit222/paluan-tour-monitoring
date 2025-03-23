@@ -7,7 +7,7 @@ const api = {
 	base: `https://api.openweathermap.org/data/2.5/weather?lat=13.4265&lon=120.4793&units=metric`,
 };
 
-const Weather = () => {
+const Weather = ({ bg = "bg-white/10" }) => {
 	const [weather, setWeather] = React.useState(null);
 
 	React.useEffect(() => {
@@ -30,7 +30,7 @@ const Weather = () => {
 	if (!weather) return null;
 
 	return (
-		<div className="bg-white/10 backdrop-blur-md rounded-lg p-3 text-white text-sm">
+		<div className={`${bg} backdrop-blur-md rounded-lg p-3 text-white text-sm`}>
 			<div className="flex items-center justify-between mb-2">
 				<h2 className="text-lg font-semibold">{weather.name}</h2>
 				<div className="flex items-center">

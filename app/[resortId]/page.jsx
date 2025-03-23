@@ -218,6 +218,25 @@ const ResortPage = ({ params }) => {
 									{`${spot?.result?.Address.street}, Brgy. ${barangay?.name}, Paluan, Occidental Mindoro` ||
 										"No address provided"}
 								</p>
+								{spot?.result?.longitude && spot?.result?.latitude && (
+									<p className="text-gray-500 text-sm mt-1 flex items-center gap-1">
+										<svg
+											xmlns="http://www.w3.org/2000/svg"
+											className="h-4 w-4"
+											fill="none"
+											viewBox="0 0 24 24"
+											stroke="currentColor"
+										>
+											<path
+												strokeLinecap="round"
+												strokeLinejoin="round"
+												strokeWidth={2}
+												d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"
+											/>
+										</svg>
+										{`Coordinates: ${spot.result.latitude}°N, ${spot.result.longitude}°E`}
+									</p>
+								)}
 							</div>
 							<div className="flex justify-start sm:justify-center flex-col items-start">
 								<Rating>
@@ -325,6 +344,24 @@ const ResortPage = ({ params }) => {
 									Cancel
 								</button>
 							)}
+
+							{/* Location Map Section */}
+							{spot?.result?.longitude && spot?.result?.latitude && (
+								<div className="mt-8 border-t pt-8">
+									<h2 className="text-2xl font-semibold mb-6">Location</h2>
+									<div className="w-full h-[450px] rounded-lg overflow-hidden shadow-md">
+										<iframe
+											src={`https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1000!2d${spot.result.longitude}!3d${spot.result.latitude}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zM!5e0!3m2!1sen!2sph!4v1742724501974!5m2!1sen!2sph`}
+											width="100%"
+											height="100%"
+											style={{ border: 0 }}
+											allowFullScreen=""
+											loading="lazy"
+											referrerPolicy="no-referrer-when-downgrade"
+										/>
+									</div>
+								</div>
+							)}
 						</div>
 					</div>
 
@@ -420,6 +457,7 @@ const ResortPage = ({ params }) => {
 					</div>
 				</div>
 			</div>
+
 			<Modal
 				show={isFullView}
 				onClose={() => setIsFullView(false)}

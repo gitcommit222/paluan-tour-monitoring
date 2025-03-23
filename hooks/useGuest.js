@@ -78,3 +78,20 @@ export const useDeleteGuest = () => {
 		},
 	});
 };
+
+const checkoutTourist = async (id) => {
+	const response = await api.put(`/guest/checkout-tourist/${id}`);
+	return response.data;
+};
+
+export const useCheckoutGuest = () => {
+	const queryClient = useQueryClient();
+
+	return useMutation({
+		mutationFn: checkoutTourist,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["touristByResortId"] });
+			queryClient.invalidateQueries({ queryKey: ["guests"] });
+		},
+	});
+};

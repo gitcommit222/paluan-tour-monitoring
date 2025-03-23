@@ -52,6 +52,8 @@ const SpotDetailsForm = ({ data }) => {
 			ownerEmail: "",
 			contactNumber: "",
 			spotCover: "",
+			longitude: "",
+			latitude: "",
 		},
 		resolver: yupResolver(addSpotSchema),
 	});
@@ -69,6 +71,8 @@ const SpotDetailsForm = ({ data }) => {
 				ownerEmail: data?.User?.email || "",
 				contactNumber: data?.contactNumber || "",
 				spotCover: data?.thumbnail || "",
+				longitude: data?.longitude || "",
+				latitude: data?.latitude || "",
 			});
 			setSelectedImage(data?.thumbnail || "");
 		}
@@ -87,6 +91,8 @@ const SpotDetailsForm = ({ data }) => {
 				ownerEmail,
 				contactNumber,
 				spotCover,
+				longitude,
+				latitude,
 			} = formData;
 			const spotData = {
 				name: spotName,
@@ -99,6 +105,8 @@ const SpotDetailsForm = ({ data }) => {
 				email: ownerEmail,
 				phone: contactNumber,
 				thumbnail: spotCover,
+				longitude,
+				latitude,
 			};
 
 			if (data) {
@@ -246,6 +254,38 @@ const SpotDetailsForm = ({ data }) => {
 									name="description"
 									placeholder="Describe the place..."
 									rows={8}
+								/>
+							</div>
+						</div>
+						<div className="flex gap-4">
+							<div className="flex-1">
+								<div className="mb-2 block">
+									<Label htmlFor="longitude" value="Longitude" />
+								</div>
+								<TextInput
+									{...register("longitude")}
+									id="longitude"
+									type="number"
+									step="any"
+									placeholder="e.g. 120.5632"
+									name="longitude"
+									color={`${errors.longitude ? "failure" : "gray"}`}
+									helperText={errors.longitude && errors.longitude.message}
+								/>
+							</div>
+							<div className="flex-1">
+								<div className="mb-2 block">
+									<Label htmlFor="latitude" value="Latitude" />
+								</div>
+								<TextInput
+									{...register("latitude")}
+									id="latitude"
+									type="number"
+									step="any"
+									placeholder="e.g. 14.3214"
+									name="latitude"
+									color={`${errors.latitude ? "failure" : "gray"}`}
+									helperText={errors.latitude && errors.latitude.message}
 								/>
 							</div>
 						</div>

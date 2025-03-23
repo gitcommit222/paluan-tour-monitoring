@@ -6,18 +6,37 @@ import Headerbox from "@/components/shared/HeaderBox";
 import { useFetchUser } from "@/hooks/useAuth";
 import { female, male, spot, tourist } from "@/public";
 import { Button, Tooltip } from "flowbite-react";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { getFirstWord } from "@/utils/getFirstWord";
 import { useGetGuests } from "@/hooks/useGuest";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { useFetchSpots } from "@/hooks/useSpot";
+import Loader from "@/components/Loader";
+import Weather from "@/components/Weather";
 
 const Dashboard = () => {
-	const { data: user } = useFetchUser();
-	const { data: guests } = useGetGuests();
-	const { data: spots } = useFetchSpots();
+	const { data: user, isLoading: isUserLoading } = useFetchUser();
+	const { data: guests, isLoading: isGuestsLoading } = useGetGuests();
+	const { data: spots, isLoading: isSpotsLoading } = useFetchSpots();
 	const dashboardRef = useRef(null);
+	const [timeFilter, setTimeFilter] = useState("year");
+
+	// Show loader while data is being fetched
+	if (isUserLoading || isGuestsLoading || isSpotsLoading) {
+		return <Loader />;
+	}
+
+	// Handle error states
+	if (!user || !guests || !spots) {
+		return (
+			<div className="flex items-center justify-center h-screen">
+				<p className="text-red-500">
+					Error loading dashboard data. Please try again later.
+				</p>
+			</div>
+		);
+	}
 
 	const totalTourists = guests ? guests.tourists.length : 0;
 	const maleTourists = guests
@@ -47,9 +66,27 @@ const Dashboard = () => {
 			};
 		}
 
-		const months = Array.from({ length: 12 }, (_, i) => {
-			return new Date(2024, i).toLocaleString("default", { month: "long" });
-		});
+		let labels;
+		const currentDate = new Date();
+
+		if (timeFilter === "year") {
+			labels = Array.from({ length: 12 }, (_, i) => {
+				return new Date(currentDate.getFullYear(), i).toLocaleString(
+					"default",
+					{ month: "long" }
+				);
+			});
+		} else if (timeFilter === "month") {
+			const daysInMonth = new Date(
+				currentDate.getFullYear(),
+				currentDate.getMonth() + 1,
+				0
+			).getDate();
+			labels = Array.from({ length: daysInMonth }, (_, i) => `Day ${i + 1}`);
+		} else {
+			// week
+			labels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+		}
 
 		const colors = [
 			{ bg: "rgb(219 234 254)", border: "rgb(59 130 246)" }, // blue-100, blue-500
@@ -61,7 +98,7 @@ const Dashboard = () => {
 		];
 
 		return {
-			labels: months,
+			labels,
 			datasets: spots.resorts.map((resort, index) => {
 				const resortTourists = Array.isArray(guests.tourists)
 					? guests.tourists.filter(
@@ -69,17 +106,23 @@ const Dashboard = () => {
 					  )
 					: [];
 
-				const touristsByMonth = (resortTourists || []).reduce(
+				const touristsByPeriod = (resortTourists || []).reduce(
 					(acc, tourist) => {
 						if (!tourist?.visitDate) return acc;
 
-						const month = new Date(tourist.visitDate).toLocaleString(
-							"default",
-							{
-								month: "long",
-							}
-						);
-						acc[month] = (acc[month] || 0) + 1;
+						const visitDate = new Date(tourist.visitDate);
+						let key;
+
+						if (timeFilter === "year") {
+							key = visitDate.toLocaleString("default", { month: "long" });
+						} else if (timeFilter === "month") {
+							key = `Day ${visitDate.getDate()}`;
+						} else {
+							// week
+							key = visitDate.toLocaleString("default", { weekday: "short" });
+						}
+
+						acc[key] = (acc[key] || 0) + 1;
 						return acc;
 					},
 					{}
@@ -87,7 +130,7 @@ const Dashboard = () => {
 
 				return {
 					label: resort.name,
-					data: months.map((month) => touristsByMonth[month] || 0),
+					data: labels.map((label) => touristsByPeriod[label] || 0),
 					backgroundColor: colors[index % colors.length].bg,
 					borderColor: colors[index % colors.length].border,
 					borderWidth: 1,
@@ -175,14 +218,77 @@ const Dashboard = () => {
 			</div>
 			<div className="flex flex-col gap-4 mt-10">
 				<div className="border p-5 w-full rounded-lg overflow-hidden">
-					<BarChart
-						data={chartData}
-						options={options}
-						title="Resort Guest Distribution"
-					/>
+					<div className="flex flex-col sm:flex-row justify-between items-start mb-6">
+						<div className="flex flex-col sm:flex-row items-center gap-4">
+							<h2 className="text-xl font-semibold mb-4 sm:mb-0">
+								Resort Guest Distribution
+							</h2>
+						</div>
+						<div className="flex gap-2">
+							<Button.Group>
+								<Button
+									color={timeFilter === "week" ? "primary" : "gray"}
+									onClick={() => setTimeFilter("week")}
+								>
+									Week
+								</Button>
+								<Button
+									color={timeFilter === "month" ? "primary" : "gray"}
+									onClick={() => setTimeFilter("month")}
+								>
+									Month
+								</Button>
+								<Button
+									color={timeFilter === "year" ? "primary" : "gray"}
+									onClick={() => setTimeFilter("year")}
+								>
+									Year
+								</Button>
+							</Button.Group>
+						</div>
+					</div>
+					<div className="h-[500px] lg:h-[600px]">
+						<BarChart
+							data={chartData}
+							options={{
+								...options,
+								maintainAspectRatio: false,
+								responsive: true,
+							}}
+							title="Resort Guest Distribution"
+						/>
+					</div>
 				</div>
-				<div className="border p-5 h-[400px] lg:h-[500px] w-full lg:w-2/5 rounded-lg overflow-hidden">
-					<DoughnutChart />
+				<div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+					<div className="border p-5 h-[400px] rounded-lg overflow-hidden">
+						<DoughnutChart />
+					</div>
+					<div className="border p-5 h-[400px] rounded-lg overflow-hidden bg-gray-50">
+						<h2 className="text-xl font-semibold mb-4">Quick Stats</h2>
+						<div className="space-y-4">
+							<div>
+								<Weather bg="bg-primary" />
+							</div>
+							<div className="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+								<span>Average Daily Visitors</span>
+								<span className="font-semibold">
+									{Math.round(totalTourists / 30)}
+								</span>
+							</div>
+							<div className="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+								<span>Gender Ratio (M:F)</span>
+								<span className="font-semibold">
+									{maleTourists}:{femaleTourists}
+								</span>
+							</div>
+							<div className="flex justify-between items-center p-3 bg-white rounded-lg shadow-sm">
+								<span>Most Popular Resort</span>
+								<span className="font-semibold">
+									{spots.resorts[0]?.name || "N/A"}
+								</span>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</section>

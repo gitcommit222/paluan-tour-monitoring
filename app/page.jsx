@@ -27,7 +27,6 @@ import Place from "@/components/promotions/Place";
 import { useFetchUser, useLogout } from "@/hooks/useAuth";
 import { useFetchSpots } from "@/hooks/useSpot";
 import NavDrawer from "@/components/promotions/NavDrawer";
-import ProtectedRoutes from "@/hoc/ProtectedRoutes";
 import Weather from "@/components/Weather";
 import MiniLoader from "@/components/Miniloader";
 const PromotionsPage = () => {
