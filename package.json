@@ -25,6 +25,7 @@
     "phil-reg-prov-mun-brgy": "^1.1.0",
     "plaiceholder": "^3.0.0",
     "psgc": "^2.2.0",
+    "qrcode.react": "^4.2.0",
     "react": "^18",
     "react-chartjs-2": "^5.2.0",
     "react-dom": "^18",
